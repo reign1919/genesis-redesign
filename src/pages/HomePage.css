@@ -1,0 +1,185 @@
+.homepage-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.homepage-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+}
+
+/* --- OVERLAYS --- */
+.noise-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1; /* Above radar */
+  opacity: 0.04;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+}
+
+.grid-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.1;
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, var(--accent) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--accent) 1px, transparent 1px);
+}
+
+.mouse-blur-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 2; /* Below the main container */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  /* Mask isolates the blur to the area around the cursor */
+  mask-image: radial-gradient(circle 250px at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent);
+  -webkit-mask-image: radial-gradient(circle 250px at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent);
+}
+
+/* --- HUD BRACKETS --- */
+.hud-brackets {
+  position: fixed;
+  top: 24px; left: 24px; right: 24px; bottom: 24px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.bracket {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--accent-deep);
+}
+
+.top-left { top: 0; left: 0; border-right: none; border-bottom: none; }
+.top-right { top: 0; right: 0; border-left: none; border-bottom: none; }
+.bottom-left { bottom: 0; left: 0; border-right: none; border-top: none; }
+.bottom-right { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+/* --- FIXED HEADERS --- */
+.tech-header {
+  position: fixed;
+  top: 32px;
+  left: 64px;
+  right: 64px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 10;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+
+.data-accent {
+  position: fixed;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  color: var(--accent-deep);
+  pointer-events: none;
+  z-index: 10;
+  letter-spacing: 0.1em;
+  line-height: 1.5;
+}
+
+.left-accent {
+  top: 50%;
+  left: 32px;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+}
+
+.right-accent {
+  top: 50%;
+  right: -32px;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+  text-align: right;
+}
+
+.homepage-container {
+  position: relative;
+  z-index: 20; /* Keep content ABOVE the mouse-blur-overlay so it can be read */
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--margin-desktop);
+  display: flex;
+  flex-direction: column;
+  gap: 120px; /* Space between major sections */
+}
+
+/* --- HERO SECTION --- */
+.hero-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 80vh;
+  gap: 40px;
+}
+
+.hero-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.hero-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* --- FAQ SECTION --- */
+.faq-section {
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* --- COMMITTEE SECTION --- */
+.committee-section {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 992px) {
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 40px;
+  }
+  
+  .hero-right {
+    margin-top: 60px;
+    width: 100%;
+  }
+  
+  .homepage-container {
+    padding: var(--margin-mobile);
+    gap: 80px;
+  }
+}

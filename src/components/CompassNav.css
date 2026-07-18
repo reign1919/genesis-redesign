@@ -1,0 +1,122 @@
+.compass-nav-container {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.compass-rotating-wrapper {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  animation: spin 30s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Base Nav Label styling */
+.nav-label {
+  position: absolute;
+  font-family: var(--font-label);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+  padding: 10px;
+}
+
+.nav-label:hover {
+  color: var(--accent-bright);
+}
+
+/* Position the anchors relative to the 400x400 wrapper */
+/* Counter-rotate the inner text so it remains readable while revolving */
+
+.nav-text {
+  display: inline-block;
+  animation: counter-spin 30s linear infinite;
+}
+
+@keyframes counter-spin {
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+.label-top {
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.label-bottom {
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Register (Left) & Events (Right) should be vertical text according to mockup, 
+   but with the counter-rotation they will stay upright. 
+   To make them vertical natively, we can apply a writing-mode, 
+   but the counter-spin keeps them legible in the rotating context. */
+.label-left {
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.label-right {
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.compass-svg {
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+}
+
+.radar-sweep {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 70%, rgba(253, 98, 95, 0.3) 100%);
+  animation: sweep 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .compass-nav-container {
+    width: 320px;
+    height: 320px;
+  }
+  
+  .compass-rotating-wrapper {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .nav-label {
+    font-size: 14px;
+  }
+}

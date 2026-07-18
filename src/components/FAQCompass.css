@@ -1,0 +1,189 @@
+.faq-compass-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 500px;
+  position: relative;
+  transition: all 0.5s var(--ease-in-out);
+}
+
+/* INTERACTIVE ZONE */
+.faq-interactive-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.5s var(--ease-in-out);
+  z-index: 2;
+}
+
+/* When panel opens, shift the compass left */
+.panel-open .faq-interactive-zone {
+  transform: translateX(-200px) scale(0.85);
+}
+
+.faq-rotating-wrapper {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  /* Continual spin */
+  animation: spin 40s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 0 15px rgba(253, 98, 95, 0.4)); /* Subtle global glow to the compass */
+}
+
+/* QUESTION BUTTONS */
+.faq-question-btn {
+  position: absolute;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-label);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 12px;
+  white-space: nowrap;
+}
+
+.faq-question-btn:hover {
+  color: var(--text);
+  text-shadow: 0 0 8px rgba(255,255,255,0.5);
+}
+
+.faq-question-btn.active {
+  color: var(--accent-bright);
+  text-shadow: 0 0 10px var(--accent-bright), 0 0 20px var(--accent-bright);
+}
+
+/* Counter-spin the text so it stays upright */
+.faq-question-text {
+  display: inline-block;
+  animation: counter-spin 40s linear infinite;
+  position: relative;
+}
+
+/* Underline effect for active question */
+.faq-question-btn.active .faq-question-text::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent-bright);
+  box-shadow: 0 0 8px var(--accent-bright), 0 0 15px var(--accent-bright);
+}
+
+/* Positions around the 300x300 compass */
+.pos-top {
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pos-right {
+  right: -50px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.pos-bottom {
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pos-left {
+  left: -50px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ANSWER PANEL */
+.faq-answer-panel {
+  position: absolute;
+  right: 0;
+  width: 500px;
+  max-width: 90%;
+  opacity: 0;
+  transform: translateX(100px);
+  pointer-events: none;
+  transition: all 0.5s var(--ease-in-out);
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.faq-answer-panel.visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.answer-content {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  padding: 40px;
+  position: relative;
+  width: 100%;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 24px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: var(--accent-bright);
+}
+
+.answer-title {
+  font-family: var(--font-label);
+  font-size: 24px;
+  color: var(--text);
+  margin-bottom: 16px;
+  padding-right: 24px;
+}
+
+.answer-bar {
+  width: 40px;
+  height: 2px;
+  background-color: var(--accent-bright);
+  margin-bottom: 24px;
+  box-shadow: 0 0 8px var(--accent-bright), 0 0 16px var(--accent-bright);
+}
+
+.answer-body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .faq-compass-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .panel-open .faq-interactive-zone {
+    transform: translateY(-50px) scale(0.8);
+  }
+
+  .faq-answer-panel {
+    padding-left: 0;
+    margin-top: 40px;
+  }
+}

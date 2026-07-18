@@ -1,0 +1,79 @@
+.countdown-container {
+  background-color: transparent;
+  border: none;
+  border-left: 2px solid var(--accent-deep);
+  padding: 12px 24px;
+  position: relative;
+  display: inline-flex;
+  min-width: 320px;
+}
+
+/* Hide the old red dot */
+.countdown-indicator-dot {
+  display: none;
+}
+
+.countdown-display {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.time-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.time-value {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--text-primary); /* White instead of red */
+  line-height: 1;
+  letter-spacing: 0.1em;
+}
+
+.time-separator {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--accent-deep);
+  line-height: 1;
+  transform: translateY(-6px); 
+}
+
+.time-label {
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* URGENCY (less than 24h) */
+.countdown-container.urgent {
+  border-left-color: var(--accent-bright);
+}
+
+.countdown-container.urgent .flip-digit {
+  color: var(--accent-bright);
+  text-shadow: 0 0 10px rgba(253, 98, 95, 0.5);
+  animation: urgentPulse 1s infinite alternate;
+}
+
+@keyframes urgentPulse {
+  from { opacity: 0.8; text-shadow: 0 0 5px rgba(253, 98, 95, 0.3); }
+  to { opacity: 1; text-shadow: 0 0 15px rgba(253, 98, 95, 0.8); }
+}
+
+/* ROLLOVER PULSE */
+.countdown-container.rollover-pulse {
+  animation: glowPulse 1s ease-out;
+}
+
+@keyframes glowPulse {
+  0% { filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
+  30% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.8)); }
+  100% { filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
+}
