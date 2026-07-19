@@ -11,6 +11,7 @@ const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const SchoolDashboardPage = React.lazy(() => import('./pages/SchoolDashboardPage'));
 const AdminPage = React.lazy(() => import('./pages/AdminPage'));
 const DocumentationPage = React.lazy(() => import('./pages/DocumentationPage'));
+const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
 
 // Mobile Pages
 const MobileHomePage = React.lazy(() => import('./pages/mobile/MobileHomePage'));
@@ -33,6 +34,9 @@ function AppRouter() {
         
         {/* Admin stays desktop only */}
         <Route path="/admin" element={<AdminPage />} />
+
+        {/* Catch-all 404 */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );

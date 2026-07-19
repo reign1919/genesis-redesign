@@ -1,0 +1,281 @@
+/* ============================================================
+   404 NOT FOUND PAGE
+   ============================================================ */
+
+.notfound-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--bg);
+}
+
+.notfound-grid-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.08;
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, var(--accent) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--accent) 1px, transparent 1px);
+}
+
+/* ── Desktop Header ──────────────────────────────────────── */
+.notfound-tech-header {
+  position: absolute;
+  top: 32px;
+  left: 48px;
+  right: 48px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+}
+
+.notfound-tech-header a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.notfound-tech-header a:hover {
+  color: var(--accent-mid);
+}
+
+/* ── Content Area ────────────────────────────────────────── */
+.notfound-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 24px;
+  max-width: 600px;
+  width: 100%;
+}
+
+/* ── Glitch 404 ──────────────────────────────────────────── */
+.notfound-glitch-container {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.notfound-title {
+  font-family: var(--font-display);
+  font-size: clamp(80px, 15vw, 150px);
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  margin: 0;
+  letter-spacing: 0.05em;
+  position: relative;
+  text-shadow: 0 0 40px rgba(139, 26, 26, 0.4);
+  animation: notfoundPulse 4s infinite alternate;
+}
+
+.notfound-title::before,
+.notfound-title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.notfound-title::before {
+  left: 4px;
+  text-shadow: -2px 0 var(--accent-bright);
+  animation: glitch-anim-1 2s infinite linear alternate-reverse;
+  clip-path: inset(20% 0 80% 0);
+}
+
+.notfound-title::after {
+  left: -4px;
+  text-shadow: 2px 0 cyan;
+  animation: glitch-anim-2 3s infinite linear alternate-reverse;
+  clip-path: inset(80% 0 5% 0);
+}
+
+@keyframes glitch-anim-1 {
+  0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
+  20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+  40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+  60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+  80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
+  100% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -1px); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, -1px); }
+  20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px, 2px); }
+  40% { clip-path: inset(70% 0 10% 0); transform: translate(1px, -1px); }
+  60% { clip-path: inset(20% 0 50% 0); transform: translate(-1px, 1px); }
+  80% { clip-path: inset(50% 0 30% 0); transform: translate(2px, 2px); }
+  100% { clip-path: inset(5% 0 80% 0); transform: translate(-2px, -2px); }
+}
+
+@keyframes notfoundPulse {
+  0% { text-shadow: 0 0 20px rgba(139, 26, 26, 0.2); }
+  100% { text-shadow: 0 0 60px rgba(139, 26, 26, 0.6); }
+}
+
+/* ── Message Box ─────────────────────────────────────────── */
+.notfound-message-box {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.notfound-eyebrow {
+  color: var(--accent-bright);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 8px rgba(253, 98, 95, 0.4);
+}
+
+.notfound-quote {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 4vw, 22px);
+  color: var(--text);
+  line-height: 1.4;
+  margin: 0;
+  font-style: italic;
+}
+
+.notfound-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 200px;
+  margin: 8px 0;
+}
+
+.notfound-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-accent);
+}
+
+.notfound-divider-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  transform: rotate(45deg);
+}
+
+.notfound-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.notfound-desc strong {
+  color: var(--accent-bright);
+  font-weight: 600;
+}
+
+/* ── CTA Button ──────────────────────────────────────────── */
+.notfound-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent-light);
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.notfound-cta::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: -1;
+}
+
+.notfound-cta:hover {
+  color: #fff;
+  border-color: var(--accent-bright);
+}
+
+.notfound-cta:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.notfound-cta-arrow {
+  font-size: 16px;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.notfound-cta:hover .notfound-cta-arrow {
+  transform: translateX(4px);
+}
+
+/* ── Frame Brackets (Desktop) ────────────────────────────── */
+.notfound-frame {
+  position: absolute;
+  inset: 24px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.notfound-bracket {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--accent-mid);
+  opacity: 0.3;
+}
+
+.notfound-bracket--tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+.notfound-bracket--tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+.notfound-bracket--bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+.notfound-bracket--br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+/* ── Mobile Overrides ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .notfound-message-box {
+    padding: 24px;
+  }
+  
+  .notfound-cta {
+    width: 100%;
+    justify-content: center;
+    background: rgba(139, 26, 26, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
