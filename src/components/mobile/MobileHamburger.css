@@ -187,7 +187,7 @@
   position: relative;
 }
 
-.hamburger-nav-link:first-child {
+.hamburger-nav-item:first-child .hamburger-nav-link {
   border-top: 1px solid var(--border-subtle);
 }
 
@@ -242,21 +242,7 @@
   color: var(--accent-mid);
 }
 
-.hamburger-nav-link .footer-folder-icon {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  opacity: 0.8;
-  filter: grayscale(1) brightness(1.5);
-  transition: all 0.25s ease;
-  vertical-align: middle;
-}
 
-.hamburger-nav-link:hover .footer-folder-icon,
-.hamburger-nav-link.active .footer-folder-icon {
-  opacity: 1;
-  filter: none;
-}
 
 /* ── Panel footer ──────────────────────────────────────────── */
 .panel-footer {

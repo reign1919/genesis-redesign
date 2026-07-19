@@ -10,7 +10,7 @@ const navItems = [
   { to: '/login', label: 'REGISTER', icon: '◉' },
   { to: '/#about', label: 'ABOUT', hash: true, icon: '◎' },
   { to: '/docs', label: 'DOCUMENTATION', icon: '⊞' },
-  { action: 'creators', label: 'DEVELOPERS', icon: <img src={webDevIcon} alt="Web Dev" className="footer-folder-icon" /> },
+  { action: 'creators', label: 'DEVELOPERS', icon: <img src={webDevIcon} alt="Web Dev" style={{ width: '18px', height: '18px', objectFit: 'contain' }} /> },
 ];
 
 const MobileHamburger = () => {
