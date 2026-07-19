@@ -8,6 +8,7 @@ const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const SchoolDashboardPage = React.lazy(() => import('./pages/SchoolDashboardPage'));
 const AdminPage = React.lazy(() => import('./pages/AdminPage'));
+const DocumentationPage = React.lazy(() => import('./pages/DocumentationPage'));
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/dashboard" element={<SchoolDashboardPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/docs" element={<DocumentationPage />} />
           </Routes>
         </Suspense>
       </BrowserRouter>

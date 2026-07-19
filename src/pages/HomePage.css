@@ -183,3 +183,47 @@
     gap: 80px;
   }
 }
+
+/* --- FOOTER --- */
+.homepage-footer {
+  margin-top: 4rem;
+  padding: 2rem 0;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid var(--border);
+}
+
+.docs-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-family: var(--font-label);
+  font-size: 1rem;
+  color: var(--text);
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.docs-link-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-strong);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+.footer-folder-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  opacity: 0.8;
+  filter: grayscale(1) brightness(1.5);
+}
+
+.docs-link-btn:hover .footer-folder-icon {
+  opacity: 1;
+  filter: none;
+}

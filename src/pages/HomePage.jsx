@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import './HomePage.css';
 import CountdownTimer from '../components/CountdownTimer';
 import BrandBlock from '../components/BrandBlock';
@@ -75,6 +76,14 @@ const HomePage = () => {
         <section className="committee-section">
           <CommitteeSection />
         </section>
+
+        {/* FOOTER */}
+        <footer className="homepage-footer">
+          <Link to="/docs" className="docs-link-btn">
+            <img src="/src/assets/folder.png" alt="Folder" className="footer-folder-icon" />
+            <span>DOCUMENTATION</span>
+          </Link>
+        </footer>
       </div>
     </div>
   );
