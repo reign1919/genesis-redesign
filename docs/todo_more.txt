@@ -1,2 +1,2 @@
 add a difficulty meter to events
-event roulette
+event roulette/event quiz (4 questions or something to decide what event suits you)
