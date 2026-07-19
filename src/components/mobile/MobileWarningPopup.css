@@ -1,0 +1,90 @@
+.m-warning-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: m-warning-fade-in 0.4s ease-out forwards;
+}
+
+.m-warning-modal {
+  background: rgba(15, 15, 15, 0.95);
+  border: 1px solid var(--accent);
+  padding: 32px 24px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 0 40px rgba(139, 26, 26, 0.2);
+  transform: translateY(20px);
+  opacity: 0;
+  animation: m-warning-slide-up 0.5s ease-out 0.1s forwards;
+}
+
+.m-warning-icon {
+  font-size: 32px;
+  color: var(--accent-bright);
+  text-shadow: 0 0 10px rgba(253, 98, 95, 0.6);
+  margin-bottom: -8px;
+}
+
+.m-warning-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  color: #fff;
+  margin: 0;
+}
+
+.m-warning-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.m-warning-btn {
+  margin-top: 8px;
+  width: 100%;
+  padding: 16px;
+  background: rgba(139, 26, 26, 0.1);
+  border: 1px solid var(--accent);
+  color: var(--accent-light);
+  font-family: var(--font-label);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.m-warning-btn:active {
+  background: var(--accent);
+  color: #fff;
+  transform: scale(0.98);
+}
+
+@keyframes m-warning-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes m-warning-slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

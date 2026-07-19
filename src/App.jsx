@@ -19,12 +19,14 @@ const MobileLoginPage = React.lazy(() => import('./pages/mobile/MobileLoginPage'
 const MobileContactPage = React.lazy(() => import('./pages/mobile/MobileContactPage'));
 const MobileSchoolDashboardPage = React.lazy(() => import('./pages/mobile/MobileSchoolDashboardPage'));
 const MobileDocumentationPage = React.lazy(() => import('./pages/mobile/MobileDocumentationPage'));
+const MobileWarningPopup = React.lazy(() => import('./components/mobile/MobileWarningPopup'));
 
 function AppRouter() {
   const isMobile = useIsMobile();
 
   return (
     <Suspense fallback={<LoadingScreen />}>
+      {isMobile && <MobileWarningPopup />}
       <Routes>
         <Route path="/" element={isMobile ? <MobileHomePage /> : <HomePage />} />
         <Route path="/login" element={isMobile ? <MobileLoginPage /> : <LoginPage />} />
