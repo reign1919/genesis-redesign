@@ -1,7 +1,6 @@
 export type RegistrationInput = {
   schoolName: string;
   teacherWhatsapp: string;
-  captchaToken: string;
 };
 
 export type ValidationResult<T> =
@@ -29,29 +28,26 @@ export function normalizePhone(value: string): string {
 export function validateRegistrationPayload(
   payload: Record<string, unknown>,
 ): ValidationResult<RegistrationInput> {
-  if (!exactKeys(payload, ['schoolName', 'teacherWhatsapp', 'captchaToken'])) {
+  if (!exactKeys(payload, ['schoolName', 'teacherWhatsapp'])) {
     return { ok: false, code: 'INVALID_PAYLOAD' };
   }
 
   if (
     typeof payload.schoolName !== 'string' ||
-    typeof payload.teacherWhatsapp !== 'string' ||
-    typeof payload.captchaToken !== 'string'
+    typeof payload.teacherWhatsapp !== 'string'
   ) {
     return { ok: false, code: 'INVALID_PAYLOAD' };
   }
 
   if (
     payload.schoolName.length > 512 ||
-    payload.teacherWhatsapp.length > 64 ||
-    payload.captchaToken.length > 2048
+    payload.teacherWhatsapp.length > 64
   ) {
     return { ok: false, code: 'INVALID_PAYLOAD' };
   }
 
   const schoolName = normalizeSchoolName(payload.schoolName);
   const teacherWhatsapp = normalizePhone(payload.teacherWhatsapp);
-  const captchaToken = payload.captchaToken.trim();
 
   if (
     schoolName.length < 2 ||
@@ -65,13 +61,9 @@ export function validateRegistrationPayload(
     return { ok: false, code: 'INVALID_PHONE' };
   }
 
-  if (!captchaToken) {
-    return { ok: false, code: 'CAPTCHA_REQUIRED' };
-  }
-
   return {
     ok: true,
-    value: { schoolName, teacherWhatsapp, captchaToken },
+    value: { schoolName, teacherWhatsapp },
   };
 }
 

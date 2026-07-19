@@ -11,7 +11,7 @@ This repository uses the hosted Supabase project `kcnmvggxqcxlbbfgtrwq` for scho
 
 ## Enrollment flow
 
-1. A school submits its name and teacher-in-charge WhatsApp number after completing Turnstile.
+1. A school submits its name and teacher-in-charge WhatsApp number.
 2. The admin panel lists the application as pending.
 3. Rejection finalizes the application without sending a notification.
 4. Approval creates a `GEN-####` code, an eight-character password, and a Supabase Auth account.
@@ -25,13 +25,12 @@ The ignored local `.env` requires these public values:
 ```text
 VITE_SUPABASE_URL
 VITE_SUPABASE_ANON_KEY
-VITE_TURNSTILE_SITE_KEY
 VITE_ENROLLMENT_ENABLED=true
 ```
 
 `VITE_SCHOOL_AUTH_DOMAIN` is optional and defaults to `schools.genesis.invalid`. It must match the Edge Function `SCHOOL_AUTH_EMAIL_DOMAIN` value if changed.
 
-Do not add service-role, encryption, Turnstile secret, or database credentials to a frontend environment file.
+Do not add service-role, encryption, or database credentials to a frontend environment file.
 
 ## Hosted Edge Function secrets
 
@@ -40,15 +39,12 @@ Configure these with `supabase secrets set`:
 ```text
 ALLOWED_ORIGINS
 ENROLLMENT_ENABLED
-TURNSTILE_SECRET_KEY
-TURNSTILE_EXPECTED_HOSTNAMES
-TURNSTILE_REGISTRATION_ACTION
 SCHOOL_AUTH_EMAIL_DOMAIN
 SCHOOL_CREDENTIAL_ENCRYPTION_KEY
 PUBLIC_PORTAL_URL
 ```
 
-For production, replace the current localhost values in `ALLOWED_ORIGINS`, `TURNSTILE_EXPECTED_HOSTNAMES`, and `PUBLIC_PORTAL_URL` with the deployed frontend origin and `/login` URL. Add the production hostname to the Cloudflare Turnstile widget as well.
+For production, replace the current localhost values in `ALLOWED_ORIGINS` and `PUBLIC_PORTAL_URL` with the deployed frontend origin and `/login` URL.
 
 ## Deployment order
 
@@ -80,4 +76,4 @@ supabase db reset
 npm run test:db
 ```
 
-Before launch, manually verify registration, approval, credential delivery, school login/dashboard access, rejection, admin authorization, Contact Us, CORS, and Turnstile using the final production hostname.
+Before launch, manually verify registration, approval, credential delivery, school login/dashboard access, rejection, admin authorization, Contact Us, CORS, and direct route refreshes using the final production hostname.

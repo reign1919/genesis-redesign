@@ -1,7 +1,7 @@
 import { corsDecision } from '../_shared/cors.ts';
 import { createRequestId, jsonResponse, readJsonObject, stableBody } from '../_shared/http.ts';
 import { safeLog } from '../_shared/logging.ts';
-import { clientIp, sha256, verifyTurnstile } from '../_shared/security.ts';
+import { clientIp, sha256 } from '../_shared/security.ts';
 import { createAdminClient } from '../_shared/supabase.ts';
 import { validateRegistrationPayload } from '../_shared/validation.ts';
 
@@ -29,13 +29,11 @@ export async function handleSubmitRegistration(
   dependencies: {
     env?: (name: string) => string;
     createAdminClient?: typeof createAdminClient;
-    verifyTurnstile?: typeof verifyTurnstile;
     sha256?: typeof sha256;
   } = {},
 ): Promise<Response> {
   const env = dependencies.env || ((name: string) => Deno.env.get(name) || '');
   const makeAdminClient = dependencies.createAdminClient || createAdminClient;
-  const verifyCaptcha = dependencies.verifyTurnstile || verifyTurnstile;
   const hash = dependencies.sha256 || sha256;
   const requestId = createRequestId();
   const cors = corsDecision(request, ['POST'], env('ALLOWED_ORIGINS'));
@@ -62,9 +60,7 @@ export async function handleSubmitRegistration(
         ? 'Enter a school name between 2 and 120 characters.'
         : validated.code === 'INVALID_PHONE'
           ? 'Enter the WhatsApp number in international format, such as +919876543210.'
-          : validated.code === 'CAPTCHA_REQUIRED'
-            ? 'Complete the security check before continuing.'
-            : 'Check the submitted fields and try again.';
+          : 'Check the submitted fields and try again.';
       return jsonResponse(stableBody(false, validated.code, message, requestId), 400, cors.headers);
     }
 
@@ -91,36 +87,16 @@ export async function handleSubmitRegistration(
       return jsonResponse(stableBody(false, 'RATE_LIMITED', 'Too many attempts. Try again later.', requestId), 429, cors.headers);
     }
 
-    const captcha = await verifyCaptcha(validated.value.captchaToken, ipAddress, requestId, {
-      secret: env('TURNSTILE_SECRET_KEY'),
-      expectedHostnames: env('TURNSTILE_EXPECTED_HOSTNAMES'),
-      expectedAction: env('TURNSTILE_REGISTRATION_ACTION') || 'submit_registration',
-    });
-    if (!captcha.ok) {
-      const invalid = captcha.code === 'CAPTCHA_INVALID';
-      return jsonResponse(
-        stableBody(false, invalid ? 'CAPTCHA_INVALID' : 'SERVICE_UNAVAILABLE', invalid ? 'The security check expired or was invalid. Try again.' : 'Registration is temporarily unavailable.', requestId),
-        invalid ? 400 : 503,
-        cors.headers,
-      );
-    }
-
-    const captchaHash = await hash(validated.value.captchaToken);
     const { data: creationCode, error: creationError } = await adminClient.rpc(
       'create_public_registration',
       {
         p_school_name: validated.value.schoolName,
         p_teacher_whatsapp: validated.value.teacherWhatsapp,
-        p_captcha_hash: captchaHash,
-        p_subject_hash: whatsappHash,
       },
     );
     if (creationError || typeof creationCode !== 'string') {
       safeLog('error', 'registration_creation_failed', requestId, { code: 'DATABASE_ERROR' });
       return jsonResponse(stableBody(false, 'SERVICE_UNAVAILABLE', 'Registration is temporarily unavailable.', requestId), 503, cors.headers);
-    }
-    if (creationCode === 'captcha_reused') {
-      return jsonResponse(stableBody(false, 'CAPTCHA_INVALID', 'The security check expired or was invalid. Try again.', requestId), 400, cors.headers);
     }
     const duplicate = DUPLICATE_RESPONSES[creationCode];
     if (duplicate) {

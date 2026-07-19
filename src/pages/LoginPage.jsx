@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import NeuralBackground from '../components/NeuralBackground';
 import CompassSVG from '../components/CompassSVG';
-import Turnstile from '../components/Turnstile';
 import { signInSchool } from '../lib/auth';
 import { loadSchoolCredentials, submitRegistration } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
@@ -14,8 +13,6 @@ function registrationMessage(result) {
   const messages = {
     INVALID_SCHOOL_NAME: 'Enter a school name between 2 and 120 characters.',
     INVALID_PHONE: 'Use international phone format, such as +919876543210.',
-    CAPTCHA_REQUIRED: 'Complete the security check again.',
-    CAPTCHA_INVALID: 'The security check expired. Complete it again.',
     ALREADY_PENDING: 'Your school registration is already awaiting review.',
     ALREADY_APPROVED: 'Your school is already approved. Contact the core committee if you need the credentials again.',
     REGISTRATION_REJECTED: 'Thank you for your interest. Your school registration was not approved for this edition of Genesis.',
@@ -35,8 +32,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [schoolName, setSchoolName] = useState('');
   const [teacherWhatsapp, setTeacherWhatsapp] = useState('');
-  const [captchaToken, setCaptchaToken] = useState('');
-  const [captchaReset, setCaptchaReset] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [formResult, setFormResult] = useState(null);
 
@@ -69,8 +64,6 @@ const LoginPage = () => {
     const next = mode === 'login' ? 'register' : 'login';
     setMode(next);
     setNeedleRotation(prev => prev + 180);
-    setCaptchaToken('');
-    setCaptchaReset(prev => prev + 1);
     setFormResult(null);
   };
 
@@ -78,21 +71,13 @@ const LoginPage = () => {
     event.preventDefault();
     setFormResult(null);
 
-    if (!captchaToken) {
-      setFormResult({ ok: false, message: 'Complete the security check before continuing.' });
-      return;
-    }
-
     setSubmitting(true);
     if (mode === 'register') {
       const result = await submitRegistration({
         schoolName,
         teacherWhatsapp,
-        captchaToken,
       });
       setSubmitting(false);
-      setCaptchaToken('');
-      setCaptchaReset(prev => prev + 1);
 
       if (!result.ok) {
         setFormResult({ ok: false, message: registrationMessage(result) });
@@ -108,11 +93,9 @@ const LoginPage = () => {
       return;
     }
 
-    const result = await signInSchool(schoolCode, password, captchaToken);
+    const result = await signInSchool(schoolCode, password);
     setSubmitting(false);
     setPassword('');
-    setCaptchaToken('');
-    setCaptchaReset(prev => prev + 1);
     if (!result.ok) {
       setFormResult({
         ok: false,
@@ -314,9 +297,7 @@ const LoginPage = () => {
                   />
                 </div>
 
-                <Turnstile action="school_login" onToken={setCaptchaToken} resetKey={captchaReset} />
-
-                <button type="submit" className="submit-btn" id="login-submit" disabled={submitting || !captchaToken}>
+                <button type="submit" className="submit-btn" id="login-submit" disabled={submitting}>
                   <span>{submitting ? 'AUTHENTICATING...' : 'ENTER'}</span>
                   <span className="submit-arrow">→</span>
                 </button>
@@ -359,9 +340,7 @@ const LoginPage = () => {
                   />
                 </div>
 
-                <Turnstile action="submit_registration" onToken={setCaptchaToken} resetKey={captchaReset} />
-
-                <button type="submit" className="submit-btn" id="register-submit" disabled={submitting || !captchaToken || !enrollmentEnabled}>
+                <button type="submit" className="submit-btn" id="register-submit" disabled={submitting || !enrollmentEnabled}>
                   <span>{submitting ? 'SUBMITTING...' : enrollmentEnabled ? 'REGISTER' : 'ENROLLMENT CLOSED'}</span>
                   <span className="submit-arrow">→</span>
                 </button>

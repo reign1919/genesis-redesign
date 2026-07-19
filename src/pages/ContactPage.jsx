@@ -275,7 +275,7 @@ const ContactPage = () => {
                 {/* Anti-spam honeypot */}
                 <input type="text" name="_honey" style={{ display: 'none' }} />
                 
-                {/* Disable captcha for seamless AJAX */}
+                {/* Keep FormSubmit's challenge page disabled for AJAX submissions. */}
                 <input type="hidden" name="_captcha" value="false" />
                 
                 <div className="mf-row">

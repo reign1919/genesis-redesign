@@ -38,7 +38,6 @@ describe('Edge Function client', () => {
     const result = await submitRegistration({
       schoolName: 'School A',
       teacherWhatsapp: '+919876543210',
-      captchaToken: 'captcha-token',
     });
 
     expect(result.ok).toBe(true);

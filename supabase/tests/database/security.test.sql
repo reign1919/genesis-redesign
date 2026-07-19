@@ -10,7 +10,7 @@ select hasnt_column('public', 'registrations', 'password', 'registrations contai
 select hasnt_column('public', 'school_credentials', 'password', 'credentials contain no plaintext password column');
 select col_is_unique('public', 'registrations', 'teacher_whatsapp', 'WhatsApp identifies duplicate enrollment');
 select col_is_unique('public', 'registrations', 'school_code', 'school codes are unique');
-select col_is_pk('public', 'captcha_redemptions', 'token_hash', 'CAPTCHA tokens cannot be replayed');
+select hasnt_table('public', 'captcha_redemptions', 'obsolete CAPTCHA storage is removed');
 select hasnt_function('public', 'handle_new_user', 'legacy duplicate Auth profile trigger function is removed');
 
 insert into auth.users (
@@ -25,24 +25,24 @@ update public.profiles set is_admin = true
 where id = '10000000-0000-0000-0000-000000000001';
 
 select is(
-  public.create_public_registration('School A', '+919876543210', repeat('a', 64), repeat('1', 64)),
+  public.create_public_registration('School A', '+919876543210'),
   'created',
   'public registration creates a pending row'
 );
 select is(
-  public.create_public_registration('School A Again', '+919876543210', repeat('b', 64), repeat('1', 64)),
+  public.create_public_registration('School A Again', '+919876543210'),
   'duplicate_pending',
   'repeat WhatsApp reports the pending state'
 );
 select is(
-  public.create_public_registration('School B', '+919876543211', repeat('a', 64), repeat('2', 64)),
-  'captcha_reused',
-  'reused CAPTCHA token is rejected'
-);
-select is(
-  public.create_public_registration('School B', '+919876543211', repeat('c', 64), repeat('2', 64)),
+  public.create_public_registration('School B', '+919876543211'),
   'created',
   'a second unique school can register'
+);
+select is(
+  public.create_public_registration('School B Again', '+919876543211'),
+  'duplicate_pending',
+  'repeat WhatsApp for the second school is detected'
 );
 select is(
   public.consume_public_registration_attempt(repeat('3', 64), repeat('4', 64)),
@@ -87,7 +87,7 @@ select throws_ok('select * from public.registrations', '42501', null, 'anonymous
 select throws_ok('insert into public.registrations (school_name, teacher_whatsapp) values (''Attack'', ''+919999999999'')', '42501', null, 'anonymous clients cannot bypass the registration function');
 select throws_ok('update public.registrations set status = ''approved''', '42501', null, 'anonymous clients cannot approve schools');
 select throws_ok('select * from public.school_credentials', '42501', null, 'anonymous clients cannot read encrypted credentials');
-select throws_ok('select public.create_public_registration(''Attack'', ''+919999999999'', repeat(''d'', 64), repeat(''e'', 64))', '42501', null, 'anonymous clients cannot call service RPCs directly');
+select throws_ok('select public.create_public_registration(''Attack'', ''+919999999999'')', '42501', null, 'anonymous clients cannot call service RPCs directly');
 reset role;
 
 set local role authenticated;

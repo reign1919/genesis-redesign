@@ -9,11 +9,10 @@ In Vercel, open **Project Settings → Environment Variables** and add these var
 ```text
 VITE_SUPABASE_URL
 VITE_SUPABASE_ANON_KEY
-VITE_TURNSTILE_SITE_KEY
 VITE_ENROLLMENT_ENABLED=true
 ```
 
-Copy only these public `VITE_` values from the local `.env`. Do not add service-role, encryption, database, or Turnstile secret keys to Vercel.
+Copy only these public `VITE_` values from the local `.env`. Do not add service-role, encryption, or database keys to Vercel.
 
 Redeploy after adding or changing environment variables.
 
@@ -23,19 +22,14 @@ Replace `YOUR-DOMAIN` with the final Vercel/custom domain:
 
 ```text
 ALLOWED_ORIGINS=http://localhost:5173,https://YOUR-DOMAIN
-TURNSTILE_EXPECTED_HOSTNAMES=localhost,127.0.0.1,YOUR-DOMAIN
 PUBLIC_PORTAL_URL=https://YOUR-DOMAIN/login
 ```
 
-Set these as hosted Supabase Edge Function secrets. Do not include `https://` in `TURNSTILE_EXPECTED_HOSTNAMES`.
+Set these as hosted Supabase Edge Function secrets.
 
-## 3. Configure Cloudflare Turnstile
+## 3. Vercel SPA routing
 
-Add the final Vercel/custom hostname to the Turnstile widget's allowed hostnames. Enter only the hostname, without `https://` or a path.
-
-## 4. Add Vercel SPA routing
-
-Add a root-level `vercel.json` so direct visits and refreshes work for `/login`, `/dashboard`, and `/admin`:
+The root-level `vercel.json` sends application routes to `index.html` so direct visits and refreshes work for `/login`, `/dashboard`, and `/admin`:
 
 ```json
 {
@@ -47,7 +41,7 @@ Add a root-level `vercel.json` so direct visits and refreshes work for `/login`,
 
 Commit, push, and redeploy after adding the rewrite.
 
-## 5. Production verification
+## 4. Production verification
 
 - Open `/login` directly and refresh it.
 - Submit a new school registration.

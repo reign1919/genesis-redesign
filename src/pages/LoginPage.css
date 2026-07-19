@@ -517,11 +517,6 @@
   background: var(--accent);
 }
 
-.turnstile-field {
-  min-height: 65px;
-  overflow-x: auto;
-}
-
 .form-message {
   margin-top: 20px;
   padding: 12px 16px;

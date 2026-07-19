@@ -12,16 +12,15 @@ export function schoolCodeEmail(value) {
   return `${code.toLowerCase()}@${schoolAuthDomain}`;
 }
 
-export async function signInSchool(schoolCode, password, captchaToken) {
+export async function signInSchool(schoolCode, password) {
   if (!isSupabaseConfigured) return { ok: false, code: 'SERVICE_UNAVAILABLE' };
   const email = schoolCodeEmail(schoolCode);
-  if (!email || !password || !captchaToken) return { ok: false, code: 'INVALID_REQUEST' };
+  if (!email || !password) return { ok: false, code: 'INVALID_REQUEST' };
 
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
-      options: { captchaToken },
     });
     if (error || !data?.session) return { ok: false, code: 'AUTH_FAILED' };
     return { ok: true, session: data.session };

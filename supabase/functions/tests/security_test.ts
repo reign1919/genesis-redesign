@@ -1,5 +1,5 @@
 import { corsDecision } from '../_shared/cors.ts';
-import { bearerToken, clientIp, verifyTurnstile } from '../_shared/security.ts';
+import { bearerToken, clientIp } from '../_shared/security.ts';
 import { validateAdminTransition, validateRegistrationPayload } from '../_shared/validation.ts';
 import { handleAdminRegistrations } from '../admin-registrations/index.ts';
 import { handleSubmitRegistration } from '../submit-registration/index.ts';
@@ -21,12 +21,11 @@ async function responseBody(response: Response) {
   return await response.json() as Record<string, unknown>;
 }
 
-Deno.test('registration validation rejects unknown, malformed, and oversized fields', () => {
+Deno.test('registration validation rejects unknown and malformed fields', () => {
   assertEquals(
     validateRegistrationPayload({
       schoolName: 'School A',
       teacherWhatsapp: '+919876543210',
-      captchaToken: 'token',
       userId: 'caller-controlled',
     }),
     { ok: false, code: 'INVALID_PAYLOAD' },
@@ -36,7 +35,6 @@ Deno.test('registration validation rejects unknown, malformed, and oversized fie
     validateRegistrationPayload({
       schoolName: 'A',
       teacherWhatsapp: '+919876543210',
-      captchaToken: 'token',
     }),
     { ok: false, code: 'INVALID_SCHOOL_NAME' },
     'short school name must fail',
@@ -45,28 +43,9 @@ Deno.test('registration validation rejects unknown, malformed, and oversized fie
     validateRegistrationPayload({
       schoolName: 'School A',
       teacherWhatsapp: '9876543210',
-      captchaToken: 'token',
     }),
     { ok: false, code: 'INVALID_PHONE' },
     'non-E.164 phone must fail',
-  );
-  assertEquals(
-    validateRegistrationPayload({
-      schoolName: 'School A',
-      teacherWhatsapp: '+919876543210',
-      captchaToken: 'x'.repeat(2049),
-    }),
-    { ok: false, code: 'INVALID_PAYLOAD' },
-    'oversized CAPTCHA must fail before verification',
-  );
-  assertEquals(
-    validateRegistrationPayload({
-      schoolName: 'School A',
-      teacherWhatsapp: '+919876543210',
-      captchaToken: '   ',
-    }),
-    { ok: false, code: 'CAPTCHA_REQUIRED' },
-    'missing CAPTCHA must fail',
   );
 });
 
@@ -154,85 +133,7 @@ Deno.test('bearer and proxy parsing reject malformed caller-controlled data', ()
   );
 });
 
-Deno.test('Turnstile validation binds success to hostname and action', async () => {
-  const valid = await verifyTurnstile(
-    'token',
-    '203.0.113.10',
-    crypto.randomUUID(),
-    {
-      secret: 'test-secret',
-      expectedHostnames: 'genesis.example',
-      expectedAction: 'submit_registration',
-      fetchImpl: () =>
-        Promise.resolve(
-          new Response(
-            JSON.stringify({
-              success: true,
-              hostname: 'genesis.example',
-              action: 'submit_registration',
-            }),
-            { status: 200 },
-          ),
-        ),
-    },
-  );
-  assertEquals(valid, { ok: true }, 'valid response');
-
-  const replayed = await verifyTurnstile(
-    'replayed',
-    '203.0.113.10',
-    crypto.randomUUID(),
-    {
-      secret: 'test-secret',
-      expectedHostnames: 'genesis.example',
-      expectedAction: 'submit_registration',
-      fetchImpl: () =>
-        Promise.resolve(
-          new Response(
-            JSON.stringify({
-              success: false,
-              'error-codes': ['timeout-or-duplicate'],
-            }),
-            { status: 200 },
-          ),
-        ),
-    },
-  );
-  assertEquals(
-    replayed,
-    { ok: false, code: 'CAPTCHA_INVALID' },
-    'replayed token',
-  );
-
-  const wrongAction = await verifyTurnstile(
-    'token',
-    '203.0.113.10',
-    crypto.randomUUID(),
-    {
-      secret: 'test-secret',
-      expectedHostnames: 'genesis.example',
-      expectedAction: 'submit_registration',
-      fetchImpl: () =>
-        Promise.resolve(
-          new Response(
-            JSON.stringify({
-              success: true,
-              hostname: 'genesis.example',
-              action: 'different_action',
-            }),
-            { status: 200 },
-          ),
-        ),
-    },
-  );
-  assertEquals(
-    wrongAction,
-    { ok: false, code: 'CAPTCHA_INVALID' },
-    'wrong action',
-  );
-});
-
-Deno.test('submit handler creates a public registration only after CAPTCHA and quota checks', async () => {
+Deno.test('submit handler creates a public registration after validation and quota checks', async () => {
   const calls: Array<[string, Record<string, unknown>]> = [];
   const adminClient = {
     rpc(name: string, parameters: Record<string, unknown>) {
@@ -253,23 +154,15 @@ Deno.test('submit handler creates a public registration only after CAPTCHA and q
       body: JSON.stringify({
         schoolName: '  School   A  ',
         teacherWhatsapp: '+91 98765 43210',
-        captchaToken: 'captcha-token',
       }),
     }),
     {
       env: (name) =>
         ({
           ENROLLMENT_ENABLED: 'true',
-          TURNSTILE_SECRET_KEY: 'secret',
-          TURNSTILE_EXPECTED_HOSTNAMES: 'genesis.example',
-          TURNSTILE_REGISTRATION_ACTION: 'submit_registration',
         })[name] || '',
       createAdminClient: () => adminClient as never,
-      verifyTurnstile: () => Promise.resolve({ ok: true }),
-      sha256: (value) =>
-        Promise.resolve(
-          value === 'captcha-token' ? 'c'.repeat(64) : 'a'.repeat(64),
-        ),
+      sha256: () => Promise.resolve('a'.repeat(64)),
     },
   );
 
@@ -288,7 +181,7 @@ Deno.test('submit handler creates a public registration only after CAPTCHA and q
   );
 });
 
-Deno.test('submit handler returns stable rate, CAPTCHA, and duplicate failures', async () => {
+Deno.test('submit handler returns stable rate and duplicate failures', async () => {
   const baseRequest = () =>
     new Request('https://function.example', {
       method: 'POST',
@@ -298,7 +191,6 @@ Deno.test('submit handler returns stable rate, CAPTCHA, and duplicate failures',
       body: JSON.stringify({
         schoolName: 'School A',
         teacherWhatsapp: '+919876543210',
-        captchaToken: 'captcha-token',
       }),
     });
   const baseDependencies = {
@@ -316,21 +208,6 @@ Deno.test('submit handler returns stable rate, CAPTCHA, and duplicate failures',
   assertEquals(limited.status, 429, 'rate status');
   assertEquals((await responseBody(limited)).code, 'RATE_LIMITED', 'rate code');
 
-  const invalidCaptcha = await handleSubmitRegistration(baseRequest(), {
-    ...baseDependencies,
-    createAdminClient: () =>
-      ({
-        rpc: () => Promise.resolve({ data: 'ok', error: null }),
-      }) as never,
-    verifyTurnstile: () => Promise.resolve({ ok: false, code: 'CAPTCHA_INVALID' }),
-  });
-  assertEquals(invalidCaptcha.status, 400, 'CAPTCHA status');
-  assertEquals(
-    (await responseBody(invalidCaptcha)).code,
-    'CAPTCHA_INVALID',
-    'CAPTCHA code',
-  );
-
   let rpcCall = 0;
   const duplicate = await handleSubmitRegistration(baseRequest(), {
     ...baseDependencies,
@@ -342,7 +219,6 @@ Deno.test('submit handler returns stable rate, CAPTCHA, and duplicate failures',
             error: null,
           }),
       }) as never,
-    verifyTurnstile: () => Promise.resolve({ ok: true }),
   });
   assertEquals(duplicate.status, 409, 'duplicate status');
   assertEquals(
