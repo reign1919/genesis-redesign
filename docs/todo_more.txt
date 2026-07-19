@@ -1,0 +1,2 @@
+add a difficulty meter to events
+event roulette
