@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import './CommitteeSection.css';
 
 const CommitteeSection = () => {
@@ -39,4 +39,4 @@ const CommitteeSection = () => {
   );
 };
 
-export default CommitteeSection;
+export default memo(CommitteeSection);

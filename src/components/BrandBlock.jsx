@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import './BrandBlock.css';
 import DashboardButton from './DashboardButton';
 
@@ -61,4 +61,4 @@ const BrandBlock = () => {
   );
 };
 
-export default BrandBlock;
+export default memo(BrandBlock);

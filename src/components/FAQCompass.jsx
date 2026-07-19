@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import CompassSVG from './CompassSVG';
 import './FAQCompass.css';
 
@@ -67,4 +67,4 @@ const FAQCompass = () => {
   );
 };
 
-export default FAQCompass;
+export default memo(FAQCompass);

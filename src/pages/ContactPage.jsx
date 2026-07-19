@@ -19,11 +19,10 @@ const SIGNAL_MSGS = [
 ];
 
 const ContactPage = () => {
-  const [mousePos, setMousePos] = useState({ x: '50%', y: '50%' });
   const [signalIdx, setSignalIdx] = useState(0);
   const [formStatus, setFormStatus] = useState('idle'); // idle | sending | sent
   const [hoveredContact, setHoveredContact] = useState(null);
-  const rafRef = useRef(null);
+  const wrapperRef = useRef(null);
 
   /* Signal msg cycle */
   useEffect(() => {
@@ -32,15 +31,10 @@ const ContactPage = () => {
   }, []);
 
   const handleMouseMove = (e) => {
-    if (rafRef.current) return;
-    
-    const x = `${e.clientX}px`;
-    const y = `${e.clientY}px`;
-    
-    rafRef.current = requestAnimationFrame(() => {
-      setMousePos({ x, y });
-      rafRef.current = null;
-    });
+    if (wrapperRef.current) {
+      wrapperRef.current.style.setProperty('--mouse-x', `${e.clientX}px`);
+      wrapperRef.current.style.setProperty('--mouse-y', `${e.clientY}px`);
+    }
   };
 
   const handleSend = async (e) => {
@@ -124,8 +118,9 @@ const ContactPage = () => {
   return (
     <div
       className="contact-wrapper"
+      ref={wrapperRef}
       onMouseMove={handleMouseMove}
-      style={{ '--mouse-x': mousePos.x, '--mouse-y': mousePos.y }}
+      style={{ '--mouse-x': '50%', '--mouse-y': '50%' }}
     >
       {/* Background */}
       <div className="contact-background">

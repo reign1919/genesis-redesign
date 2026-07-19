@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 import CompassSVG from './CompassSVG';
 import './CompassNav.css';
@@ -32,4 +32,4 @@ const CompassNav = () => {
   );
 };
 
-export default CompassNav;
+export default memo(CompassNav);

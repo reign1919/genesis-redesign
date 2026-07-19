@@ -6,43 +6,24 @@ import CompassNav from '../components/CompassNav';
 import FAQCompass from '../components/FAQCompass';
 import CommitteeSection from '../components/CommitteeSection';
 import NeuralBackground from '../components/NeuralBackground';
+import SysReadyCounter from '../components/SysReadyCounter';
 
 const HomePage = () => {
-  const [mousePos, setMousePos] = useState({ x: '50%', y: '50%' });
-  const [sysReady, setSysReady] = useState(0);
-  const rafRef = useRef(null);
-
-  useEffect(() => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.floor(Math.random() * 15) + 5;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-      }
-      setSysReady(progress);
-    }, 40); // Fast dopamine count-up on load
-    return () => clearInterval(interval);
-  }, []);
+  const wrapperRef = useRef(null);
 
   const handleMouseMove = (e) => {
-    if (rafRef.current) return; // Skip if a frame is already pending
-    
-    // Capture coordinates immediately
-    const x = `${e.clientX}px`;
-    const y = `${e.clientY}px`;
-    
-    rafRef.current = requestAnimationFrame(() => {
-      setMousePos({ x, y });
-      rafRef.current = null;
-    });
+    if (wrapperRef.current) {
+      wrapperRef.current.style.setProperty('--mouse-x', `${e.clientX}px`);
+      wrapperRef.current.style.setProperty('--mouse-y', `${e.clientY}px`);
+    }
   };
 
   return (
     <div 
       className="homepage-wrapper" 
+      ref={wrapperRef}
       onMouseMove={handleMouseMove} 
-      style={{ '--mouse-x': mousePos.x, '--mouse-y': mousePos.y }}
+      style={{ '--mouse-x': '50%', '--mouse-y': '50%' }}
     >
       
       {/* 1. Constellation Background */}
@@ -69,7 +50,7 @@ const HomePage = () => {
         <div className="header-right">INDUS VALLEY WORLD SCHOOL</div>
       </header>
       
-      <div className="data-accent left-accent">SYS.RDY // {sysReady}%</div>
+      <div className="data-accent left-accent"><SysReadyCounter /></div>
       <div className="data-accent right-accent">LAT: 22.5121° N<br/>LNG: 88.4027° E</div>
       
       {/* 5. Main Content Container */}

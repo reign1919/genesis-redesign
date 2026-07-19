@@ -28,7 +28,6 @@ const LoginPage = () => {
   const { login } = useAuth();
   const [mode, setMode] = useState('login'); // 'login' | 'register'
   const [needleRotation, setNeedleRotation] = useState(0); // 0 = login (up), 180 = register (down)
-  const [mousePos, setMousePos] = useState({ x: '50%', y: '50%' });
   const [authStatus, setAuthStatus] = useState(0);
   const [schoolCode, setSchoolCode] = useState('');
   const [password, setPassword] = useState('');
@@ -36,7 +35,7 @@ const LoginPage = () => {
   const [teacherWhatsapp, setTeacherWhatsapp] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formResult, setFormResult] = useState(null);
-  const rafRef = useRef(null);
+  const wrapperRef = useRef(null);
 
   // Count-up on mount
   useEffect(() => {
@@ -60,15 +59,10 @@ const LoginPage = () => {
   }, [navigate]);
 
   const handleMouseMove = (e) => {
-    if (rafRef.current) return;
-    
-    const x = `${e.clientX}px`;
-    const y = `${e.clientY}px`;
-    
-    rafRef.current = requestAnimationFrame(() => {
-      setMousePos({ x, y });
-      rafRef.current = null;
-    });
+    if (wrapperRef.current) {
+      wrapperRef.current.style.setProperty('--mouse-x', `${e.clientX}px`);
+      wrapperRef.current.style.setProperty('--mouse-y', `${e.clientY}px`);
+    }
   };
 
   const toggleMode = () => {
@@ -120,8 +114,9 @@ const LoginPage = () => {
   return (
     <div
       className="login-wrapper"
+      ref={wrapperRef}
       onMouseMove={handleMouseMove}
-      style={{ '--mouse-x': mousePos.x, '--mouse-y': mousePos.y }}
+      style={{ '--mouse-x': '50%', '--mouse-y': '50%' }}
     >
       {/* Background layer */}
       <div className="login-background">
