@@ -1,0 +1,81 @@
+/* ============================================================
+   MOBILE COUNTDOWN
+   ============================================================ */
+
+.m-countdown {
+  width: 100%;
+  max-width: 340px;
+  border-left: 2px solid var(--accent-deep);
+  padding: 16px 20px;
+}
+
+.m-countdown-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.m-countdown-grid {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.m-countdown-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.m-countdown-value {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: 0.05em;
+  background: var(--bg-surface-highest);
+  padding: 8px 4px;
+  width: 100%;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.m-countdown-unit {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+
+.m-countdown-sep {
+  color: var(--accent-bright);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  animation: mSepBlink 2s step-end infinite;
+  text-shadow: 0 0 6px rgba(253, 98, 95, 0.4);
+}
+
+@keyframes mSepBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Urgent state */
+.m-countdown--urgent {
+  border-left-color: var(--accent-bright);
+}
+
+.m-countdown--urgent .m-countdown-value {
+  color: var(--accent-bright);
+  text-shadow: 0 0 10px rgba(253, 98, 95, 0.5);
+  animation: mUrgentPulse 1s infinite alternate;
+}
+
+@keyframes mUrgentPulse {
+  from { opacity: 0.8; text-shadow: 0 0 5px rgba(253, 98, 95, 0.3); }
+  to { opacity: 1; text-shadow: 0 0 15px rgba(253, 98, 95, 0.8); }
+}

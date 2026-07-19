@@ -1,0 +1,106 @@
+/* ============================================================
+   MOBILE HOME PAGE
+   ============================================================ */
+
+.m-home-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grid overlay */
+.m-grid-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.06;
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, var(--accent) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--accent) 1px, transparent 1px);
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.m-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 24px;
+  pointer-events: none;
+}
+
+.m-header-text {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+
+/* ── Content ─────────────────────────────────────────────── */
+.m-home-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Countdown section ───────────────────────────────────── */
+.m-countdown-section {
+  padding: 20px 24px 40px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.m-home-footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px 24px;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+}
+
+.m-docs-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-label);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s;
+}
+
+.m-docs-link:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.m-docs-icon {
+  color: var(--accent-mid);
+  font-size: 16px;
+}
+
+.m-footer-rule {
+  width: 48px;
+  height: 1px;
+  background: var(--border-accent);
+}
+
+.m-footer-copy {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  text-align: center;
+}

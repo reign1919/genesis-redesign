@@ -1,0 +1,48 @@
+.mobile-bg-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.mobile-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(65, 0, 3, 0.4) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(105, 0, 8, 0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 1) 100%);
+  animation: bgPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes bgPulse {
+  0% {
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(65, 0, 3, 0.4) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(105, 0, 8, 0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 1) 100%);
+  }
+  100% {
+    background:
+      radial-gradient(ellipse 70% 50% at 70% 70%, rgba(65, 0, 3, 0.35) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 60% at 30% 30%, rgba(105, 0, 8, 0.2) 0%, transparent 70%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 1) 100%);
+  }
+}
+
+.mobile-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.mobile-bg-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+}

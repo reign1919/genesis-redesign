@@ -1,0 +1,207 @@
+/* ============================================================
+   MOBILE DOCUMENTATION PAGE
+   ============================================================ */
+
+.mdocs-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.mdocs-wrapper .m-grid-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.06;
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, var(--accent) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--accent) 1px, transparent 1px);
+}
+
+.mdocs-content {
+  position: relative;
+  z-index: 2;
+  padding: 72px 20px 40px;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.mdocs-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mdocs-back {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mdocs-back:active {
+  color: var(--accent-mid);
+}
+
+.mdocs-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 0.05em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* ── Selector ────────────────────────────────────────────── */
+.mdocs-selector {
+  position: relative;
+  width: 100%;
+}
+
+.mdocs-selector-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  text-align: left;
+}
+
+.mdocs-selector-btn .label-caps {
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-right: 12px;
+}
+
+.mdocs-selector-btn strong {
+  flex: 1;
+  font-family: var(--font-label);
+  font-size: 14px;
+  color: var(--text);
+  font-weight: normal;
+}
+
+.mdocs-chevron {
+  font-size: 12px;
+  color: var(--accent-mid);
+  transition: transform 0.2s;
+}
+
+.mdocs-chevron.open {
+  transform: rotate(180deg);
+}
+
+.mdocs-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+.mdocs-dropdown-item {
+  padding: 16px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-family: var(--font-label);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mdocs-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.mdocs-dropdown-item.active {
+  color: var(--accent-bright);
+  background: rgba(139, 26, 26, 0.05);
+}
+
+/* ── Markdown Content ────────────────────────────────────── */
+.mdocs-markdown-area {
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 24px 20px;
+  overflow-x: hidden;
+}
+
+.mdocs-markdown-area h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  font-family: var(--font-display);
+}
+
+.mdocs-markdown-area h2 {
+  font-size: 18px;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  color: var(--text);
+  font-family: var(--font-display);
+}
+
+.mdocs-markdown-area p {
+  line-height: 1.6;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.mdocs-markdown-area ul {
+  padding-left: 20px;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.mdocs-markdown-area li {
+  margin-bottom: 8px;
+}
+
+.mdocs-markdown-area code {
+  background: var(--bg-surface-highest);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.mdocs-markdown-area pre {
+  background: var(--bg-surface-highest);
+  padding: 12px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.mdocs-markdown-area pre code {
+  background: transparent;
+  padding: 0;
+}

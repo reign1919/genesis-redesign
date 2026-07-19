@@ -1,0 +1,338 @@
+/* ============================================================
+   MOBILE CONTACT PAGE
+   ============================================================ */
+
+.mc-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.mc-wrapper .m-grid-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.06;
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, var(--accent) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--accent) 1px, transparent 1px);
+}
+
+.mc-content {
+  position: relative;
+  z-index: 2;
+  padding: 72px 24px 40px;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Back nav ────────────────────────────────────────────── */
+.mc-back {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mc-back:active {
+  color: var(--accent-mid);
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.mc-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mc-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--accent-mid);
+}
+
+.mc-dash {
+  color: var(--accent);
+  font-size: 16px;
+}
+
+.mc-headline {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text);
+  margin: 0;
+}
+
+.mc-headline-accent {
+  color: var(--accent-mid);
+  font-style: italic;
+  font-family: var(--font-label);
+  font-size: 36px;
+}
+
+/* ── Decorative rule ─────────────────────────────────────── */
+.mc-rule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mc-rule-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-accent);
+}
+
+.mc-rule-line--short {
+  flex: 0 0 32px;
+}
+
+.mc-rule-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── Contact cards ───────────────────────────────────────── */
+.mc-cards {
+  display: flex;
+  flex-direction: column;
+}
+
+.mc-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: padding-left 0.2s ease;
+}
+
+.mc-card:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.mc-card:active {
+  padding-left: 8px;
+}
+
+.mc-card-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  color: var(--accent-mid);
+}
+
+.mc-icon-svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mc-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.mc-card-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--text-tertiary);
+}
+
+.mc-card-value {
+  font-family: var(--font-label);
+  font-size: 14px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mc-card-meta {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(139, 26, 26, 0.55);
+}
+
+.mc-card-arrow {
+  color: var(--text-muted);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Form ────────────────────────────────────────────────── */
+.mc-form-wrap {
+  border: 1px solid var(--border);
+  padding: 24px;
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  margin-top: 8px;
+}
+
+.mc-form-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mc-form-tag {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--accent-mid);
+  flex-shrink: 0;
+}
+
+.mc-form-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-accent);
+}
+
+.mc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mc-field-label {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--text-tertiary);
+}
+
+.mc-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-strong);
+  padding: 10px 0;
+  font-family: var(--font-label);
+  font-size: 16px; /* 16px to prevent iOS zoom */
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  resize: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+.mc-input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 14px;
+}
+
+.mc-input:focus {
+  border-bottom-color: var(--accent-mid);
+}
+
+.mc-textarea {
+  min-height: 72px;
+  line-height: 1.5;
+}
+
+.mc-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--accent);
+  border: none;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  color: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  margin-top: 4px;
+}
+
+.mc-submit:active:not(:disabled) {
+  background: #1A1616;
+}
+
+.mc-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.mc-submit--sending {
+  background: var(--accent-deep);
+}
+
+.mc-submit-arrow {
+  font-size: 16px;
+}
+
+/* ── Sent state ──────────────────────────────────────────── */
+.mc-sent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 28px 0;
+  text-align: center;
+  animation: mcFadeIn 0.35s ease-out;
+}
+
+@keyframes mcFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mc-sent-icon {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--accent-mid);
+}
+
+.mc-sent-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text);
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.mc-sent-sub {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--text-tertiary);
+  margin: 0;
+}

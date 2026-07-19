@@ -1,0 +1,198 @@
+/* ============================================================
+   MOBILE HERO
+   ============================================================ */
+
+.m-hero {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px 40px;
+  text-align: center;
+  gap: 28px;
+}
+
+/* ── Top accent ──────────────────────────────────────────── */
+.m-hero-top-accent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.m-hero-accent-text {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.m-hero-accent-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-accent);
+}
+
+/* ── Logos ────────────────────────────────────────────────── */
+.m-hero-logos {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.m-hero-logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
+.m-hero-logo-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--border-accent);
+}
+
+/* ── Title ───────────────────────────────────────────────── */
+.m-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 14vw, 80px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.15em;
+  line-height: 1;
+  margin: 0;
+  animation: mobileGlitchIn 0.8s ease-out forwards, mobileCrtPulse 4s infinite;
+}
+
+@keyframes mobileGlitchIn {
+  0% { transform: translate(0); opacity: 0; }
+  20% { transform: translate(-6px, 3px); text-shadow: 3px 0 var(--accent-bright), -3px 0 cyan; opacity: 1; }
+  40% { transform: translate(6px, -3px); text-shadow: -3px 0 var(--accent-bright), 3px 0 cyan; }
+  60% { transform: translate(-3px, 1px); text-shadow: 1px 0 var(--accent-bright), -1px 0 cyan; }
+  80% { transform: translate(2px, -1px); text-shadow: none; }
+  100% { transform: translate(0); }
+}
+
+@keyframes mobileCrtPulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+  50% { text-shadow: 0 0 40px rgba(255, 255, 255, 0.3); }
+}
+
+/* ── Typewriter ──────────────────────────────────────────── */
+.m-hero-typewriter {
+  width: 100%;
+  max-width: 320px;
+}
+
+.m-hero-typewriter code {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  display: inline-block;
+  min-height: 34px;
+  text-align: left;
+  width: 100%;
+  word-break: break-all;
+}
+
+.m-cursor.blink {
+  animation: mBlink 1s step-end infinite;
+  display: inline-block;
+  margin-left: 2px;
+}
+
+@keyframes mBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── CTA row ─────────────────────────────────────────────── */
+.m-hero-cta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.m-hero-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.m-hero-cta:active {
+  background: #1A1616;
+}
+
+.m-cta-arrow {
+  font-size: 18px;
+  transition: transform 0.25s var(--ease-out);
+}
+
+/* Dashboard button */
+.m-hero-dashboard-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.m-hero-dashboard-btn:active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.m-dash-icon {
+  color: var(--accent-bright);
+  font-size: 14px;
+  animation: mPulseIcon 2s infinite;
+}
+
+@keyframes mPulseIcon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Data strip ──────────────────────────────────────────── */
+.m-hero-data-strip {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 320px;
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.m-hero-data-strip .label-caps {
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
