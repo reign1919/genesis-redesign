@@ -8,6 +8,7 @@ import FAQCompass from '../components/FAQCompass';
 import CommitteeSection from '../components/CommitteeSection';
 import NeuralBackground from '../components/NeuralBackground';
 import SysReadyCounter from '../components/SysReadyCounter';
+import folderIcon from '../assets/folder.png';
 
 const HomePage = () => {
   const wrapperRef = useRef(null);
@@ -90,7 +91,7 @@ const HomePage = () => {
         {/* FOOTER */}
         <footer className="homepage-footer">
           <Link to="/docs" className="docs-link-btn">
-            <img src="/src/assets/folder.png" alt="Folder" className="footer-folder-icon" />
+            <img src={folderIcon} alt="Folder" className="footer-folder-icon" />
             <span>DOCUMENTATION</span>
           </Link>
         </footer>
