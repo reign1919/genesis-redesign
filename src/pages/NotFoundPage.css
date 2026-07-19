@@ -161,6 +161,16 @@
   font-style: italic;
 }
 
+.notfound-author {
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--accent-bright);
+  align-self: flex-end;
+  margin-top: -8px;
+  text-transform: uppercase;
+}
+
 .notfound-divider {
   display: flex;
   align-items: center;

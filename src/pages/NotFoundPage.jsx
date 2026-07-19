@@ -48,8 +48,9 @@ export default function NotFoundPage() {
         <div className="notfound-message-box">
           <span className="notfound-eyebrow label-caps">SYSTEM ERROR: ORPHANED NODE</span>
           <p className="notfound-quote">
-            "Even in the infinite void of cyberspace, some coordinates lead to nowhere."
+            "Give yourself time... Life'll shake you, roll you, maybe embrace you. The music'll find you."
           </p>
+          <span className="notfound-author">— Johnny Silverhand</span>
           <div className="notfound-divider">
             <div className="notfound-divider-line" />
             <div className="notfound-divider-dot" />
