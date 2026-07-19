@@ -78,7 +78,7 @@ const HomePage = () => {
         </section>
 
         {/* SECTION 2: FAQ */}
-        <section className="faq-section">
+        <section id="about" className="faq-section">
           <FAQCompass />
         </section>
 

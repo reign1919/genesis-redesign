@@ -1,0 +1,575 @@
+/* ============================================================
+   LOGIN PAGE — Genesis Editorial Minimalism
+   Design system: newdesign.md — zero border-radius, sharp edges
+   ============================================================ */
+
+/* ── Wrapper ─────────────────────────────────────────────── */
+.login-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Background ──────────────────────────────────────────── */
+.login-background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  z-index: 0;
+}
+
+/* ── Reuse overlays from design system ───────────────────── */
+/* .noise-overlay, .grid-overlay, .mouse-blur-overlay — defined in HomePage.css,
+   we re-declare them here so LoginPage is standalone */
+.login-wrapper .noise-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.04;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+}
+
+.login-wrapper .grid-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.07;
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, var(--accent) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--accent) 1px, transparent 1px);
+}
+
+.login-wrapper .mouse-blur-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 2;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mask-image: radial-gradient(circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent);
+  -webkit-mask-image: radial-gradient(circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent);
+}
+
+/* ── HUD brackets (inherited style) ─────────────────────── */
+.login-wrapper .hud-brackets {
+  position: fixed;
+  top: 24px; left: 24px; right: 24px; bottom: 24px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.login-wrapper .bracket {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--accent-deep);
+  opacity: 0.7;
+}
+
+.login-wrapper .top-left    { top: 0;    left: 0;   border-right: none; border-bottom: none; }
+.login-wrapper .top-right   { top: 0;    right: 0;  border-left: none;  border-bottom: none; }
+.login-wrapper .bottom-left { bottom: 0; left: 0;   border-right: none; border-top: none; }
+.login-wrapper .bottom-right{ bottom: 0; right: 0;  border-left: none;  border-top: none; }
+
+/* ── Fixed header ────────────────────────────────────────── */
+.login-wrapper .tech-header {
+  position: fixed;
+  top: 32px;
+  left: 64px;
+  right: 64px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 10;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+
+/* ── HUD data accents ────────────────────────────────────── */
+.login-wrapper .data-accent {
+  position: fixed;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--accent-deep);
+  pointer-events: none;
+  z-index: 10;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.login-wrapper .left-accent {
+  top: 50%;
+  left: 28px;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+}
+
+.login-wrapper .right-accent {
+  top: 50%;
+  right: -38px;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+  text-align: right;
+}
+
+/* ── MAIN LAYOUT ─────────────────────────────────────────── */
+.login-container {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 100vh;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* ── LEFT: Brand glass panel ──────────────────────────────── */
+.login-brand-panel {
+  position: relative;
+  flex: 0 0 48%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* Glass / transparent dark overlay — background shows through */
+  background: rgba(10, 10, 10, 0.45);
+  border-right: 1px solid rgba(139, 26, 26, 0.25);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* Decorative crosshair lines */
+.brand-crosshair {
+  position: absolute;
+  background: rgba(139, 26, 26, 0.12);
+  pointer-events: none;
+}
+
+.brand-crosshair.h {
+  top: 50%; left: 0; right: 0; height: 1px;
+  transform: translateY(-50%);
+}
+
+.brand-crosshair.v {
+  left: 50%; top: 0; bottom: 0; width: 1px;
+  transform: translateX(-50%);
+}
+
+/* Inner content wrapper */
+.brand-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  padding: 64px 48px;
+  max-width: 420px;
+}
+
+/* Compass SVG watermark behind the text */
+.brand-compass-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  animation: compassSpin 80s linear infinite;
+}
+
+@keyframes compassSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.brand-eyebrow {
+  color: var(--accent-mid);
+  opacity: 0.8;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-wordmark {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 8vw, 96px);
+  font-weight: bold;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: var(--text);
+  position: relative;
+  z-index: 1;
+  /* Subtle vertical hairlines through the letters */
+  text-shadow:
+    0 0 80px rgba(139, 26, 26, 0.3),
+    0 0 160px rgba(139, 26, 26, 0.1);
+}
+
+.brand-divider {
+  width: 48px;
+  height: 1px;
+  background: var(--accent);
+  position: relative;
+  z-index: 1;
+}
+
+.brand-tagline {
+  font-family: var(--font-label);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-tagline-code {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--accent-mid);
+  font-style: normal;
+  opacity: 0.8;
+}
+
+.brand-year-tag {
+  color: var(--text-tertiary);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+}
+
+/* ── RIGHT: Form panel ────────────────────────────────────── */
+.login-form-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 64px 64px;
+  gap: 0;
+  background: rgba(10, 10, 10, 0.3);
+}
+
+/* ── MODE TOGGLE BLOCK ────────────────────────────────────── */
+.mode-toggle-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: 8px;
+}
+
+.mode-label {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px 0;
+  position: relative;
+  transition: color 200ms ease;
+  width: 100%;
+  text-align: center;
+}
+
+.mode-label.active {
+  color: var(--text);
+}
+
+/* Active underline bar */
+.mode-label.active::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 2px;
+  background: var(--accent);
+}
+
+.mode-label:hover {
+  color: var(--text-secondary);
+}
+
+/* ── Compass toggle button ───────────────────────────────── */
+.compass-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.compass-toggle-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(139, 26, 26, 0.2);
+  border-radius: 0; /* sharp */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.compass-toggle-btn:hover::before {
+  opacity: 1;
+}
+
+.compass-needle-wrapper {
+  transition: transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compass-needle-svg {
+  width: 72px;
+  height: 144px;
+  display: block;
+  filter: drop-shadow(0 0 12px rgba(172, 50, 46, 0.35));
+}
+
+/* ── Form divider ─────────────────────────────────────────── */
+.form-divider {
+  width: 100%;
+  max-width: 360px;
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+}
+
+/* ── FORM ─────────────────────────────────────────────────── */
+.login-form {
+  width: 100%;
+  max-width: 360px;
+}
+
+.fields-group {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  animation: fieldsIn 350ms var(--ease-out) both;
+}
+
+@keyframes fieldsIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Auth Notice ──────────────────────────────────────────── */
+.auth-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border: 1px solid rgba(139, 26, 26, 0.3);
+  background: rgba(139, 26, 26, 0.06);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.notice-icon {
+  color: var(--accent-mid);
+  font-size: 16px;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+.notice-link {
+  background: none;
+  border: none;
+  color: var(--accent-mid);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(172, 50, 46, 0.45);
+  transition: color 150ms;
+}
+
+.notice-link:hover {
+  color: var(--accent-bright);
+}
+
+/* ── Field rows ───────────────────────────────────────────── */
+.field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  font-family: var(--font-label);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.field-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-strong);
+  padding: 10px 0;
+  font-family: var(--font-label); /* EB Garamond for input text per design system */
+  font-size: 17px;
+  color: var(--text);
+  width: 100%;
+  outline: none;
+  transition: border-color 200ms;
+}
+
+.field-input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 15px;
+}
+
+.field-input:focus {
+  border-bottom-color: var(--accent-mid);
+}
+
+/* ── Submit button ────────────────────────────────────────── */
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 20px;
+  margin-top: 12px;
+  background: var(--accent);
+  border: none;
+  border-radius: 0; /* sharp — design system rule */
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 0.16em;
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--duration-fast) step-end; /* physical switch feel */
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(-100%);
+  transition: transform 300ms var(--ease-out);
+}
+
+.submit-btn:hover {
+  background: #1A1616; /* "Punch-out" — solid black on hover, no transition delay */
+}
+
+.submit-btn:hover::before {
+  transform: translateX(0);
+}
+
+.submit-arrow {
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 250ms var(--ease-out);
+}
+
+.submit-btn:hover .submit-arrow {
+  transform: translateX(4px);
+}
+
+/* ── Back link ────────────────────────────────────────────── */
+.back-link-row {
+  width: 100%;
+  max-width: 360px;
+  margin-top: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.back-link {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 150ms;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--accent-mid);
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .login-container {
+    flex-direction: column;
+    min-height: unset;
+  }
+
+  .login-brand-panel {
+    flex: 0 0 auto;
+    min-height: 45vh;
+    border-right: none;
+    border-bottom: 1px solid rgba(139, 26, 26, 0.25);
+  }
+
+  .login-form-panel {
+    padding: 48px 24px 80px;
+  }
+
+  .login-wrapper .tech-header {
+    left: 24px;
+    right: 24px;
+    font-size: 11px;
+  }
+
+  .login-wrapper .left-accent,
+  .login-wrapper .right-accent {
+    display: none;
+  }
+
+  .brand-wordmark {
+    font-size: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form-panel {
+    padding: 40px 20px 64px;
+  }
+  .mode-label {
+    font-size: 22px;
+  }
+}

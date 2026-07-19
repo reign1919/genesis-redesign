@@ -60,19 +60,19 @@ const CountdownTimer = () => {
           <FlipDigit value={timeLeft.days} />
           <span className="time-label label-caps">DAYS</span>
         </div>
-        <span className="time-separator">.</span>
+        <span className="time-separator">:</span>
         
         <div className="time-block">
           <FlipDigit value={timeLeft.hours} />
           <span className="time-label label-caps">HRS</span>
         </div>
-        <span className="time-separator">.</span>
+        <span className="time-separator">:</span>
         
         <div className="time-block">
           <FlipDigit value={timeLeft.minutes} />
           <span className="time-label label-caps">MINS</span>
         </div>
-        <span className="time-separator">.</span>
+        <span className="time-separator">:</span>
         
         <div className="time-block">
           <FlipDigit value={timeLeft.seconds} />

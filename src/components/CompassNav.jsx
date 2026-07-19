@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import CompassSVG from './CompassSVG';
 import './CompassNav.css';
 
@@ -11,19 +12,19 @@ const CompassNav = () => {
         <div className="radar-sweep"></div>
         <CompassSVG size={400} color="var(--accent-mid)" activePoint={hoveredNav} />
         
-        <a href="#contact" className="nav-label label-top" onMouseEnter={() => setHoveredNav('top')} onMouseLeave={() => setHoveredNav(null)}>
+        <Link to="/contact" className="nav-label label-top" onMouseEnter={() => setHoveredNav('top')} onMouseLeave={() => setHoveredNav(null)}>
           <span className="nav-text">CONTACT</span>
-        </a>
+        </Link>
         
-        <a href="#register" className="nav-label label-left" onMouseEnter={() => setHoveredNav('left')} onMouseLeave={() => setHoveredNav(null)}>
+        <Link to="/login" className="nav-label label-left" onMouseEnter={() => setHoveredNav('left')} onMouseLeave={() => setHoveredNav(null)}>
           <span className="nav-text">REGISTER</span>
-        </a>
+        </Link>
         
         <a href="#events" className="nav-label label-right" onMouseEnter={() => setHoveredNav('right')} onMouseLeave={() => setHoveredNav(null)}>
           <span className="nav-text">EVENTS</span>
         </a>
         
-        <a href="#about" className="nav-label label-bottom" onMouseEnter={() => setHoveredNav('bottom')} onMouseLeave={() => setHoveredNav(null)}>
+        <a href="/#about" className="nav-label label-bottom" onMouseEnter={() => setHoveredNav('bottom')} onMouseLeave={() => setHoveredNav(null)}>
           <span className="nav-text">ABOUT</span>
         </a>
       </div>

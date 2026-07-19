@@ -1,0 +1,670 @@
+/* ============================================================
+   CONTACT PAGE — Genesis Editorial Minimalism
+   ============================================================ */
+
+/* ── Wrapper ─────────────────────────────────────────────── */
+.contact-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Background ──────────────────────────────────────────── */
+.contact-background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100vh;
+  z-index: 0;
+}
+
+/* ── Scanline ─────────────────────────────────────────────── */
+.scanline {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(172, 50, 46, 0.15);
+  pointer-events: none;
+  z-index: 3;
+  transition: top 0.016s linear;
+}
+
+/* ── Overlays ─────────────────────────────────────────────── */
+.contact-wrapper .noise-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.04;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+}
+
+.contact-wrapper .grid-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.07;
+  background-size: 50px 50px;
+  background-image:
+    linear-gradient(to right, var(--accent) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--accent) 1px, transparent 1px);
+}
+
+.contact-wrapper .mouse-blur-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 2;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mask-image: radial-gradient(circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent);
+  -webkit-mask-image: radial-gradient(circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent);
+}
+
+/* ── HUD Brackets ──────────────────────────────────────────── */
+.contact-wrapper .hud-brackets {
+  position: fixed;
+  top: 24px; left: 24px; right: 24px; bottom: 24px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.contact-wrapper .bracket {
+  position: absolute;
+  width: 40px; height: 40px;
+  border: 2px solid var(--accent-deep);
+  opacity: 0.7;
+}
+
+.contact-wrapper .top-left    { top: 0; left: 0; border-right: none; border-bottom: none; }
+.contact-wrapper .top-right   { top: 0; right: 0; border-left: none; border-bottom: none; }
+.contact-wrapper .bottom-left { bottom: 0; left: 0; border-right: none; border-top: none; }
+.contact-wrapper .bottom-right{ bottom: 0; right: 0; border-left: none; border-top: none; }
+
+/* ── Fixed header ─────────────────────────────────────────── */
+.contact-wrapper .tech-header {
+  position: fixed;
+  top: 32px; left: 64px; right: 64px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 10;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+
+/* ── HUD data accents ─────────────────────────────────────── */
+.contact-wrapper .data-accent {
+  position: fixed;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--accent-deep);
+  pointer-events: none;
+  z-index: 10;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.contact-wrapper .left-accent {
+  top: 50%; left: 28px;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+  transition: all 0.6s ease;
+}
+
+.contact-wrapper .right-accent {
+  top: 50%; right: -38px;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+  text-align: right;
+}
+
+/* ── Morse ticker ─────────────────────────────────────────── */
+.morse-ticker {
+  position: fixed;
+  bottom: 28px;
+  left: 64px;
+  right: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.morse-label {
+  color: var(--accent-deep);
+  opacity: 0.6;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  flex-shrink: 0;
+}
+
+.morse-dots {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(139, 26, 26, 0.35);
+  letter-spacing: 0.3em;
+  white-space: nowrap;
+  animation: marqueeDots 12s linear infinite;
+}
+
+@keyframes marqueeDots {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── MAIN LAYOUT ─────────────────────────────────────────── */
+.contact-container {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 100px 64px 80px;
+  gap: 80px;
+}
+
+/* ── LEFT ─────────────────────────────────────────────────── */
+.contact-left {
+  flex: 0 0 48%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Eyebrow */
+.contact-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent-mid);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+}
+
+.eyebrow-dash {
+  color: var(--accent);
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Headline */
+.contact-headline {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.5vw, 60px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.headline-accent {
+  color: var(--accent-mid);
+  font-style: italic;
+  font-family: var(--font-label);
+  font-size: clamp(40px, 5vw, 68px);
+}
+
+/* Decorative rule */
+.contact-rule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rule-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-accent);
+}
+
+.rule-line--short {
+  flex: 0 0 40px;
+}
+
+.rule-dot {
+  width: 5px; height: 5px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── Contact cards ─────────────────────────────────────────── */
+.contact-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: padding-left 200ms var(--ease-out);
+  cursor: pointer;
+}
+
+.contact-card:first-child {
+  border-top: 1px solid var(--border);
+}
+
+/* Hover shift */
+.contact-card--active {
+  padding-left: 12px;
+}
+
+/* Animated background fill on hover */
+.contact-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: rgba(139, 26, 26, 0.06);
+  transition: width 300ms var(--ease-out);
+}
+
+.contact-card--active::before {
+  width: 100%;
+}
+
+/* Icon */
+.card-icon-wrap {
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  color: var(--accent-mid);
+  transition: border-color 200ms, color 200ms, background 200ms;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-card--active .card-icon-wrap {
+  border-color: var(--accent-mid);
+  background: rgba(139, 26, 26, 0.12);
+  color: var(--accent-bright);
+}
+
+.contact-icon-svg {
+  width: 20px; height: 20px;
+}
+
+/* Text */
+.card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.card-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--text-tertiary);
+}
+
+.card-value {
+  font-family: var(--font-label);
+  font-size: 17px;
+  color: var(--text);
+  transition: color 200ms;
+}
+
+.contact-card--active .card-value {
+  color: var(--accent-light);
+}
+
+.card-meta {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(139, 26, 26, 0.55);
+}
+
+/* Right indicator bar */
+.card-indicator {
+  width: 2px;
+  height: 0;
+  background: var(--accent);
+  transition: height 250ms var(--ease-out);
+  position: relative;
+  z-index: 1;
+  align-self: stretch;
+}
+
+.contact-card--active .card-indicator {
+  height: 100%;
+}
+
+/* Back nav */
+.contact-back-row {
+  margin-top: 8px;
+}
+
+.back-link {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 150ms;
+}
+
+.back-link:hover {
+  color: var(--accent-mid);
+}
+
+/* ── RIGHT ──────────────────────────────────────────────────  */
+.contact-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+/* ── Compass ────────────────────────────────────────────────── */
+.contact-compass-wrap {
+  position: relative;
+  width: 460px;
+  height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-compass-wrap .compass-rotating-wrapper {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  animation: spin 30s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-compass-wrap .radar-sweep {
+  position: absolute;
+  top: 5%; left: 5%;
+  width: 90%; height: 90%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 70%, rgba(253,98,95,0.25) 100%);
+  animation: sweep 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* Nav labels on compass */
+.contact-compass-wrap .nav-label {
+  position: absolute;
+  font-family: var(--font-label);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--text);
+  text-decoration: none;
+  padding: 10px;
+  transition: color 0.3s ease;
+}
+
+.contact-compass-wrap .nav-label:hover { color: var(--accent-bright); }
+
+.contact-compass-wrap .nav-text {
+  display: inline-block;
+  animation: counter-spin 30s linear infinite;
+}
+
+@keyframes counter-spin {
+  100% { transform: rotate(-360deg); }
+}
+
+.contact-compass-wrap .label-top    { top: -32px; left: 50%; transform: translateX(-50%); }
+.contact-compass-wrap .label-bottom { bottom: -32px; left: 50%; transform: translateX(-50%); }
+.contact-compass-wrap .label-left   { left: -32px; top: 50%; transform: translateY(-50%); }
+.contact-compass-wrap .label-right  { right: -32px; top: 50%; transform: translateY(-50%); }
+
+/* ── Inline message form ──────────────────────────────────── */
+.contact-form-wrap {
+  width: 100%;
+  max-width: 380px;
+  border: 1px solid var(--border);
+  padding: 28px;
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.form-header-tag {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--accent-mid);
+  flex-shrink: 0;
+}
+
+.form-header-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-accent);
+}
+
+/* Form fields */
+.message-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.mf-row {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.mf-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-tertiary);
+}
+
+.mf-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-strong);
+  padding: 8px 0;
+  font-family: var(--font-label);
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  transition: border-color 200ms;
+  resize: none;
+}
+
+.mf-input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 14px;
+}
+
+.mf-input:focus {
+  border-bottom-color: var(--accent-mid);
+}
+
+.mf-textarea {
+  min-height: 72px;
+  line-height: 1.5;
+}
+
+/* Submit */
+.mf-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  background: var(--accent);
+  border: none;
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--duration-fast) step-end;
+  margin-top: 4px;
+}
+
+.mf-submit:hover:not(:disabled) {
+  background: #1A1616;
+}
+
+.mf-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.mf-submit--sending {
+  background: var(--accent-deep);
+}
+
+.submit-arrow {
+  font-size: 16px;
+  transition: transform 250ms var(--ease-out);
+}
+
+.mf-submit:hover:not(:disabled) .submit-arrow {
+  transform: translateX(4px);
+}
+
+/* Sending dots animation */
+.sending-dots { display: inline-flex; gap: 1px; }
+
+.dot-1, .dot-2, .dot-3 {
+  animation: dotPulse 1.2s infinite both;
+}
+.dot-2 { animation-delay: 0.2s; }
+.dot-3 { animation-delay: 0.4s; }
+
+@keyframes dotPulse {
+  0%, 80%, 100% { opacity: 0; }
+  40%           { opacity: 1; }
+}
+
+/* Sent state */
+.form-sent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  text-align: center;
+  animation: fieldsIn 350ms var(--ease-out) both;
+}
+
+@keyframes fieldsIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.sent-icon {
+  width: 48px; height: 48px;
+  border: 1px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--accent-mid);
+}
+
+.sent-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--text);
+  letter-spacing: 0.08em;
+}
+
+.sent-sub {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-tertiary);
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .contact-container {
+    flex-direction: column;
+    padding: 100px 40px 80px;
+    gap: 60px;
+    align-items: flex-start;
+  }
+
+  .contact-left { flex: unset; width: 100%; }
+  .contact-right { width: 100%; align-items: flex-start; }
+
+  .contact-compass-wrap {
+    width: 340px; height: 340px;
+  }
+
+  .contact-compass-wrap .compass-rotating-wrapper {
+    width: 260px; height: 260px;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-container {
+    padding: 80px 20px 60px;
+  }
+
+  .contact-wrapper .tech-header {
+    left: 24px; right: 24px;
+    font-size: 11px;
+  }
+
+  .contact-wrapper .left-accent,
+  .contact-wrapper .right-accent {
+    display: none;
+  }
+
+  .morse-ticker {
+    left: 24px; right: 24px;
+  }
+
+  .contact-form-wrap {
+    padding: 20px;
+  }
+}
