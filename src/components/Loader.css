@@ -6,7 +6,8 @@
 
 .genesis-loader {
   width: 140px;
-  max-height: 900px;
+  height: 140px;
+  display: block;
   transform-origin: 50% 50%;
   overflow: visible;
 }
@@ -33,8 +34,8 @@
 
 .genesis-points {
   animation: rot 3s infinite;
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: center;
 }
 
 @keyframes rot {

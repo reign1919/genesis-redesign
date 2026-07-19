@@ -144,8 +144,18 @@ const ContactPage = () => {
 
       {/* Fixed header */}
       <header className="tech-header">
-        <div className="header-left">GENESIS TECH FEST</div>
-        <div className="header-right">INDUS VALLEY WORLD SCHOOL</div>
+        <Link to="/" className="home-header-link header-left" aria-label="Go to the home page">
+          GENESIS TECH FEST
+        </Link>
+        <a
+          href="https://www.ivwschool.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="home-header-link header-right"
+          aria-label="Visit the Indus Valley World School website in a new tab"
+        >
+          INDUS VALLEY WORLD SCHOOL
+        </a>
       </header>
 
       {/* HUD data accents */}

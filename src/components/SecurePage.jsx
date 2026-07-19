@@ -10,8 +10,15 @@ export default function SecurePage({ eyebrow, title, subtitle, action, children 
       </div>
       <div className="secure-page__grid" aria-hidden="true" />
       <header className="secure-page__tech-header">
-        <Link to="/">GENESIS TECH FEST</Link>
-        <span>INDUS VALLEY WORLD SCHOOL</span>
+        <Link to="/" aria-label="Go to the home page">GENESIS TECH FEST</Link>
+        <a
+          href="https://www.ivwschool.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit the Indus Valley World School website in a new tab"
+        >
+          INDUS VALLEY WORLD SCHOOL
+        </a>
       </header>
       <main className="secure-page__container">
         <div className="secure-page__heading">
