@@ -27,7 +27,7 @@
 
 .secure-page__tech-header {
   position: fixed;
-  z-index: 10;
+  z-index: 30;
   top: 32px;
   left: 48px;
   right: 48px;

@@ -76,8 +76,8 @@
   right: 64px;
   display: flex;
   justify-content: space-between;
-  pointer-events: none;
-  z-index: 10;
+  pointer-events: auto;
+  z-index: 30;
   font-family: var(--font-display);
   font-size: 14px;
   letter-spacing: 0.2em;
