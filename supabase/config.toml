@@ -1,0 +1,15 @@
+project_id = "genesis-redesign"
+
+[auth]
+site_url = "http://127.0.0.1:5173"
+
+[functions.submit-registration]
+# Authentication is performed inside the handler so every auth failure uses the
+# stable response contract instead of leaking gateway-specific JWT errors.
+verify_jwt = false
+
+[functions.admin-registrations]
+verify_jwt = false
+
+[functions.school-credentials]
+verify_jwt = false

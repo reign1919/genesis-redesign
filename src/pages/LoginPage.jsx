@@ -1,14 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import NeuralBackground from '../components/NeuralBackground';
 import CompassSVG from '../components/CompassSVG';
+import Turnstile from '../components/Turnstile';
+import { signInSchool } from '../lib/auth';
+import { loadSchoolCredentials, submitRegistration } from '../lib/edgeFunctions';
+import { supabase } from '../lib/supabase';
+
+const enrollmentEnabled = import.meta.env.VITE_ENROLLMENT_ENABLED !== 'false';
+
+function registrationMessage(result) {
+  const messages = {
+    INVALID_SCHOOL_NAME: 'Enter a school name between 2 and 120 characters.',
+    INVALID_PHONE: 'Use international phone format, such as +919876543210.',
+    CAPTCHA_REQUIRED: 'Complete the security check again.',
+    CAPTCHA_INVALID: 'The security check expired. Complete it again.',
+    ALREADY_PENDING: 'Your school registration is already awaiting review.',
+    ALREADY_APPROVED: 'Your school is already approved. Contact the core committee if you need the credentials again.',
+    REGISTRATION_REJECTED: 'Thank you for your interest. Your school registration was not approved for this edition of Genesis.',
+    RATE_LIMITED: 'Too many attempts. Try again later.',
+    ENROLLMENT_CLOSED: 'School enrollment is temporarily closed.',
+  };
+  return messages[result.code] || 'Registration is temporarily unavailable. Please try again later.';
+}
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [mode, setMode] = useState('login'); // 'login' | 'register'
   const [needleRotation, setNeedleRotation] = useState(0); // 0 = login (up), 180 = register (down)
   const [mousePos, setMousePos] = useState({ x: '50%', y: '50%' });
   const [authStatus, setAuthStatus] = useState(0);
+  const [schoolCode, setSchoolCode] = useState('');
+  const [password, setPassword] = useState('');
+  const [schoolName, setSchoolName] = useState('');
+  const [teacherWhatsapp, setTeacherWhatsapp] = useState('');
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [captchaReset, setCaptchaReset] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
+  const [formResult, setFormResult] = useState(null);
 
   // Count-up on mount
   useEffect(() => {
@@ -21,6 +51,16 @@ const LoginPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (!active || !data?.session) return;
+      const result = await loadSchoolCredentials();
+      if (active && result.ok) navigate('/dashboard', { replace: true });
+    });
+    return () => { active = false; };
+  }, [navigate]);
+
   const handleMouseMove = (e) => {
     setMousePos({ x: `${e.clientX}px`, y: `${e.clientY}px` });
   };
@@ -29,6 +69,58 @@ const LoginPage = () => {
     const next = mode === 'login' ? 'register' : 'login';
     setMode(next);
     setNeedleRotation(prev => prev + 180);
+    setCaptchaToken('');
+    setCaptchaReset(prev => prev + 1);
+    setFormResult(null);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFormResult(null);
+
+    if (!captchaToken) {
+      setFormResult({ ok: false, message: 'Complete the security check before continuing.' });
+      return;
+    }
+
+    setSubmitting(true);
+    if (mode === 'register') {
+      const result = await submitRegistration({
+        schoolName,
+        teacherWhatsapp,
+        captchaToken,
+      });
+      setSubmitting(false);
+      setCaptchaToken('');
+      setCaptchaReset(prev => prev + 1);
+
+      if (!result.ok) {
+        setFormResult({ ok: false, message: registrationMessage(result) });
+        return;
+      }
+
+      setSchoolName('');
+      setTeacherWhatsapp('');
+      setFormResult({
+        ok: true,
+        message: 'Application received. The core committee will contact approved schools on WhatsApp.',
+      });
+      return;
+    }
+
+    const result = await signInSchool(schoolCode, password, captchaToken);
+    setSubmitting(false);
+    setPassword('');
+    setCaptchaToken('');
+    setCaptchaReset(prev => prev + 1);
+    if (!result.ok) {
+      setFormResult({
+        ok: false,
+        message: 'Invalid school code or password. Check the credentials sent by the core committee.',
+      });
+      return;
+    }
+    navigate('/dashboard');
   };
 
   return (
@@ -166,8 +258,7 @@ const LoginPage = () => {
           {/* ── FORM ── */}
           <form
             className="login-form"
-            onSubmit={(e) => e.preventDefault()}
-            noValidate
+            onSubmit={handleSubmit}
           >
             {mode === 'login' ? (
               /* ── LOGIN FIELDS ── */
@@ -180,7 +271,7 @@ const LoginPage = () => {
                     <button
                       type="button"
                       className="notice-link"
-                      onClick={() => { setMode('register'); setNeedleRotation(prev => prev + 180); }}
+                      onClick={toggleMode}
                     >
                       Register your school first.
                     </button>
@@ -195,8 +286,13 @@ const LoginPage = () => {
                     id="school-code"
                     className="field-input"
                     type="text"
-                    placeholder="e.g. IVWS-2025"
+                    placeholder="e.g. GEN-0001"
+                    value={schoolCode}
+                    onChange={(event) => setSchoolCode(event.target.value)}
                     autoComplete="username"
+                    maxLength={8}
+                    pattern="GEN-[0-9]{4}"
+                    required
                   />
                 </div>
 
@@ -209,12 +305,19 @@ const LoginPage = () => {
                     className="field-input"
                     type="password"
                     placeholder="••••••••••••"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                     autoComplete="current-password"
+                    minLength={8}
+                    maxLength={8}
+                    required
                   />
                 </div>
 
-                <button type="submit" className="submit-btn" id="login-submit">
-                  <span>ENTER</span>
+                <Turnstile action="school_login" onToken={setCaptchaToken} resetKey={captchaReset} />
+
+                <button type="submit" className="submit-btn" id="login-submit" disabled={submitting || !captchaToken}>
+                  <span>{submitting ? 'AUTHENTICATING...' : 'ENTER'}</span>
                   <span className="submit-arrow">→</span>
                 </button>
               </div>
@@ -230,7 +333,12 @@ const LoginPage = () => {
                     className="field-input"
                     type="text"
                     placeholder="Full name of your institution"
+                    value={schoolName}
+                    onChange={(event) => setSchoolName(event.target.value)}
                     autoComplete="organization"
+                    minLength={2}
+                    maxLength={120}
+                    required
                   />
                 </div>
 
@@ -242,15 +350,30 @@ const LoginPage = () => {
                     id="teacher-whatsapp"
                     className="field-input"
                     type="tel"
-                    placeholder="+91 XXXXX XXXXX"
+                    placeholder="+919876543210"
+                    value={teacherWhatsapp}
+                    onChange={(event) => setTeacherWhatsapp(event.target.value)}
                     autoComplete="tel"
+                    maxLength={64}
+                    required
                   />
                 </div>
 
-                <button type="submit" className="submit-btn" id="register-submit">
-                  <span>REGISTER</span>
+                <Turnstile action="submit_registration" onToken={setCaptchaToken} resetKey={captchaReset} />
+
+                <button type="submit" className="submit-btn" id="register-submit" disabled={submitting || !captchaToken || !enrollmentEnabled}>
+                  <span>{submitting ? 'SUBMITTING...' : enrollmentEnabled ? 'REGISTER' : 'ENROLLMENT CLOSED'}</span>
                   <span className="submit-arrow">→</span>
                 </button>
+              </div>
+            )}
+
+            {formResult && (
+              <div
+                className={`form-message ${formResult.ok ? 'form-message--success' : 'form-message--error'}`}
+                role={formResult.ok ? 'status' : 'alert'}
+              >
+                {formResult.message}
               </div>
             )}
           </form>
