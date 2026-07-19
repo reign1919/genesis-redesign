@@ -18,16 +18,23 @@
   z-index: 0;
 }
 
-/* ── Scanline ─────────────────────────────────────────────── */
-.scanline {
+/* --- SCANLINE EFFECT (Pure CSS) --- */
+.contact-wrapper::before {
+  content: '';
   position: fixed;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(172, 50, 46, 0.15);
+  top: 0; left: 0; right: 0; height: 1px;
+  background: rgba(172, 50, 46, 0.4);
+  box-shadow: 0 0 10px rgba(172, 50, 46, 0.6);
   pointer-events: none;
-  z-index: 3;
-  transition: top 0.016s linear;
+  z-index: 6;
+  opacity: 0.6;
+  animation: scanlineAnim 5.5s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scanlineAnim {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100vh); }
 }
 
 /* ── Overlays ─────────────────────────────────────────────── */

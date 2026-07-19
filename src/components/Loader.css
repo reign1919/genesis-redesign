@@ -1,0 +1,69 @@
+.genesis-loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.genesis-loader {
+  width: 140px;
+  max-height: 900px;
+  transform-origin: 50% 50%;
+  overflow: visible;
+}
+
+.genesis-ci1 {
+  fill: var(--accent);
+  animation: toBig 3s infinite -1.5s;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.genesis-ciw {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: breath 3s infinite;
+}
+
+.genesis-ci2 {
+  fill: var(--accent);
+  animation: toBig2 3s infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.genesis-points {
+  animation: rot 3s infinite;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+@keyframes rot {
+  0% { transform: rotate(0deg); }
+  30% { transform: rotate(360deg); }
+  50% { transform: rotate(360deg); }
+  80% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes toBig {
+  0% { transform: scale(1) translateX(0px); }
+  30% { transform: scale(1) translateX(0px); }
+  50% { transform: scale(10) translateX(-4.5px); }
+  80% { transform: scale(10) translateX(-4.5px); }
+  100% { transform: scale(1) translateX(0px); }
+}
+
+@keyframes toBig2 {
+  0% { transform: scale(1) translateX(0px); }
+  30% { transform: scale(1) translateX(0px); }
+  50% { transform: scale(10) translateX(4.5px); }
+  80% { transform: scale(10) translateX(4.5px); }
+  100% { transform: scale(1) translateX(0px); }
+}
+
+@keyframes breath {
+  15% { transform: scale(1); }
+  40% { transform: scale(1.1); }
+  65% { transform: scale(1); }
+  90% { transform: scale(1.1); }
+}

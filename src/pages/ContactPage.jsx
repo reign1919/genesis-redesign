@@ -23,8 +23,7 @@ const ContactPage = () => {
   const [signalIdx, setSignalIdx] = useState(0);
   const [formStatus, setFormStatus] = useState('idle'); // idle | sending | sent
   const [hoveredContact, setHoveredContact] = useState(null);
-  const [scanLine, setScanLine] = useState(0);
-  const scanRef = useRef(null);
+  const rafRef = useRef(null);
 
   /* Signal msg cycle */
   useEffect(() => {
@@ -32,18 +31,17 @@ const ContactPage = () => {
     return () => clearInterval(t);
   }, []);
 
-  /* Scanline animation */
-  useEffect(() => {
-    let pos = 0;
-    scanRef.current = setInterval(() => {
-      pos = (pos + 1) % 100;
-      setScanLine(pos);
-    }, 18);
-    return () => clearInterval(scanRef.current);
-  }, []);
-
-  const handleMouseMove = (e) =>
-    setMousePos({ x: `${e.clientX}px`, y: `${e.clientY}px` });
+  const handleMouseMove = (e) => {
+    if (rafRef.current) return;
+    
+    const x = `${e.clientX}px`;
+    const y = `${e.clientY}px`;
+    
+    rafRef.current = requestAnimationFrame(() => {
+      setMousePos({ x, y });
+      rafRef.current = null;
+    });
+  };
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -139,11 +137,7 @@ const ContactPage = () => {
       <div className="grid-overlay" />
       <div className="mouse-blur-overlay" />
 
-      {/* Scanline effect */}
-      <div
-        className="scanline"
-        style={{ top: `${scanLine}%` }}
-      />
+      {/* Scanline effect is now handled purely in CSS via .contact-wrapper::before */}
 
       {/* HUD Brackets */}
       <div className="hud-brackets">

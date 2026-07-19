@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './BrandBlock.css';
+import DashboardButton from './DashboardButton';
 
 import schoolLogo from '../../iconsredesign/icons/schoollogo.png';
 import festLogo from '../../iconsredesign/icons/festlogo.png';
@@ -54,6 +55,8 @@ const BrandBlock = () => {
       <h1 className="brand-title">
         GENESIS
       </h1>
+      
+      <DashboardButton />
     </div>
   );
 };

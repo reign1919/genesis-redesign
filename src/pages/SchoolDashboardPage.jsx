@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import SecurePage from '../components/SecurePage';
 import { loadSchoolCredentials } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../lib/authContext';
+import LoadingScreen from '../components/LoadingScreen';
 import './SchoolDashboardPage.css';
 
 export default function SchoolDashboardPage() {
   const navigate = useNavigate();
+  const { login, logout } = useAuth();
   const [school, setSchool] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -27,6 +30,7 @@ export default function SchoolDashboardPage() {
       const result = await loadSchoolCredentials();
       if (!active) return;
       if (result.code === 'AUTH_REQUIRED' || result.code === 'AUTH_INVALID' || result.code === 'FORBIDDEN') {
+        logout();
         await supabase.auth.signOut({ scope: 'local' });
         navigate('/login', { replace: true });
         return;
@@ -37,6 +41,7 @@ export default function SchoolDashboardPage() {
         return;
       }
 
+      login({ schoolCode: result.school.school_code, schoolName: result.school.school_name });
       setSchool(result.school);
       setLoading(false);
     };
@@ -53,6 +58,7 @@ export default function SchoolDashboardPage() {
   }, [navigate]);
 
   const handleLogout = async () => {
+    logout();
     await supabase.auth.signOut({ scope: 'local' });
     navigate('/login', { replace: true });
   };
@@ -75,7 +81,7 @@ export default function SchoolDashboardPage() {
       action={<button type="button" className="secure-action" onClick={handleLogout}>Log out</button>}
     >
       {loading ? (
-        <div className="secure-card secure-status">Verifying school session…</div>
+        <LoadingScreen />
       ) : error ? (
         <div className="secure-card secure-status secure-status--error" role="alert">{error}</div>
       ) : school ? (

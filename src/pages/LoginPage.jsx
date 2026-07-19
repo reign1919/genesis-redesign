@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import NeuralBackground from '../components/NeuralBackground';
@@ -6,6 +6,7 @@ import CompassSVG from '../components/CompassSVG';
 import { signInSchool } from '../lib/auth';
 import { loadSchoolCredentials, submitRegistration } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../lib/authContext';
 
 const enrollmentEnabled = import.meta.env.VITE_ENROLLMENT_ENABLED !== 'false';
 
@@ -24,6 +25,7 @@ function registrationMessage(result) {
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [mode, setMode] = useState('login'); // 'login' | 'register'
   const [needleRotation, setNeedleRotation] = useState(0); // 0 = login (up), 180 = register (down)
   const [mousePos, setMousePos] = useState({ x: '50%', y: '50%' });
@@ -34,6 +36,7 @@ const LoginPage = () => {
   const [teacherWhatsapp, setTeacherWhatsapp] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formResult, setFormResult] = useState(null);
+  const rafRef = useRef(null);
 
   // Count-up on mount
   useEffect(() => {
@@ -57,7 +60,15 @@ const LoginPage = () => {
   }, [navigate]);
 
   const handleMouseMove = (e) => {
-    setMousePos({ x: `${e.clientX}px`, y: `${e.clientY}px` });
+    if (rafRef.current) return;
+    
+    const x = `${e.clientX}px`;
+    const y = `${e.clientY}px`;
+    
+    rafRef.current = requestAnimationFrame(() => {
+      setMousePos({ x, y });
+      rafRef.current = null;
+    });
   };
 
   const toggleMode = () => {

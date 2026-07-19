@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import './NeuralBackground.css';
 
-const NODE_COUNT = 80;
+const NODE_COUNT = 50; // Reduced from 80 for performance
 const CONNECTION_DIST = 160;
+const CONNECTION_DIST_SQ = CONNECTION_DIST * CONNECTION_DIST;
 const CURSOR_ATTRACT_DIST = 200;
+const CURSOR_ATTRACT_DIST_SQ = CURSOR_ATTRACT_DIST * CURSOR_ATTRACT_DIST;
 const CURSOR_ATTRACT_FORCE = 0.012;
 const NODE_SPEED = 0.35;
 
@@ -16,6 +18,7 @@ export default function NeuralBackground() {
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const nodesRef = useRef([]);
   const rafRef = useRef(null);
+  const mouseRafRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -39,7 +42,13 @@ export default function NeuralBackground() {
     }));
 
     const onMouseMove = (e) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
+      if (mouseRafRef.current) return;
+      const x = e.clientX;
+      const y = e.clientY;
+      mouseRafRef.current = requestAnimationFrame(() => {
+        mouseRef.current = { x, y };
+        mouseRafRef.current = null;
+      });
     };
     const onMouseLeave = () => {
       mouseRef.current = { x: -9999, y: -9999 };
@@ -67,8 +76,9 @@ export default function NeuralBackground() {
         // Cursor attraction
         const dx = mx - n.x;
         const dy = my - n.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < CURSOR_ATTRACT_DIST && dist > 0) {
+        const distSq = dx * dx + dy * dy;
+        if (distSq < CURSOR_ATTRACT_DIST_SQ && distSq > 0) {
+          const dist = Math.sqrt(distSq); // Only calc sqrt if within bounding box
           n.vx += (dx / dist) * CURSOR_ATTRACT_FORCE;
           n.vy += (dy / dist) * CURSOR_ATTRACT_FORCE;
         }
@@ -78,9 +88,10 @@ export default function NeuralBackground() {
         n.vy *= 0.99;
 
         // Clamp speed
-        const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
+        const speedSq = n.vx * n.vx + n.vy * n.vy;
         const maxSpeed = NODE_SPEED * 2.5;
-        if (speed > maxSpeed) {
+        if (speedSq > maxSpeed * maxSpeed) {
+          const speed = Math.sqrt(speedSq);
           n.vx = (n.vx / speed) * maxSpeed;
           n.vy = (n.vy / speed) * maxSpeed;
         }
@@ -102,8 +113,9 @@ export default function NeuralBackground() {
           const b = nodes[j];
           const dx = a.x - b.x;
           const dy = a.y - b.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < CONNECTION_DIST) {
+          const distSq = dx * dx + dy * dy;
+          if (distSq < CONNECTION_DIST_SQ) {
+            const dist = Math.sqrt(distSq);
             const alpha = (1 - dist / CONNECTION_DIST) * 0.55;
 
             // Proximity to cursor boosts edge brightness
@@ -111,8 +123,8 @@ export default function NeuralBackground() {
             const midY = (a.y + b.y) / 2;
             const cdx = mx - midX;
             const cdy = my - midY;
-            const cursorDist = Math.sqrt(cdx * cdx + cdy * cdy);
-            const boost = cursorDist < 180 ? (1 - cursorDist / 180) * 0.6 : 0;
+            const cursorDistSq = cdx * cdx + cdy * cdy;
+            const boost = cursorDistSq < (180 * 180) ? (1 - Math.sqrt(cursorDistSq) / 180) * 0.6 : 0;
 
             // Alternate edge colour for variety
             const useAccent = (i + j) % 3 === 0;
@@ -133,9 +145,14 @@ export default function NeuralBackground() {
         const pulse = 0.6 + 0.4 * Math.sin(t * 1.8 + n.pulseOffset);
         const dx = mx - n.x;
         const dy = my - n.y;
-        const cursorDist = Math.sqrt(dx * dx + dy * dy);
-        const near = cursorDist < CURSOR_ATTRACT_DIST;
-        const nearFactor = near ? 1 - cursorDist / CURSOR_ATTRACT_DIST : 0;
+        const cursorDistSq = dx * dx + dy * dy;
+        const near = cursorDistSq < CURSOR_ATTRACT_DIST_SQ;
+        let nearFactor = 0;
+        
+        if (near) {
+           const cursorDist = Math.sqrt(cursorDistSq);
+           nearFactor = 1 - cursorDist / CURSOR_ATTRACT_DIST;
+        }
 
         const r = n.radius * (1 + nearFactor * 1.8) * pulse;
         const rgb = idx % 4 === 0 ? NEURO_PINK : (idx % 4 === 1 ? NEURO_CYAN : NEURO_PURPLE);

@@ -1,0 +1,60 @@
+.hud-dashboard-btn {
+  display: inline-block;
+  width: max-content;
+  text-decoration: none;
+  animation: slideInFade 0.6s var(--ease-out) forwards;
+  /* Glass effect */
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  padding: 6px 14px;
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: crosshair;
+}
+
+.hud-dashboard-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(139, 26, 26, 0.4);
+}
+
+.hud-dashboard-btn-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-dashboard-icon {
+  color: var(--accent-bright);
+  font-size: 14px;
+  animation: pulseIcon 2s infinite;
+}
+
+.hud-dashboard-btn:hover .hud-dashboard-icon {
+  color: #fff;
+}
+
+.hud-dashboard-text {
+  line-height: 1;
+}
+
+@keyframes slideInFade {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulseIcon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}

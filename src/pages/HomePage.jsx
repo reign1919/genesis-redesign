@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './HomePage.css';
 import CountdownTimer from '../components/CountdownTimer';
 import BrandBlock from '../components/BrandBlock';
@@ -10,6 +10,7 @@ import NeuralBackground from '../components/NeuralBackground';
 const HomePage = () => {
   const [mousePos, setMousePos] = useState({ x: '50%', y: '50%' });
   const [sysReady, setSysReady] = useState(0);
+  const rafRef = useRef(null);
 
   useEffect(() => {
     let progress = 0;
@@ -25,9 +26,15 @@ const HomePage = () => {
   }, []);
 
   const handleMouseMove = (e) => {
-    setMousePos({
-      x: `${e.clientX}px`,
-      y: `${e.clientY}px`
+    if (rafRef.current) return; // Skip if a frame is already pending
+    
+    // Capture coordinates immediately
+    const x = `${e.clientX}px`;
+    const y = `${e.clientY}px`;
+    
+    rafRef.current = requestAnimationFrame(() => {
+      setMousePos({ x, y });
+      rafRef.current = null;
     });
   };
 
@@ -37,6 +44,7 @@ const HomePage = () => {
       onMouseMove={handleMouseMove} 
       style={{ '--mouse-x': mousePos.x, '--mouse-y': mousePos.y }}
     >
+      
       {/* 1. Constellation Background */}
       <div className="homepage-background">
         <NeuralBackground />
