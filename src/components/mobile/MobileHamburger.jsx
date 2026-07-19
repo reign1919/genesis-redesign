@@ -1,6 +1,8 @@
 import React, { useState, useEffect, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './MobileHamburger.css';
+import CreatorsPopup from '../CreatorsPopup';
+import webDevIcon from '../../assets/web-development.png';
 
 const navItems = [
   { to: '/', label: 'HOME', icon: '⌂' },
@@ -8,10 +10,12 @@ const navItems = [
   { to: '/login', label: 'REGISTER', icon: '◉' },
   { to: '/#about', label: 'ABOUT', hash: true, icon: '◎' },
   { to: '/docs', label: 'DOCUMENTATION', icon: '⊞' },
+  { action: 'creators', label: 'DEVELOPERS', icon: <img src={webDevIcon} alt="Web Dev" className="footer-folder-icon" /> },
 ];
 
 const MobileHamburger = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showCreators, setShowCreators] = useState(false);
   const location = useLocation();
 
   // Close menu on route change
@@ -72,11 +76,20 @@ const MobileHamburger = () => {
           {navItems.map((item, i) => {
             const isActive = item.hash
               ? location.hash === '#about'
-              : location.pathname === item.to;
+              : item.to ? location.pathname === item.to : false;
 
             return (
-              <li key={item.to} className="hamburger-nav-item" style={{ animationDelay: `${i * 60}ms` }}>
-                {item.hash ? (
+              <li key={item.label} className="hamburger-nav-item" style={{ animationDelay: `${i * 60}ms` }}>
+                {item.action ? (
+                  <button
+                    className="hamburger-nav-link"
+                    onClick={() => { setIsOpen(false); setShowCreators(true); }}
+                  >
+                    <span className="nav-link-icon">{item.icon}</span>
+                    <span className="nav-link-label">{item.label}</span>
+                    <span className="nav-link-arrow">→</span>
+                  </button>
+                ) : item.hash ? (
                   <a
                     href={item.to}
                     className={`hamburger-nav-link ${isActive ? 'active' : ''}`}
@@ -107,6 +120,7 @@ const MobileHamburger = () => {
           <span className="panel-footer-coord label-caps">22.5121°N / 88.4027°E</span>
         </div>
       </nav>
+      <CreatorsPopup isOpen={showCreators} onClose={() => setShowCreators(false)} />
     </>
   );
 };

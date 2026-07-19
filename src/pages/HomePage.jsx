@@ -9,8 +9,11 @@ import CommitteeSection from '../components/CommitteeSection';
 import NeuralBackground from '../components/NeuralBackground';
 import SysReadyCounter from '../components/SysReadyCounter';
 import folderIcon from '../assets/folder.png';
+import webDevIcon from '../assets/web-development.png';
+import CreatorsPopup from '../components/CreatorsPopup';
 
 const HomePage = () => {
+  const [showCreators, setShowCreators] = useState(false);
   const wrapperRef = useRef(null);
 
   const handleMouseMove = (e) => {
@@ -90,12 +93,19 @@ const HomePage = () => {
 
         {/* FOOTER */}
         <footer className="homepage-footer">
-          <Link to="/docs" className="docs-link-btn">
-            <img src={folderIcon} alt="Folder" className="footer-folder-icon" />
-            <span>DOCUMENTATION</span>
-          </Link>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <Link to="/docs" className="docs-link-btn">
+              <img src={folderIcon} alt="Folder" className="footer-folder-icon" />
+              <span>DOCUMENTATION</span>
+            </Link>
+            <button className="docs-link-btn" onClick={() => setShowCreators(true)}>
+              <img src={webDevIcon} alt="Web Dev" className="footer-folder-icon" />
+              <span>DEVELOPERS</span>
+            </button>
+          </div>
         </footer>
       </div>
+      <CreatorsPopup isOpen={showCreators} onClose={() => setShowCreators(false)} />
     </div>
   );
 };
