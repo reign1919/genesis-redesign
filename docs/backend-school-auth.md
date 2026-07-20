@@ -14,7 +14,7 @@ This repository uses the hosted Supabase project `kcnmvggxqcxlbbfgtrwq` for scho
 1. A school submits its name and teacher-in-charge WhatsApp number.
 2. The admin panel lists the application as pending.
 3. Rejection finalizes the application without sending a notification.
-4. Approval creates a `GEN-####` code, an eight-character password, and a Supabase Auth account.
+4. Approval creates a `GEN-####` code, a 16-character password, and a Supabase Auth account.
 5. The admin copies or opens the generated WhatsApp message and sends it manually.
 6. The same code and password are visible to administrators and the authenticated school dashboard.
 

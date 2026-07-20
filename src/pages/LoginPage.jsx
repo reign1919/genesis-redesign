@@ -308,7 +308,7 @@ const LoginPage = () => {
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="current-password"
                     minLength={8}
-                    maxLength={8}
+                    maxLength={64}
                     required
                   />
                 </div>

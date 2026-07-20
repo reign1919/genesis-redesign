@@ -2,7 +2,9 @@ const PASSWORD_UPPERCASE = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 const PASSWORD_LOWERCASE = 'abcdefghijkmnopqrstuvwxyz';
 const PASSWORD_DIGITS = '23456789';
 const PASSWORD_SYMBOLS = '!@#$%';
-const PASSWORD_ALPHABET = `${PASSWORD_UPPERCASE}${PASSWORD_LOWERCASE}${PASSWORD_DIGITS}${PASSWORD_SYMBOLS}`;
+const PASSWORD_ALPHABET =
+  `${PASSWORD_UPPERCASE}${PASSWORD_LOWERCASE}${PASSWORD_DIGITS}${PASSWORD_SYMBOLS}`;
+const PASSWORD_LENGTH = 16;
 
 function bytesToBase64(bytes: Uint8Array): string {
   let value = '';
@@ -34,7 +36,7 @@ export function generateSchoolPassword(): string {
     randomCharacter(PASSWORD_DIGITS),
     randomCharacter(PASSWORD_SYMBOLS),
   ];
-  while (characters.length < 8) characters.push(randomCharacter(PASSWORD_ALPHABET));
+  while (characters.length < PASSWORD_LENGTH) characters.push(randomCharacter(PASSWORD_ALPHABET));
 
   for (let index = characters.length - 1; index > 0; index -= 1) {
     const randomIndex = crypto.getRandomValues(new Uint32Array(1))[0] % (index + 1);
@@ -46,7 +48,10 @@ export function generateSchoolPassword(): string {
 async function importEncryptionKey(encodedKey: string): Promise<CryptoKey> {
   const keyBytes = base64ToBytes(encodedKey);
   if (keyBytes.byteLength !== 32) throw new Error('invalid credential encryption key');
-  return await crypto.subtle.importKey('raw', asArrayBuffer(keyBytes), 'AES-GCM', false, ['encrypt', 'decrypt']);
+  return await crypto.subtle.importKey('raw', asArrayBuffer(keyBytes), 'AES-GCM', false, [
+    'encrypt',
+    'decrypt',
+  ]);
 }
 
 export async function encryptPassword(

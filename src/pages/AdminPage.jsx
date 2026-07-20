@@ -62,7 +62,7 @@ function AdminDashboard({ admin, onLogout }) {
       setError(result.code === 'INVALID_TRANSITION'
         ? 'That registration is no longer pending.'
         : result.code === 'PROVISIONING_FAILED' && result.stage
-          ? `Approval failed during ${result.stage.replaceAll('_', ' ')}.${result.detail ? ` ${result.detail}` : ''}`
+          ? `Approval failed during ${result.stage.replaceAll('_', ' ')}.`
           : 'The status could not be updated. Try again later.');
       return;
     }

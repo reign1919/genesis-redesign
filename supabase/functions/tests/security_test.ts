@@ -3,7 +3,11 @@ import { bearerToken, clientIp } from '../_shared/security.ts';
 import { validateAdminTransition, validateRegistrationPayload } from '../_shared/validation.ts';
 import { handleAdminRegistrations } from '../admin-registrations/index.ts';
 import { handleSubmitRegistration } from '../submit-registration/index.ts';
-import { decryptPassword, encryptPassword, generateSchoolPassword } from '../_shared/credentials.ts';
+import {
+  decryptPassword,
+  encryptPassword,
+  generateSchoolPassword,
+} from '../_shared/credentials.ts';
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -49,19 +53,24 @@ Deno.test('registration validation rejects unknown and malformed fields', () => 
   );
 });
 
-Deno.test('school passwords use eight unambiguous mixed characters and encrypted display storage', async () => {
+Deno.test('school passwords use sixteen unambiguous mixed characters and encrypted display storage', async () => {
   for (let index = 0; index < 50; index += 1) {
     const password = generateSchoolPassword();
-    assert(/^[A-HJ-NP-Za-km-z2-9!@#$%]{8}$/u.test(password), 'password alphabet and length');
+    assert(/^[A-HJ-NP-Za-km-z2-9!@#$%]{16}$/u.test(password), 'password alphabet and length');
     assert(
-      /[A-Z]/u.test(password) && /[a-z]/u.test(password) && /[0-9]/u.test(password) && /[!@#$%]/u.test(password),
+      /[A-Z]/u.test(password) && /[a-z]/u.test(password) && /[0-9]/u.test(password) &&
+        /[!@#$%]/u.test(password),
       'password must contain uppercase, lowercase, digit, and symbol',
     );
   }
   const key = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))));
   const encrypted = await encryptPassword('ABCD2345', key);
   assert(encrypted.ciphertext !== 'ABCD2345', 'plaintext is not stored');
-  assertEquals(await decryptPassword(encrypted.ciphertext, encrypted.iv, key), 'ABCD2345', 'encrypted password round trip');
+  assertEquals(
+    await decryptPassword(encrypted.ciphertext, encrypted.iv, key),
+    'ABCD2345',
+    'encrypted password round trip',
+  );
 });
 
 Deno.test('CORS uses an exact allowlist and always varies on Origin', () => {
@@ -533,9 +542,8 @@ Deno.test('admin handler lists credentials and performs explicit rejection', asy
     },
   });
   const authDependencies = (status?: string) => ({
-    env: (name: string) => name === 'SCHOOL_CREDENTIAL_ENCRYPTION_KEY'
-      ? btoa('12345678901234567890123456789012')
-      : '',
+    env: (name: string) =>
+      name === 'SCHOOL_CREDENTIAL_ENCRYPTION_KEY' ? btoa('12345678901234567890123456789012') : '',
     createAdminClient: () => makeClient(status) as never,
     authenticate: () => Promise.resolve({ id: 'admin-user' } as never),
     isAdmin: () => Promise.resolve(true),
@@ -576,4 +584,96 @@ Deno.test('admin handler lists credentials and performs explicit rejection', asy
       `${status} code`,
     );
   }
+});
+
+Deno.test('approval failure never deletes a previously linked Auth user or exposes upstream details', async () => {
+  const encryptionKey = btoa('12345678901234567890123456789012');
+  const encrypted = await encryptPassword('ExistingPass234!x', encryptionKey);
+  let deletedUsers = 0;
+
+  const adminClient = {
+    auth: {
+      admin: {
+        updateUserById: () => Promise.resolve({ data: {}, error: null }),
+        deleteUser: () => {
+          deletedUsers += 1;
+          return Promise.resolve({ data: {}, error: null });
+        },
+      },
+    },
+    rpc(name: string) {
+      if (name === 'reserve_registration_approval') {
+        return Promise.resolve({ data: 'GEN-0001', error: null });
+      }
+      if (name === 'finalize_registration_approval') {
+        return Promise.resolve({ data: null, error: { message: 'sensitive database detail' } });
+      }
+      return Promise.resolve({ data: 'reset', error: null });
+    },
+    from(table: string) {
+      const chain = {
+        select() {
+          return chain;
+        },
+        eq() {
+          return chain;
+        },
+        single() {
+          return Promise.resolve({
+            data: {
+              id: '10000000-0000-4000-8000-000000000001',
+              school_name: 'Existing School',
+              teacher_whatsapp: '+919876543210',
+              school_code: 'GEN-0001',
+              status: 'provisioning',
+              created_at: '2026-07-20T00:00:00.000Z',
+              updated_at: '2026-07-20T00:00:00.000Z',
+            },
+            error: null,
+          });
+        },
+        maybeSingle() {
+          assertEquals(table, 'school_credential_provisioning', 'staging table lookup');
+          return Promise.resolve({
+            data: {
+              auth_user_id: 'existing-auth-user',
+              password_ciphertext: encrypted.ciphertext,
+              password_iv: encrypted.iv,
+            },
+            error: null,
+          });
+        },
+      };
+      return chain;
+    },
+  };
+
+  const response = await handleAdminRegistrations(
+    new Request('https://function.example', {
+      method: 'PATCH',
+      headers: {
+        Authorization: 'Bearer admin-token',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        registrationId: '10000000-0000-4000-8000-000000000001',
+        status: 'approved',
+      }),
+    }),
+    {
+      env: (name) => name === 'SCHOOL_CREDENTIAL_ENCRYPTION_KEY' ? encryptionKey : '',
+      createAdminClient: () => adminClient as never,
+      authenticate: () => Promise.resolve({ id: 'admin-user' } as never),
+      isAdmin: () => Promise.resolve(true),
+    },
+  );
+
+  const body = await responseBody(response);
+  assertEquals(response.status, 503, 'failed finalization status');
+  assertEquals(body.code, 'PROVISIONING_FAILED', 'stable failure code');
+  assertEquals(deletedUsers, 0, 'existing Auth user must be preserved');
+  assert(
+    !JSON.stringify(body).includes('sensitive database detail'),
+    'upstream detail must stay server-side',
+  );
 });
