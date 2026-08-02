@@ -10,6 +10,7 @@ const EventsPage = React.lazy(() => import('./pages/EventsPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const SchoolDashboardPage = React.lazy(() => import('./pages/SchoolDashboardPage'));
+const EventDetailPage = React.lazy(() => import('./pages/EventDetailPage'));
 const AdminPage = React.lazy(() => import('./pages/AdminPage'));
 const DocumentationPage = React.lazy(() => import('./pages/DocumentationPage'));
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
@@ -34,6 +35,7 @@ function AppRouter() {
         <Route path="/events" element={isMobile ? <MobileEventsPage /> : <EventsPage />} />
         <Route path="/login" element={isMobile ? <MobileLoginPage /> : <LoginPage />} />
         <Route path="/dashboard" element={isMobile ? <MobileSchoolDashboardPage /> : <SchoolDashboardPage />} />
+        <Route path="/dashboard/:eventSlug" element={<EventDetailPage />} />
         <Route path="/contact" element={isMobile ? <MobileContactPage /> : <ContactPage />} />
         <Route path="/docs" element={isMobile ? <MobileDocumentationPage /> : <DocumentationPage />} />
         

@@ -32,7 +32,11 @@ export async function handleSubmitRegistration(
     sha256?: typeof sha256;
   } = {},
 ): Promise<Response> {
-  const env = dependencies.env || ((name: string) => Deno.env.get(name) || '');
+  const env = dependencies.env || ((name: string) => {
+    const val = Deno.env.get(name);
+    if (name === 'ENROLLMENT_ENABLED') return val || 'true';
+    return val || '';
+  });
   const makeAdminClient = dependencies.createAdminClient || createAdminClient;
   const hash = dependencies.sha256 || sha256;
   const requestId = createRequestId();
