@@ -111,7 +111,7 @@ const ContactPage = () => {
       label: 'LOCATION',
       value: 'Indus Valley World School, Kolkata',
       href: 'https://maps.google.com',
-      meta: 'Lat: 22.5121°N / Lng: 88.4027°E',
+      meta: 'Lat: 22.4845545°N / Lng: 88.3960671°E',
     },
   ];
 
@@ -163,7 +163,7 @@ const ContactPage = () => {
         {SIGNAL_MSGS[signalIdx]}
       </div>
       <div className="data-accent right-accent">
-        LAT: 22.5121° N<br />LNG: 88.4027° E
+        LAT: 22.4845545° N<br />LNG: 88.3960671° E
       </div>
 
       {/* Morse ticker */}

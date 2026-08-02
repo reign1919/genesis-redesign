@@ -137,7 +137,7 @@ const MobileHamburger = () => {
         {/* Footer accent */}
         <div className="panel-footer">
           <span className="panel-footer-text label-caps">Indus Valley World School</span>
-          <span className="panel-footer-coord label-caps">22.5121°N / 88.4027°E</span>
+          <span className="panel-footer-coord label-caps">22.4845545°N / 88.3960671°E</span>
         </div>
       </nav>
       <CreatorsPopup isOpen={showCreators} onClose={() => setShowCreators(false)} />

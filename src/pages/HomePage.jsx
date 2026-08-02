@@ -66,7 +66,7 @@ const HomePage = () => {
       </header>
       
       <div className="data-accent left-accent"><SysReadyCounter /></div>
-      <div className="data-accent right-accent">LAT: 22.5121° N<br/>LNG: 88.4027° E</div>
+      <div className="data-accent right-accent">LAT: 22.4845545° N<br/>LNG: 88.3960671° E</div>
       
       {/* 5. Main Content Container */}
       <div className="homepage-container">

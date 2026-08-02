@@ -83,7 +83,7 @@ const MobileHero = () => {
       {/* Bottom data strip */}
       <div className="m-hero-data-strip">
         <span className="label-caps">INDUS VALLEY WORLD SCHOOL</span>
-        <span className="label-caps" style={{ color: 'var(--accent-deep)' }}>22.5121°N / 88.4027°E</span>
+        <span className="label-caps" style={{ color: 'var(--accent-deep)' }}>22.4845545°N / 88.3960671°E</span>
       </div>
     </section>
   );

@@ -42,7 +42,7 @@ const contacts = [
     label: 'LOCATION',
     value: 'Indus Valley World School, Kolkata',
     href: 'https://maps.google.com',
-    meta: 'Lat: 22.5121°N / Lng: 88.4027°E',
+    meta: 'Lat: 22.4845545°N / Lng: 88.3960671°E',
   },
 ];
 
