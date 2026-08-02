@@ -70,6 +70,12 @@
   fill: var(--accent-deep);
 }
 
+.circuit-glow-group {
+  filter: blur(2px);
+  will-change: filter;
+  transform: translateZ(0);
+}
+
 /* Pulsing Current Animations */
 .pulse-path {
   fill: none;

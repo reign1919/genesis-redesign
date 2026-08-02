@@ -99,7 +99,6 @@
 .reel-wrapper.flagship .reel-rim-outer {
   stroke: var(--accent-bright);
   stroke-width: 3px;
-  filter: drop-shadow(0 0 6px rgba(253, 98, 95, 0.4));
 }
 
 .reel-wrapper.flagship .reel-center-glow {
@@ -109,11 +108,13 @@
 /* Active & Hover States */
 .reel-wrapper:hover {
   transform: scale(1.06);
+  will-change: transform;
 }
 
 .reel-wrapper:hover .reel-rim-outer {
   stroke: var(--accent-bright);
-  filter: drop-shadow(0 0 10px rgba(253, 98, 95, 0.7));
+  filter: drop-shadow(0 0 8px rgba(253, 98, 95, 0.6));
+  will-change: filter;
 }
 
 .reel-wrapper:hover .reel-center-glow {
@@ -122,7 +123,7 @@
 
 .reel-wrapper.active .reel-rim-outer {
   stroke: var(--accent-light);
-  filter: drop-shadow(0 0 14px var(--accent-bright));
+  filter: drop-shadow(0 0 10px var(--accent-bright));
 }
 
 /* Label Strip below reel */

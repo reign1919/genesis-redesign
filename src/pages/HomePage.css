@@ -38,14 +38,16 @@
 
 .mouse-blur-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0; left: 0;
+  width: 400px; height: 400px;
   pointer-events: none;
   z-index: 2; /* Below the main container */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  /* Mask isolates the blur to the area around the cursor */
-  mask-image: radial-gradient(circle 250px at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent);
-  -webkit-mask-image: radial-gradient(circle 250px at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent);
+  mask-image: radial-gradient(circle 200px at center, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle 200px at center, black 0%, transparent 70%);
+  transform: translate3d(calc(var(--mouse-x, 50vw) - 200px), calc(var(--mouse-y, 50vh) - 200px), 0);
+  will-change: transform;
 }
 
 /* --- HUD BRACKETS --- */

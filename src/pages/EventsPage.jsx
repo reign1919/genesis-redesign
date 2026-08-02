@@ -21,13 +21,20 @@ const EventsPage = () => {
   const [showCreators, setShowCreators] = useState(false);
 
   const wrapperRef = useRef(null);
+  const rafRef = useRef(null);
 
-  // Mouse spotlight positioning
+  // Mouse spotlight positioning — rAF-batched to cap style writes at 1 per frame
   const handleMouseMove = (e) => {
-    if (wrapperRef.current) {
-      wrapperRef.current.style.setProperty('--mouse-x', `${e.clientX}px`);
-      wrapperRef.current.style.setProperty('--mouse-y', `${e.clientY}px`);
-    }
+    if (rafRef.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    rafRef.current = requestAnimationFrame(() => {
+      if (wrapperRef.current) {
+        wrapperRef.current.style.setProperty('--mouse-x', `${clientX}px`);
+        wrapperRef.current.style.setProperty('--mouse-y', `${clientY}px`);
+      }
+      rafRef.current = null;
+    });
   };
 
   // Synchronize deep-linking via query params (?id=zero-day)

@@ -28,10 +28,6 @@ const CircuitBackground = ({ activeCluster = null }) => {
             <stop offset="50%" stopColor="var(--accent-mid)" stopOpacity="0.8" />
             <stop offset="100%" stopColor="var(--accent-bright)" stopOpacity="1" />
           </linearGradient>
-          <filter id="circuitGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
         </defs>
 
         {/* Static PCB Etched Grid Network */}
@@ -76,7 +72,7 @@ const CircuitBackground = ({ activeCluster = null }) => {
         </g>
 
         {/* Live Current Pulsing Traces */}
-        <g className="pulsing-current-traces" filter="url(#circuitGlow)">
+        <g className="pulsing-current-traces circuit-glow-group">
           <path d="M 500,0 V 180" className="pulse-path pulse-1" />
           <path d="M 500,180 L 280,320 L 500,440" className="pulse-path pulse-2" />
           <path d="M 500,180 L 720,320 L 500,440" className="pulse-path pulse-3" />

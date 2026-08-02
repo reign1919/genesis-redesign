@@ -6,10 +6,26 @@ const FAQCompass = () => {
   const [activeQuestion, setActiveQuestion] = useState(null);
 
   const questions = [
-    { id: 'q1', text: 'How it started?', answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.' },
-    { id: 'q2', text: 'Why Genesis?', answer: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.' },
-    { id: 'q3', text: 'Deep question?', answer: 'Sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque.' },
-    { id: 'q4', text: 'Deep question?', answer: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.' }
+    { 
+      id: 'q1', 
+      text: 'How do I register?', 
+      answer: 'For Schools: You can successfully register by requesting credentials via the "Register" button on the homepage.\n\nFor Students: Individual registration is not permitted. If you would like to participate, please ask your school to register.' 
+    },
+    { 
+      id: 'q2', 
+      text: 'When and where?', 
+      answer: 'Genesis will be hosted at the Indus Valley World School campus on September 26, 2026.' 
+    },
+    { 
+      id: 'q3', 
+      text: 'How did it start?', 
+      answer: 'Genesis began a few months ago as the shared vision of two tech-passionate students, Trishaan and Akshat (or popularly known as “Taxat”). We wanted to elevate IVWS in the inter-school community by creating an unparalleled tech fest, turning a simple spark of ambition into the premier platform for innovation you see today.' 
+    },
+    { 
+      id: 'q4', 
+      text: 'How is Genesis different?', 
+      answer: 'Unlike traditional fests, Genesis is built from the ground up by students who know exactly what modern tech enthusiasts want. Instead of just answering questions, participants tackle cutting-edge domains to build actual solutions staying true to our motto: Ideate, Innovate, Inspire. Because tech isn\'t just for hardcore coders anymore, Genesis blends logic, design, and business, challenging developers and strategists to work together. Ultimately, it’s more than a competition; it’s a networking hub where the brightest minds break out of their silos to connect, create, and inspire one another.' 
+    }
   ];
 
   const handleQuestionClick = (q) => {
