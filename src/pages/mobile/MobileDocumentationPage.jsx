@@ -7,12 +7,10 @@ import './MobileDocumentationPage.css';
 
 // Import raw markdown files
 import privacyPolicy from '../../docs/PRIVACY_POLICY.md?raw';
-import codeOfConduct from '../../docs/CODE_OF_CONDUCT.md?raw';
 import apiDocs from '../../docs/API_DOCUMENTATION.md?raw';
 
 const documents = [
   { id: 'privacy', title: 'PRIVACY POLICY', content: privacyPolicy },
-  { id: 'conduct', title: 'CODE OF CONDUCT', content: codeOfConduct },
   { id: 'api', title: 'API DOCUMENTATION', content: apiDocs },
 ];
 
