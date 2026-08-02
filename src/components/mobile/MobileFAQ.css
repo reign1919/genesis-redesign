@@ -130,4 +130,5 @@
   color: var(--text-secondary);
   line-height: 1.7;
   margin: 0;
+  white-space: pre-line;
 }
