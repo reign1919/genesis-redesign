@@ -5,22 +5,10 @@ import { loadSchoolCredentials } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/authContext';
 import LoadingScreen from '../components/LoadingScreen';
-import { eventsData } from '../lib/eventsData';
-import {
-  CheckCircle2,
-  AlertCircle,
-  ArrowLeft,
-  Printer,
-  Users,
-  Calendar,
-  Lock,
-  Sparkles,
-  Layers,
-  Building2,
-} from 'lucide-react';
-import './ReviewRegistrationPage.css';
-
+import { fetchSchoolRoster } from '../lib/rosterHelper';
 import RosterSummaryView from '../components/RosterSummaryView';
+import { ArrowLeft, Printer } from 'lucide-react';
+import './ReviewRegistrationPage.css';
 
 export default function ReviewRegistrationPage() {
   const navigate = useNavigate();
@@ -35,135 +23,77 @@ export default function ReviewRegistrationPage() {
     let active = true;
 
     const loadReviewData = async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (!active) return;
-      if (!sessionData?.session) {
-        navigate('/login', { replace: true });
-        return;
-      }
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (!active) return;
+        if (!sessionData?.session) {
+          navigate('/login', { replace: true });
+          return;
+        }
 
-      // 1. Fetch school credentials / identity
-      const credResult = await loadSchoolCredentials();
-      if (!active) return;
+        // 1. Fetch school credentials / identity
+        const credResult = await loadSchoolCredentials();
+        if (!active) return;
 
-      if (
-        credResult.code === 'AUTH_REQUIRED' ||
-        credResult.code === 'AUTH_INVALID'
-      ) {
-        logout();
-        await supabase.auth.signOut({ scope: 'local' });
-        navigate('/login', { replace: true });
-        return;
-      }
+        if (
+          credResult.code === 'AUTH_REQUIRED' ||
+          credResult.code === 'AUTH_INVALID'
+        ) {
+          logout();
+          await supabase.auth.signOut({ scope: 'local' });
+          navigate('/login', { replace: true });
+          return;
+        }
 
-      let currentSchool = null;
-      if (credResult.ok && credResult.school) {
-        currentSchool = credResult.school;
-      } else {
-        const user = sessionData.session.user;
-        const derivedCode = user?.email
-          ? user.email.split('@')[0].toUpperCase()
-          : 'GEN-0015';
-        currentSchool = {
-          school_name: derivedCode === 'GEN-0015' ? "St. Xavier's Collegiate School" : `School ${derivedCode}`,
-          school_code: derivedCode,
-        };
-      }
-      setSchool(currentSchool);
-
-      // 2. Fetch current school's selections & participant data
-      const { data: schoolUserData } = await supabase
-        .from('school_users')
-        .select('school_id')
-        .eq('auth_user_id', sessionData.session.user.id)
-        .maybeSingle();
-
-      const schoolId = schoolUserData?.school_id;
-
-      if (!schoolId) {
-        setLoading(false);
-        return;
-      }
-
-      // Fetch selections status
-      const { data: dbStatuses } = await supabase
-        .from('v_school_event_statuses')
-        .select('*');
-
-      if (!active) return;
-
-      const activeSelections = (dbStatuses || []).filter(
-        (s) => s.status !== 'not_selected'
-      );
-      setTotalSelectedCount(activeSelections.length);
-
-      const completed = activeSelections.filter((s) =>
-        ['selected_complete', 'locked', 'submitted'].includes(s.status)
-      );
-      setCompleteCount(completed.length);
-
-      // Fetch detailed participant rosters for active selections
-      const { data: selectionsData } = await supabase
-        .from('school_event_selections')
-        .select('id, event_id, status, deselected_at')
-        .eq('school_id', schoolId)
-        .is('deselected_at', null);
-
-      if (!active) return;
-
-      const rosters = await Promise.all(
-        (selectionsData || []).map(async (sel) => {
-          const staticInfo = eventsData.find(
-            (e) => e.id.toLowerCase() === sel.event_id.toLowerCase()
-          );
-
-          // Get DB event info
-          const { data: evDb } = await supabase
-            .from('events')
-            .select('*')
-            .eq('id', sel.event_id)
-            .maybeSingle();
-
-          const eventName = evDb?.name || staticInfo?.title || sel.event_id;
-          const category = evDb?.category || staticInfo?.category || 'General';
-          const teamLimit = evDb?.participant_limit || (staticInfo ? parseInt(staticInfo.teamSize, 10) : 2);
-
-          // Fetch participant links
-          const { data: partLinks } = await supabase
-            .from('registration_participants')
-            .select('row_index, participant_id, participants(name, class, phone)')
-            .eq('school_event_selection_id', sel.id)
-            .order('row_index', { ascending: true });
-
-          const participants = Array.from({ length: teamLimit }, (_, idx) => {
-            const rowIndex = idx + 1;
-            const link = partLinks?.find((p) => p.row_index === rowIndex);
-            const p = link?.participants;
-            return {
-              row_index: rowIndex,
-              name: p?.name || '—',
-              class: p?.class || '—',
-              phone: p?.phone || '—',
-            };
-          });
-
-          return {
-            selection_id: sel.id,
-            event_id: sel.event_id,
-            event_name: eventName,
-            category,
-            teamLimit,
-            status: sel.status,
-            participants,
+        let currentSchool = null;
+        if (credResult.ok && credResult.school) {
+          currentSchool = credResult.school;
+        } else {
+          const user = sessionData.session.user;
+          const derivedCode = user?.email
+            ? user.email.split('@')[0].toUpperCase()
+            : 'GEN-0015';
+          currentSchool = {
+            school_name: derivedCode === 'GEN-0015' ? "St. Xavier's Collegiate School" : `School ${derivedCode}`,
+            school_code: derivedCode,
           };
-        })
-      );
+        }
+        setSchool(currentSchool);
 
-      setEventRosters(rosters);
-      setLoading(false);
+        // 2. Resolve school ID with robust fallbacks
+        const { data: schoolUserData } = await supabase
+          .from('school_users')
+          .select('school_id')
+          .eq('auth_user_id', sessionData.session.user.id)
+          .maybeSingle();
+
+        const schoolId =
+          schoolUserData?.school_id ||
+          credResult?.school?.id ||
+          credResult?.school?.school_id;
+
+        if (schoolId) {
+          const rosterRes = await fetchSchoolRoster(schoolId);
+          if (active && rosterRes.ok) {
+            setEventRosters(rosterRes.rosters);
+            setCompleteCount(rosterRes.completeCount);
+            setTotalSelectedCount(rosterRes.totalSelectedCount);
+          }
+        }
+      } catch (err) {
+        console.error('Error loading desktop review data:', err);
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
     };
 
     loadReviewData();
+
+    return () => {
+      active = false;
+    };
   }, [navigate, logout]);
 
   const handlePrint = () => {
