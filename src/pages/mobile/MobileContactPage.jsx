@@ -14,8 +14,8 @@ const contacts = [
       </svg>
     ),
     label: 'EMAIL',
-    value: 'thegenesiscouncil@gmail.com',
-    href: 'mailto:thegenesiscouncil@gmail.com',
+    value: 'thegenesiscouncil@ivws.org',
+    href: 'mailto:thegenesiscouncil@ivws.org',
     meta: 'Primary contact',
   },
   {
@@ -27,8 +27,8 @@ const contacts = [
       </svg>
     ),
     label: 'WHATSAPP',
-    value: '+91 9999999999',
-    href: 'https://wa.me/919999999999',
+    value: '+91 9836852112',
+    href: 'https://wa.me/919836852112',
     meta: 'Teacher-in-Charge',
   },
   {
@@ -63,7 +63,7 @@ const MobileContactPage = () => {
     };
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/sahatrishaan1910@gmail.com", {
+      const response = await fetch("https://formsubmit.co/ajax/thegenesiscouncil@ivws.org", {
         method: "POST",
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(data)
