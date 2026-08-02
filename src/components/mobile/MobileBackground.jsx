@@ -2,15 +2,12 @@ import React, { useEffect, useRef, memo } from 'react';
 import './MobileBackground.css';
 
 /**
- * Touch-responsive animated background for mobile.
- * Uses lightweight CSS animations + a very simple canvas with fewer particles.
- * Responds to touch events instead of mouse.
+ * Lightweight ambient animated background for mobile.
+ * Completely non-interactive and pointer-events free for 100% smooth scrolling.
  */
 const PARTICLE_COUNT = 25;
 const PARTICLE_SPEED = 0.3;
 const CONNECTION_DIST = 120;
-const TOUCH_RIPPLE_RADIUS = 150;
-const TOUCH_RIPPLE_FORCE = 8;
 
 function randomBetween(a, b) {
   return a + Math.random() * (b - a);
@@ -20,7 +17,6 @@ const MobileBackground = () => {
   const canvasRef = useRef(null);
   const particlesRef = useRef([]);
   const rafRef = useRef(null);
-  const ripplesRef = useRef([]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -47,33 +43,6 @@ const MobileBackground = () => {
       pulseOffset: Math.random() * Math.PI * 2,
     }));
 
-    // Touch ripple handler
-    const handleTouch = (e) => {
-      const touches = e.changedTouches || e.touches;
-      if (!touches || touches.length === 0) return;
-      const rect = canvas.getBoundingClientRect();
-      for (let i = 0; i < touches.length; i++) {
-        const tx = touches[i].clientX - rect.left;
-        const ty = touches[i].clientY - rect.top;
-        // Add ripple
-        ripplesRef.current.push({ x: tx, y: ty, radius: 0, alpha: 0.6, maxRadius: TOUCH_RIPPLE_RADIUS });
-        // Push particles away
-        particlesRef.current.forEach((p) => {
-          const dx = p.x - tx;
-          const dy = p.y - ty;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < TOUCH_RIPPLE_RADIUS && dist > 0) {
-            const force = (1 - dist / TOUCH_RIPPLE_RADIUS) * TOUCH_RIPPLE_FORCE;
-            p.vx += (dx / dist) * force;
-            p.vy += (dy / dist) * force;
-          }
-        });
-      }
-    };
-
-    canvas.addEventListener('touchstart', handleTouch, { passive: true });
-    canvas.addEventListener('touchmove', handleTouch, { passive: true });
-
     let t = 0;
     const draw = () => {
       t += 0.01;
@@ -85,17 +54,6 @@ const MobileBackground = () => {
       // Update particles
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        p.vx *= 0.985;
-        p.vy *= 0.985;
-
-        const speedSq = p.vx * p.vx + p.vy * p.vy;
-        const maxSpeed = PARTICLE_SPEED * 3;
-        if (speedSq > maxSpeed * maxSpeed) {
-          const speed = Math.sqrt(speedSq);
-          p.vx = (p.vx / speed) * maxSpeed;
-          p.vy = (p.vy / speed) * maxSpeed;
-        }
-
         p.x += p.vx;
         p.y += p.vy;
 
@@ -138,23 +96,6 @@ const MobileBackground = () => {
         ctx.fill();
       }
 
-      // Draw and update ripples
-      const ripples = ripplesRef.current;
-      for (let i = ripples.length - 1; i >= 0; i--) {
-        const rip = ripples[i];
-        rip.radius += 3;
-        rip.alpha -= 0.015;
-        if (rip.alpha <= 0) {
-          ripples.splice(i, 1);
-          continue;
-        }
-        ctx.beginPath();
-        ctx.arc(rip.x, rip.y, rip.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(172, 50, 46, ${rip.alpha})`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      }
-
       rafRef.current = requestAnimationFrame(draw);
     };
 
@@ -162,19 +103,14 @@ const MobileBackground = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
-      canvas.removeEventListener('touchstart', handleTouch);
-      canvas.removeEventListener('touchmove', handleTouch);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
   return (
     <div className="mobile-bg-container">
-      {/* CSS gradient base layer */}
       <div className="mobile-bg-gradient" />
-      {/* Lightweight canvas on top */}
       <canvas ref={canvasRef} className="mobile-bg-canvas" aria-hidden="true" />
-      {/* Noise texture */}
       <div className="mobile-bg-noise" />
     </div>
   );

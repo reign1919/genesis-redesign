@@ -324,7 +324,6 @@ export default function MobileSchoolDashboardPage() {
           </div>
         </div>
 
-        {/* View Registration Summary Button */}
         <Link
           to="/dashboard/review"
           className={`mdash-roster-cta ${
@@ -334,10 +333,7 @@ export default function MobileSchoolDashboardPage() {
           }`}
         >
           <span>View Roster Summary</span>
-          <div className="mdash-roster-cta-meta">
-            <span className="mdash-roster-count-badge">({completeCount}/3 Complete)</span>
-            <ChevronRight size={14} />
-          </div>
+          <ChevronRight size={14} />
         </Link>
 
         {/* Events Checklist Section */}
