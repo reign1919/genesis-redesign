@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import MobileBackground from '../../components/mobile/MobileBackground';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
@@ -9,6 +9,17 @@ import MobileCommittee from '../../components/mobile/MobileCommittee';
 import './MobileHomePage.css';
 
 const MobileHomePage = () => {
+  useEffect(() => {
+    if (window.location.hash === '#about') {
+      const el = document.getElementById('about');
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    }
+  }, []);
+
   return (
     <div className="m-home-wrapper">
       {/* Background */}

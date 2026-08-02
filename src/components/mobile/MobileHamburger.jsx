@@ -6,6 +6,7 @@ import webDevIcon from '../../assets/web-development.png';
 
 const navItems = [
   { to: '/', label: 'HOME', icon: '⌂' },
+  { to: '/#about', label: 'ABOUT', hash: true, icon: '◎' },
   {
     to: '/events',
     label: 'EVENTS',
@@ -19,7 +20,6 @@ const navItems = [
   },
   { to: '/contact', label: 'CONTACT', icon: '◈' },
   { to: '/login', label: 'REGISTER', icon: '◉' },
-  { to: '/#about', label: 'ABOUT', hash: true, icon: '◎' },
   { to: '/docs', label: 'DOCUMENTATION', icon: '⊞' },
   { action: 'creators', label: 'DEVELOPERS', icon: <img src={webDevIcon} alt="Web Dev" style={{ width: '18px', height: '18px', objectFit: 'contain' }} /> },
 ];
@@ -104,7 +104,16 @@ const MobileHamburger = () => {
                   <a
                     href={item.to}
                     className={`hamburger-nav-link ${isActive ? 'active' : ''}`}
-                    onClick={() => setIsOpen(false)}
+                    onClick={(e) => {
+                      setIsOpen(false);
+                      if (location.pathname === '/') {
+                        e.preventDefault();
+                        const el = document.getElementById('about');
+                        if (el) {
+                          el.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }
+                    }}
                   >
                     <span className="nav-link-icon">{item.icon}</span>
                     <span className="nav-link-label">{item.label}</span>
