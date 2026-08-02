@@ -144,16 +144,31 @@ export default function SchoolDashboardPage() {
       }
 
       // 2. Fetch Events with Live Selection Status per school
-      const { data: dbStatuses } = await supabase
+      let dbStatuses = null;
+      const { data: viewStatuses } = await supabase
         .from('v_school_event_statuses')
         .select('*');
+
+      dbStatuses = viewStatuses;
+
+      const activeSchoolId = credResult?.school?.id || credResult?.school?.school_id;
+      if ((!dbStatuses || dbStatuses.length === 0) && activeSchoolId) {
+        const { data: rpcStatuses } = await supabase.rpc('get_school_event_statuses', {
+          p_school_id: activeSchoolId,
+        });
+        if (rpcStatuses && Array.isArray(rpcStatuses)) {
+          dbStatuses = rpcStatuses;
+        }
+      }
 
       if (!active) return;
 
       const statusMap = new Map();
       if (dbStatuses && Array.isArray(dbStatuses)) {
         dbStatuses.forEach((row) => {
-          statusMap.set(row.event_slug.toLowerCase(), row.status);
+          if (row.event_slug) {
+            statusMap.set(row.event_slug.toLowerCase(), row.status);
+          }
         });
       }
 
@@ -275,42 +290,56 @@ export default function SchoolDashboardPage() {
             </strong>
           </div>
 
-          <div className={`dash-deadline-pill ${deadline.badgeClass}`}>
-            <Calendar size={15} />
-            <div>
-              <div className="flex items-center gap-1.5 relative">
-                <span className="label-caps block text-[10px]">Deadline (Sep 14)</span>
-                <div className="relative inline-flex items-center">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowDeadlineTooltip((prev) => !prev);
-                    }}
-                    className="text-zinc-400 hover:text-white transition-colors cursor-pointer p-0.5 rounded-full hover:bg-white/10 focus:outline-none flex items-center justify-center"
-                    aria-label="Deadline info"
-                  >
-                    <HelpCircle size={13} />
-                  </button>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/dashboard/review"
+              className={`px-3.5 py-2 rounded-md text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+                completeCount >= 3
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
+                  : 'bg-zinc-800/60 text-zinc-400 border border-zinc-700/60 hover:text-zinc-200'
+              }`}
+            >
+              <span>View Roster Summary</span>
+              <ChevronRight size={13} />
+            </Link>
 
-                  {showDeadlineTooltip && (
-                    <>
-                      <div
-                        className="fixed inset-0 z-40 bg-transparent"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowDeadlineTooltip(false);
-                        }}
-                      />
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 bg-zinc-950 text-zinc-100 text-xs rounded-lg border border-zinc-700/80 shadow-2xl backdrop-blur-md z-50 font-sans font-normal normal-case leading-snug text-left">
-                        Deadline by which all schools have to submit participant list
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-950 border-r border-b border-zinc-700/80 rotate-45" />
-                      </div>
-                    </>
-                  )}
+            <div className={`dash-deadline-pill ${deadline.badgeClass}`}>
+              <Calendar size={15} />
+              <div>
+                <div className="flex items-center gap-1.5 relative">
+                  <span className="label-caps block text-[10px]">Deadline (Sep 14)</span>
+                  <div className="relative inline-flex items-center">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowDeadlineTooltip((prev) => !prev);
+                      }}
+                      className="text-zinc-400 hover:text-white transition-colors cursor-pointer p-0.5 rounded-full hover:bg-white/10 focus:outline-none flex items-center justify-center"
+                      aria-label="Deadline info"
+                    >
+                      <HelpCircle size={13} />
+                    </button>
+
+                    {showDeadlineTooltip && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-40 bg-transparent"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowDeadlineTooltip(false);
+                          }}
+                        />
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 bg-zinc-950 text-zinc-100 text-xs rounded-lg border border-zinc-700/80 shadow-2xl backdrop-blur-md z-50 font-sans font-normal normal-case leading-snug text-left">
+                          Schools with at least 3 completed event rosters by September 14th will be automatically approved.
+                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-950 border-r border-b border-zinc-700/80 rotate-45" />
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
+                <strong>{deadline.formattedText}</strong>
               </div>
-              <strong>{deadline.formattedText}</strong>
             </div>
           </div>
         </section>

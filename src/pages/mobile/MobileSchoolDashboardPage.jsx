@@ -143,16 +143,31 @@ export default function MobileSchoolDashboardPage() {
         });
       }
 
-      const { data: dbStatuses } = await supabase
+      let dbStatuses = null;
+      const { data: viewStatuses } = await supabase
         .from('v_school_event_statuses')
         .select('*');
+
+      dbStatuses = viewStatuses;
+
+      const activeSchoolId = credResult?.school?.id || credResult?.school?.school_id;
+      if ((!dbStatuses || dbStatuses.length === 0) && activeSchoolId) {
+        const { data: rpcStatuses } = await supabase.rpc('get_school_event_statuses', {
+          p_school_id: activeSchoolId,
+        });
+        if (rpcStatuses && Array.isArray(rpcStatuses)) {
+          dbStatuses = rpcStatuses;
+        }
+      }
 
       if (!active) return;
 
       const statusMap = new Map();
       if (dbStatuses && Array.isArray(dbStatuses)) {
         dbStatuses.forEach((row) => {
-          statusMap.set(row.event_slug.toLowerCase(), row.status);
+          if (row.event_slug) {
+            statusMap.set(row.event_slug.toLowerCase(), row.status);
+          }
         });
       }
 
@@ -303,7 +318,7 @@ export default function MobileSchoolDashboardPage() {
                       }}
                     />
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-zinc-950 text-zinc-100 text-[11px] rounded border border-zinc-700 shadow-xl z-50 font-sans font-normal text-left leading-tight normal-case">
-                      Deadline by which all schools have to submit participant list
+                      Schools with at least 3 completed event rosters by September 14th will be automatically approved.
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-950 border-r border-b border-zinc-700 rotate-45" />
                     </div>
                   </>
@@ -313,6 +328,22 @@ export default function MobileSchoolDashboardPage() {
             <span className="font-sans font-bold">{deadline.formattedText}</span>
           </div>
         </div>
+
+        {/* View Registration Summary Button */}
+        <Link
+          to="/dashboard/review"
+          className={`flex items-center justify-between p-3 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all border ${
+            completeCount >= 3
+              ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30 active:bg-emerald-500/25'
+              : 'bg-zinc-900/60 text-zinc-400 border-zinc-800'
+          }`}
+        >
+          <span>View Registration Roster Summary</span>
+          <div className="flex items-center gap-1">
+            <span className="text-[10px] text-emerald-400/80 font-mono">({completeCount}/3 Complete)</span>
+            <ChevronRight size={14} />
+          </div>
+        </Link>
 
         {/* Vertical Event Timeline Sidebar */}
         <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">

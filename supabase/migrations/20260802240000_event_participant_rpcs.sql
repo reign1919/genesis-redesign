@@ -208,17 +208,12 @@ begin
         using errcode = '22000';
     end if;
 
-    if v_name = '' and v_class = '' and v_phone = '' then
-      -- Cleared row: Delete existing registration_participants link
+    if v_name = '' or v_class = '' or v_phone = '' then
+      -- Incomplete or empty row: Delete existing registration_participants link for this slot
       delete from public.registration_participants
       where school_event_selection_id = v_selection_id and row_index = v_row_idx;
     else
-      -- Validate required fields & basic phone format on server
-      if v_name = '' or v_class = '' or v_phone = '' then
-        raise exception 'Validation failed: Row % is incomplete. Name, Class, and Phone are required.', v_row_idx
-          using errcode = '22000';
-      end if;
-
+      -- Validate phone format for complete row
       if not (v_phone ~ '^[0-9+\s\-()]{10,15}$') then
         raise exception 'Validation failed: Row % phone number "%" is invalid format.', v_row_idx, v_phone
           using errcode = '22000';

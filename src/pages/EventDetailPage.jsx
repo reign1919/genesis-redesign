@@ -83,15 +83,13 @@ export default function EventDetailPage() {
   const [rows, setRows] = useState([]);
   const [initialLoaded, setInitialLoaded] = useState(false);
 
-  // Save & Autosave UX State
+  // Save UX State
   const [saving, setSaving] = useState(false);
-  const [autosaving, setAutosaving] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
   // Refs
-  const autosaveTimerRef = useRef(null);
   const isDirtyRef = useRef(false);
 
   // Load Event and Participant Roster Data
@@ -107,11 +105,11 @@ export default function EventDetailPage() {
 
     const staticInfo = getEventById(eventSlug);
 
-    // Fetch dynamic event from DB
+    // Fetch dynamic event from DB by slug
     const { data: eventData } = await supabase
       .from('events')
       .select('*')
-      .eq('slug', eventSlug.toLowerCase())
+      .ilike('slug', eventSlug.toLowerCase())
       .maybeSingle();
 
     const currentEvent = eventData || {
@@ -124,14 +122,25 @@ export default function EventDetailPage() {
     setDbEvent(currentEvent);
     const currentLimit = currentEvent.participant_limit || 2;
 
-    // Fetch caller's school_id
+    // Fetch caller's school_id with fallback to loadSchoolCredentials
+    let currentSchoolId = null;
     const { data: schoolUserData } = await supabase
       .from('school_users')
       .select('school_id')
       .eq('auth_user_id', sessionData.session.user.id)
       .maybeSingle();
 
-    const currentSchoolId = schoolUserData?.school_id || null;
+    currentSchoolId = schoolUserData?.school_id || null;
+
+    if (!currentSchoolId) {
+      const credResult = await loadSchoolCredentials();
+      if (credResult?.ok && credResult?.school?.id) {
+        currentSchoolId = credResult.school.id;
+      } else if (credResult?.ok && credResult?.school?.school_id) {
+        currentSchoolId = credResult.school.school_id;
+      }
+    }
+
     setSchoolId(currentSchoolId);
 
     if (currentSchoolId) {
@@ -150,7 +159,7 @@ export default function EventDetailPage() {
       const { data: currentEvStatus } = await supabase
         .from('v_school_event_statuses')
         .select('*')
-        .eq('event_slug', eventSlug.toLowerCase())
+        .ilike('event_slug', eventSlug.toLowerCase())
         .maybeSingle();
 
       if (currentEvStatus && currentEvStatus.status !== 'not_selected') {
@@ -179,7 +188,7 @@ export default function EventDetailPage() {
 
           const { data: partLinks } = await supabase
             .from('registration_participants')
-            .select('row_index, participant_id, participants(name, class, phone, guardian_contact)')
+            .select('row_index, participant_id, participants(name, class, phone)')
             .eq('school_event_selection_id', selRow.id)
             .order('row_index', { ascending: true });
 
@@ -192,7 +201,6 @@ export default function EventDetailPage() {
               name: p?.name || '',
               class: p?.class || '',
               phone: p?.phone || '',
-              guardian_contact: '',
             };
           });
 
@@ -204,7 +212,6 @@ export default function EventDetailPage() {
               name: '',
               class: '',
               phone: '',
-              guardian_contact: '',
             }))
           );
         }
@@ -216,7 +223,6 @@ export default function EventDetailPage() {
           name: '',
           class: '',
           phone: '',
-          guardian_contact: '',
         }))
       );
     }
@@ -260,26 +266,40 @@ export default function EventDetailPage() {
   const duplicateSet = getDuplicateRowIndices();
 
   // Save Roster Function
-  const saveRoster = async (isAutosave = false) => {
-    if (!schoolId || !dbEvent || isReadOnly) return;
-
-    if (isAutosave) {
-      setAutosaving(true);
-    } else {
-      setSaving(true);
+  const saveRoster = async (customSuccessMsg = null) => {
+    let activeSchoolId = schoolId;
+    if (!activeSchoolId) {
+      const credResult = await loadSchoolCredentials();
+      if (credResult?.ok && credResult?.school?.id) {
+        activeSchoolId = credResult.school.id;
+        setSchoolId(activeSchoolId);
+      } else if (credResult?.ok && credResult?.school?.school_id) {
+        activeSchoolId = credResult.school.school_id;
+        setSchoolId(activeSchoolId);
+      }
     }
+
+    if (!activeSchoolId || !dbEvent || isReadOnly) return false;
+
+    setSaving(true);
     setErrorMsg('');
     setSuccessMsg('');
 
     try {
-      // Auto-ensure event is selected when user fills data
-      if (!isSelected) {
-        await supabase.rpc('toggle_school_event_selection', {
-          p_school_id: schoolId,
+      // Auto-ensure event is selected when user saves data
+      if (!isSelected || selectionStatus === 'not_selected') {
+        const { data: selData, error: selErr } = await supabase.rpc('toggle_school_event_selection', {
+          p_school_id: activeSchoolId,
           p_event_id: dbEvent.id,
           p_select: true,
         });
-        setIsSelected(true);
+
+        if (selErr) {
+          console.warn('toggle_school_event_selection warning:', selErr.message);
+        } else if (selData?.success) {
+          setIsSelected(true);
+          setSelectionStatus(selData.status || 'selected_incomplete');
+        }
       }
 
       if (duplicateSet.size > 0) {
@@ -298,7 +318,7 @@ export default function EventDetailPage() {
       const { data: rpcResult, error: rpcErr } = await supabase.rpc(
         'save_event_participants',
         {
-          p_school_id: schoolId,
+          p_school_id: activeSchoolId,
           p_event_id: dbEvent.id,
           p_participants: rows,
         }
@@ -314,7 +334,7 @@ export default function EventDetailPage() {
             .from('school_event_selections')
             .upsert(
               {
-                school_id: schoolId,
+                school_id: activeSchoolId,
                 event_id: dbEvent.id,
                 status: 'selected_incomplete',
                 deselected_at: null,
@@ -335,11 +355,10 @@ export default function EventDetailPage() {
               const { data: pData, error: pErr } = await supabase
                 .from('participants')
                 .insert({
-                  school_id: schoolId,
+                  school_id: activeSchoolId,
                   name: r.name.trim(),
                   class: r.class.trim(),
                   phone: r.phone.trim(),
-                  guardian_contact: null,
                 })
                 .select('id')
                 .single();
@@ -386,65 +405,48 @@ export default function EventDetailPage() {
       setLastSavedAt(timeStr);
       isDirtyRef.current = false;
 
-      if (!isAutosave) {
-        setSuccessMsg(`Draft saved successfully at ${timeStr}`);
-        window.setTimeout(() => setSuccessMsg(''), 3500);
-      }
+      const msg = customSuccessMsg || `Participant details saved successfully at ${timeStr}`;
+      setSuccessMsg(msg);
+      window.setTimeout(() => setSuccessMsg(''), 3500);
+      return true;
     } catch (err) {
       console.error('Save error:', err);
       setErrorMsg(err.message || 'An error occurred while saving.');
+      return false;
     } finally {
       setSaving(false);
-      setAutosaving(false);
     }
   };
 
-  // Autosave Debounce (1.8s delay after typing stops)
-  const triggerAutosave = useCallback(() => {
-    if (!initialLoaded || isReadOnly) return;
-    isDirtyRef.current = true;
-
-    if (autosaveTimerRef.current) {
-      clearTimeout(autosaveTimerRef.current);
-    }
-
-    autosaveTimerRef.current = setTimeout(() => {
-      if (isDirtyRef.current) {
-        saveRoster(true);
-      }
-    }, 1800);
-  }, [initialLoaded, isReadOnly]);
-
-  useEffect(() => {
-    return () => {
-      if (autosaveTimerRef.current) {
-        clearTimeout(autosaveTimerRef.current);
-      }
-    };
-  }, []);
-
   const handleInputChange = (rowIndex, field, value) => {
     if (isReadOnly) return;
+    isDirtyRef.current = true;
 
     setRows((prevRows) =>
       prevRows.map((r) => (r.row_index === rowIndex ? { ...r, [field]: value } : r))
     );
-
-    triggerAutosave();
   };
 
   const handleClearRow = (rowIndex) => {
     if (isReadOnly) return;
+    isDirtyRef.current = true;
 
     setRows((prevRows) =>
       prevRows.map((r) =>
         r.row_index === rowIndex
-          ? { ...r, name: '', class: '', phone: '', guardian_contact: '' }
+          ? { ...r, name: '', class: '', phone: '' }
           : r
       )
     );
+  };
 
-    triggerAutosave();
+  const handleNavigateBack = async (e) => {
+    if (e) e.preventDefault();
+    if (isDirtyRef.current) {
+      const saved = await saveRoster('Saved participant details before returning to checklist.');
+      if (!saved) return;
+    }
+    navigate('/dashboard');
   };
 
   const handleToggleSelection = async () => {
@@ -517,9 +519,9 @@ export default function EventDetailPage() {
         title="Event Not Found"
         subtitle={`No official event found matching slug: "${eventSlug}"`}
         action={
-          <Link to="/dashboard" className="secure-action">
+          <button type="button" onClick={handleNavigateBack} className="secure-action">
             Back to Dashboard
-          </Link>
+          </button>
         }
       >
         <div className="secure-card secure-status secure-status--error">
@@ -542,9 +544,9 @@ export default function EventDetailPage() {
       })`}
       action={
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <Link to="/dashboard" className="secure-action">
+          <button type="button" onClick={handleNavigateBack} className="secure-action">
             ← Checklist
-          </Link>
+          </button>
           <button type="button" className="secure-action" onClick={handleLogout}>
             Log out
           </button>
@@ -592,9 +594,9 @@ export default function EventDetailPage() {
               </button>
             )}
 
-            <Link to="/dashboard" className="event-back-btn">
+            <button type="button" onClick={handleNavigateBack} className="event-back-btn">
               <ArrowLeft size={14} /> Events Checklist
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -626,41 +628,36 @@ export default function EventDetailPage() {
           </div>
         )}
 
-        {/* Action Header with Save Draft & Autosave Indicator */}
+        {/* Action Header with Save Details Button */}
         <div className="roster-actions-bar secure-card">
           <div className="actions-bar-info">
             <Info size={15} />
             <span>
-              Fill in student details for all {participantLimit} participant slots below. Each participant has a separate table.
+              Fill in student details for all {participantLimit} participant slots below. Click "Save Details" to persist your changes.
             </span>
           </div>
 
           <div className="actions-bar-controls">
-            {autosaving && (
-              <span className="autosave-pill">
-                <RefreshCw className="spin" size={12} /> Autosaving...
-              </span>
-            )}
-            {lastSavedAt && !autosaving && (
+            {lastSavedAt && (
               <span className="last-saved-pill label-caps">
-                Last saved at {lastSavedAt}
+                Saved at {lastSavedAt}
               </span>
             )}
 
             {!isReadOnly && (
               <button
                 type="button"
-                className="save-draft-btn"
-                onClick={() => saveRoster(false)}
-                disabled={saving || autosaving}
+                className="save-details-btn"
+                onClick={() => saveRoster()}
+                disabled={saving}
               >
                 {saving ? (
                   <>
-                    <RefreshCw className="spin" size={14} /> Saving...
+                    <RefreshCw className="spin" size={14} /> Saving Details...
                   </>
                 ) : (
                   <>
-                    <Save size={14} /> Save Draft
+                    <Save size={14} /> Save Details
                   </>
                 )}
               </button>

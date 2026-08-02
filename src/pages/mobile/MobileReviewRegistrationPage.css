@@ -1,0 +1,229 @@
+.mob-review-page {
+  min-height: 100vh;
+  padding: 80px 16px 40px;
+  color: var(--text-primary);
+}
+
+.mob-review-header {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mob-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.mob-header-tag {
+  color: var(--accent-light);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.mob-header-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.mob-review-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mob-card {
+  background: rgba(18, 18, 20, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  backdrop-filter: blur(12px);
+}
+
+.mob-gating-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 20px;
+}
+
+.mob-gating-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mob-gating-card h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.mob-gating-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.mob-school-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mob-school-meta h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.mob-code-text {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.mob-status-banner {
+  background: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mob-status-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mob-status-top h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #34d399;
+}
+
+.mob-status-banner p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.mob-rosters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mob-event-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mob-event-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.mob-cat-tag {
+  font-size: 10px;
+  color: var(--text-tertiary);
+}
+
+.mob-event-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mob-complete-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+  font-size: 11px;
+}
+
+.mob-participants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.mob-part-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 6px;
+}
+
+.mob-part-idx {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+}
+
+.mob-part-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+
+.mob-part-info strong {
+  color: var(--text-primary);
+
+}
+
+.mob-part-details {
+  display: flex;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.mob-btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  text-decoration: none;
+  margin-top: 8px;
+}

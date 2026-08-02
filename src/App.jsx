@@ -10,6 +10,7 @@ const EventsPage = React.lazy(() => import('./pages/EventsPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const SchoolDashboardPage = React.lazy(() => import('./pages/SchoolDashboardPage'));
+const ReviewRegistrationPage = React.lazy(() => import('./pages/ReviewRegistrationPage'));
 const EventDetailPage = React.lazy(() => import('./pages/EventDetailPage'));
 const AdminPage = React.lazy(() => import('./pages/AdminPage'));
 const DocumentationPage = React.lazy(() => import('./pages/DocumentationPage'));
@@ -21,6 +22,7 @@ const MobileEventsPage = React.lazy(() => import('./pages/mobile/MobileEventsPag
 const MobileLoginPage = React.lazy(() => import('./pages/mobile/MobileLoginPage'));
 const MobileContactPage = React.lazy(() => import('./pages/mobile/MobileContactPage'));
 const MobileSchoolDashboardPage = React.lazy(() => import('./pages/mobile/MobileSchoolDashboardPage'));
+const MobileReviewRegistrationPage = React.lazy(() => import('./pages/mobile/MobileReviewRegistrationPage'));
 const MobileDocumentationPage = React.lazy(() => import('./pages/mobile/MobileDocumentationPage'));
 const MobileWarningPopup = React.lazy(() => import('./components/mobile/MobileWarningPopup'));
 
@@ -35,6 +37,7 @@ function AppRouter() {
         <Route path="/events" element={isMobile ? <MobileEventsPage /> : <EventsPage />} />
         <Route path="/login" element={isMobile ? <MobileLoginPage /> : <LoginPage />} />
         <Route path="/dashboard" element={isMobile ? <MobileSchoolDashboardPage /> : <SchoolDashboardPage />} />
+        <Route path="/dashboard/review" element={isMobile ? <MobileReviewRegistrationPage /> : <ReviewRegistrationPage />} />
         <Route path="/dashboard/:eventSlug" element={<EventDetailPage />} />
         <Route path="/contact" element={isMobile ? <MobileContactPage /> : <ContactPage />} />
         <Route path="/docs" element={isMobile ? <MobileDocumentationPage /> : <DocumentationPage />} />
