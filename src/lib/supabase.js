@@ -12,7 +12,7 @@ export const supabase = createClient(publicSupabaseUrl, publicSupabaseKey, {
     flowType: 'pkce',
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: false,
+    detectSessionInUrl: true,
     storageKey: 'genesis-supabase-auth',
   },
 });
