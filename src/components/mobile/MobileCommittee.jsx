@@ -2,10 +2,10 @@ import React, { memo } from 'react';
 import './MobileCommittee.css';
 
 const committeeMembers = [
-  { id: 1, name: 'Committee Member 1', role: 'Role' },
-  { id: 2, name: 'Committee Member 2', role: 'Role' },
-  { id: 3, name: 'Committee Member 3', role: 'Role' },
-  { id: 4, name: 'Committee Member 4', role: 'Role' }
+  { id: 1, name: 'Trishaan Saha', role: 'AI/ML & Quantum Computing' },
+  { id: 2, name: 'Akshat R. Chowdhury', role: 'Cybersecurity' },
+  { id: 3, name: 'Dhritiman Das', role: 'Agentic Systems' },
+  { id: 4, name: 'Arka Adhikary', role: 'Network Engineering' },
 ];
 
 const MobileCommittee = () => {
@@ -21,9 +21,9 @@ const MobileCommittee = () => {
       <div className="m-committee-scroll">
         {committeeMembers.map((member) => (
           <div key={member.id} className="m-committee-card">
-            <div className="m-polaroid">
-              <div className="m-polaroid-dot" />
-              <div className="m-polaroid-image" />
+            <div className="m-committee-card-top">
+              <span className="m-member-index">[0{member.id}]</span>
+              <span className="m-committee-badge">CORE</span>
             </div>
             <div className="m-member-info">
               <h4 className="m-member-name">{member.name}</h4>

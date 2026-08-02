@@ -1,39 +1,31 @@
 import React, { memo } from 'react';
 import './CommitteeSection.css';
 
-const CommitteeSection = () => {
-  const committeeMembers = [
-    { id: 1, name: 'Committee Member 1', role: 'Role' },
-    { id: 2, name: 'Committee Member 2', role: 'Role' },
-    { id: 3, name: 'Committee Member 3', role: 'Role' },
-    { id: 4, name: 'Committee Member 4', role: 'Role' }
-  ];
+const committeeMembers = [
+  { id: 1, name: 'Trishaan Saha', role: 'AI/ML & Quantum Computing' },
+  { id: 2, name: 'Akshat R. Chowdhury', role: 'Cybersecurity' },
+  { id: 3, name: 'Dhritiman Das', role: 'Agentic Systems' },
+  { id: 4, name: 'Arka Adhikary', role: 'Network Engineering' },
+];
 
+const CommitteeSection = () => {
   return (
     <div className="committee-container">
       <h2 className="committee-title">The Core Committee</h2>
-      
+
       <div className="committee-cards-wrapper">
-        {committeeMembers.map((member, index) => {
-          // Add slight alternating rotation to cards for a scattered polaroid feel
-          const rotationClass = `rotate-${(index % 4) + 1}`;
-          
-          return (
-            <div key={member.id} className={`committee-card-container ${rotationClass}`}>
-              <div className="polaroid-frame">
-                {/* Small red dot on polaroid */}
-                <div className="polaroid-dot"></div>
-                
-                {/* Placeholder Image */}
-                <div className="polaroid-image-placeholder"></div>
-              </div>
-              <div className="member-info">
-                <h4 className="member-name">{member.name}</h4>
-                <span className="member-role label-caps">{member.role}</span>
-              </div>
+        {committeeMembers.map((member) => (
+          <div key={member.id} className="committee-card">
+            <div className="committee-card-top">
+              <span className="committee-member-index">[0{member.id}]</span>
+              <span className="committee-card-badge">CORE</span>
             </div>
-          );
-        })}
+            <div className="committee-card-body">
+              <h3 className="member-name">{member.name}</h3>
+              <span className="member-role label-caps">{member.role}</span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
