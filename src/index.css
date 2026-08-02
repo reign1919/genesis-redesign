@@ -157,21 +157,36 @@ ul, ol {
   color: #fff;
 }
 
-/* ===== SCROLLBAR ===== */
+/* ===== SCROLLBAR SYSTEM (VERTICAL & HORIZONTAL) ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg-elevated);
+}
+
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
+  height: 6px; /* Horizontal scrollbar height */
 }
 
 ::-webkit-scrollbar-track {
   background: var(--bg);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-surface-high);
+  background: var(--accent-deep);
+  border-radius: 3px;
+  border: 1px solid var(--border-accent);
+  transition: background var(--duration-fast) var(--ease-out);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+  background: var(--accent-bright);
+  box-shadow: 0 0 8px var(--accent-bright);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--bg);
 }
 
 /* ===== RESPONSIVE ===== */

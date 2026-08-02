@@ -20,9 +20,9 @@ const CompassNav = () => {
           <span className="nav-text">REGISTER</span>
         </Link>
         
-        <a href="#events" className="nav-label label-right" onMouseEnter={() => setHoveredNav('right')} onMouseLeave={() => setHoveredNav(null)}>
+        <Link to="/events" className="nav-label label-right" onMouseEnter={() => setHoveredNav('right')} onMouseLeave={() => setHoveredNav(null)}>
           <span className="nav-text">EVENTS</span>
-        </a>
+        </Link>
         
         <a href="/#about" className="nav-label label-bottom" onMouseEnter={() => setHoveredNav('bottom')} onMouseLeave={() => setHoveredNav(null)}>
           <span className="nav-text">ABOUT</span>

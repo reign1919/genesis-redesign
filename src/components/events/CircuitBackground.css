@@ -1,0 +1,134 @@
+/* ============================================================
+   GENESIS — Circuit Background Styling
+   Red & Black Tech Fest Design System
+   ============================================================ */
+
+.circuit-bg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.circuit-svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.85;
+}
+
+/* Static Etched PCB Lines */
+.pcb-line {
+  fill: none;
+  stroke: rgba(139, 26, 26, 0.22);
+  stroke-width: 1.5px;
+  transition: stroke var(--duration-normal) var(--ease-out);
+}
+
+.pcb-line.trunk-main,
+.pcb-line.trunk-horizontal {
+  stroke-width: 2px;
+  stroke: rgba(172, 50, 46, 0.35);
+}
+
+.pcb-line.flagship-triangle,
+.pcb-line.flagship-cross {
+  stroke-width: 2px;
+  stroke: rgba(253, 98, 95, 0.3);
+}
+
+.pcb-line.highlight {
+  stroke: var(--accent-bright);
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 8px var(--accent-bright));
+  opacity: 1;
+}
+
+.solder-pad.highlight-pad {
+  stroke: var(--accent-bright);
+  fill: var(--accent-bright);
+  filter: drop-shadow(0 0 10px var(--accent-bright));
+}
+
+/* Solder Pad Nodes */
+.solder-pad {
+  fill: var(--bg);
+  stroke: var(--accent-mid);
+  stroke-width: 1.5px;
+}
+
+.solder-pad.pad-flagship {
+  stroke: var(--accent-bright);
+  fill: var(--bg-surface);
+}
+
+.solder-pad.pad-core {
+  stroke: var(--accent-light);
+  fill: var(--accent-deep);
+}
+
+/* Pulsing Current Animations */
+.pulse-path {
+  fill: none;
+  stroke: var(--accent-bright);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-dasharray: 60 400;
+  stroke-dashoffset: 460;
+  animation: circuitPulse 3.5s linear infinite;
+}
+
+.pulse-1 {
+  animation-delay: 0s;
+}
+
+.pulse-2 {
+  animation-delay: 0.6s;
+}
+
+.pulse-3 {
+  animation-delay: 1.2s;
+}
+
+.pulse-4 {
+  animation-delay: 1.8s;
+}
+
+.pulse-left,
+.pulse-left-lower {
+  animation-delay: 2.2s;
+}
+
+.pulse-right,
+.pulse-right-lower {
+  animation-delay: 2.8s;
+}
+
+@keyframes circuitPulse {
+  0% {
+    stroke-dashoffset: 460;
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.1;
+  }
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .pulse-path {
+    animation: none;
+    stroke-dasharray: none;
+    opacity: 0.4;
+  }
+}

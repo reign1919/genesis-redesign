@@ -6,6 +6,7 @@ import useIsMobile from './lib/useIsMobile';
 
 // Desktop Pages
 const HomePage = React.lazy(() => import('./pages/HomePage'));
+const EventsPage = React.lazy(() => import('./pages/EventsPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
 const SchoolDashboardPage = React.lazy(() => import('./pages/SchoolDashboardPage'));
@@ -15,6 +16,7 @@ const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
 
 // Mobile Pages
 const MobileHomePage = React.lazy(() => import('./pages/mobile/MobileHomePage'));
+const MobileEventsPage = React.lazy(() => import('./pages/mobile/MobileEventsPage'));
 const MobileLoginPage = React.lazy(() => import('./pages/mobile/MobileLoginPage'));
 const MobileContactPage = React.lazy(() => import('./pages/mobile/MobileContactPage'));
 const MobileSchoolDashboardPage = React.lazy(() => import('./pages/mobile/MobileSchoolDashboardPage'));
@@ -29,6 +31,7 @@ function AppRouter() {
       {isMobile && <MobileWarningPopup />}
       <Routes>
         <Route path="/" element={isMobile ? <MobileHomePage /> : <HomePage />} />
+        <Route path="/events" element={isMobile ? <MobileEventsPage /> : <EventsPage />} />
         <Route path="/login" element={isMobile ? <MobileLoginPage /> : <LoginPage />} />
         <Route path="/dashboard" element={isMobile ? <MobileSchoolDashboardPage /> : <SchoolDashboardPage />} />
         <Route path="/contact" element={isMobile ? <MobileContactPage /> : <ContactPage />} />

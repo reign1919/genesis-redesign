@@ -6,6 +6,7 @@ import webDevIcon from '../../assets/web-development.png';
 
 const navItems = [
   { to: '/', label: 'HOME', icon: '⌂' },
+  { to: '/events', label: 'EVENTS', icon: '⚡' },
   { to: '/contact', label: 'CONTACT', icon: '◈' },
   { to: '/login', label: 'REGISTER', icon: '◉' },
   { to: '/#about', label: 'ABOUT', hash: true, icon: '◎' },
