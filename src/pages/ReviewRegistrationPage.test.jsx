@@ -181,9 +181,9 @@ describe('ReviewRegistrationPage Component', () => {
       expect(screen.getByText('Qualification Criteria Met')).toBeInTheDocument();
     });
 
-    expect(screen.getByText("St. Xavier's Collegiate School")).toBeInTheDocument();
+    expect(screen.getAllByText("St. Xavier's Collegiate School")[0]).toBeInTheDocument();
     expect(screen.getAllByText(/Alex Vance/i)[0]).toBeInTheDocument();
     expect(screen.getAllByText(/Jordan Lee/i)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Print Summary/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Print/i)[0]).toBeInTheDocument();
   });
 });

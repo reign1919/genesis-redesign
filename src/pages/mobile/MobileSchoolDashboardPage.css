@@ -1,12 +1,15 @@
 /* ============================================================
-   MOBILE SCHOOL DASHBOARD
+   MOBILE SCHOOL DASHBOARD — Pure Vanilla CSS (No Tailwind)
    ============================================================ */
 
 .mdash-wrapper {
   position: relative;
   width: 100%;
   min-height: 100vh;
+  background: var(--bg, #0A0A0A);
+  color: var(--text, #F1F1F1);
   overflow-x: hidden;
+  font-family: var(--font-body, 'Space Grotesk', sans-serif);
 }
 
 .mdash-wrapper .m-grid-overlay {
@@ -24,178 +27,440 @@
 .mdash-content {
   position: relative;
   z-index: 2;
-  padding: 72px 20px 40px;
+  width: min(580px, 100%);
+  margin: 0 auto;
+  padding: 72px 16px 40px;
   padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 /* ── Header ──────────────────────────────────────────────── */
 .mdash-header {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.mdash-back {
-  font-family: var(--font-label);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  color: var(--text-muted);
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.mdash-title-row {
-  display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  gap: 16px;
-  border-bottom: 1px solid var(--border-accent);
-  padding-bottom: 16px;
-}
-
-.mdash-eyebrow {
-  color: var(--accent-mid);
-  margin-bottom: 8px;
-}
-
-.mdash-title {
-  font-family: var(--font-display);
-  font-size: 32px;
-  font-weight: 400;
-  color: var(--text);
-  margin: 0;
-}
-
-.mdash-subtitle {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-.mdash-logout {
-  background: transparent;
-  border: 1px solid var(--border-accent);
-  color: var(--accent-light);
-  font-family: var(--font-label);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  padding: 8px 12px;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-/* ── Loading & Error ─────────────────────────────────────── */
-.mdash-loading {
-  height: 200px;
-  display: flex;
   align-items: center;
-  justify-content: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
 }
 
-.mdash-error {
-  padding: 16px;
-  background: rgba(139, 26, 26, 0.1);
-  border: 1px solid var(--border-accent);
-  color: var(--accent-pale);
-  font-family: var(--font-body);
-  font-size: 14px;
+.mdash-header-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent-light, #FF9A91);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--font-label, 'EB Garamond', serif);
 }
 
-/* ── Dashboard Card ──────────────────────────────────────── */
+.mdash-header-title {
+  font-family: var(--font-display, 'Orbit', sans-serif);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text, #F1F1F1);
+  margin-top: 2px;
+}
+
+.mdash-logout-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border-accent, rgba(139, 26, 26, 0.45));
+  background: rgba(10, 10, 10, 0.6);
+  color: var(--accent-light, #FF9A91);
+  font-family: var(--font-body, 'Space Grotesk', sans-serif);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mdash-logout-btn:active {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* ── Credentials Card ────────────────────────────────────── */
 .mdash-card {
-  background: rgba(10, 10, 10, 0.78);
-  border: 1px solid var(--border);
+  background: rgba(18, 18, 18, 0.85);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  border-radius: 10px;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .mdash-card-header {
-  padding: 20px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mdash-card-header h2 {
+  font-family: var(--font-display, 'Orbit', sans-serif);
+  font-size: 20px;
+  color: var(--text);
+  font-weight: 400;
+  margin: 0;
+}
+
+.mdash-badge-approved {
+  align-self: flex-start;
+  padding: 3px 8px;
+  border: 1px solid rgba(77, 181, 113, 0.45);
+  color: #9de0b4;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  border-radius: 3px;
+  text-transform: uppercase;
+  background: rgba(77, 181, 113, 0.1);
+}
+
+.mdash-creds-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mdash-cred-row {
+  padding: 14px 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.mdash-card-header h2 {
-  font-family: var(--font-display);
-  font-size: 24px;
+.mdash-cred-row + .mdash-cred-row {
+  border-top: 1px solid var(--border);
+}
+
+.mdash-cred-val-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mdash-cred-val-row strong {
+  font-size: 16px;
+  letter-spacing: 0.05em;
   color: var(--text);
-  margin: 0;
-  font-weight: 400;
 }
 
-.mdash-badge {
-  align-self: flex-start;
-  padding: 4px 8px;
-  border: 1px solid rgba(77, 181, 113, 0.45);
-  color: #9de0b4;
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  font-family: var(--font-label);
-  margin-top: 4px;
+.mdash-action-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent-light);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 4px 6px;
 }
 
-.mdash-creds {
+.mdash-actions-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* ── Metrics Grid ────────────────────────────────────────── */
+.mdash-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.mdash-metric-box {
+  padding: 12px 10px;
+  background: rgba(18, 18, 18, 0.85);
+  border: 1px solid var(--border);
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 4px;
 }
 
-.mdash-cred-item {
-  padding: 20px;
+.mdash-metric-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary, #8C716E);
+  line-height: 1.2;
+}
+
+.mdash-metric-val {
+  font-family: var(--font-display, 'Orbit', sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.mdash-metric-val--green {
+  color: #34d399;
+}
+
+/* ── Deadline Box ────────────────────────────────────────── */
+.mdash-deadline-box {
+  position: relative;
+}
+
+.dash-deadline--amber {
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.dash-deadline--red {
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.dash-deadline--neutral {
+  border-color: var(--border);
+  color: var(--text-secondary);
+}
+
+.mdash-tooltip-box {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  width: 200px;
+  padding: 10px 12px;
+  background: #0f0f0f;
+  color: var(--text);
+  font-size: 11px;
+  border-radius: 6px;
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+  z-index: 50;
+  text-align: left;
+  line-height: 1.35;
+  font-family: var(--font-body);
+  font-weight: normal;
+  text-transform: none;
+}
+
+.mdash-tooltip-arrow {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background: #0f0f0f;
+  border-right: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+}
+
+/* ── View Roster Summary CTA Button ──────────────────────── */
+.mdash-roster-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.mdash-roster-cta--active {
+  background: rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  color: #34d399;
+}
+
+.mdash-roster-cta--active:active {
+  background: rgba(52, 211, 153, 0.25);
+}
+
+.mdash-roster-cta--muted {
+  background: rgba(18, 18, 18, 0.85);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.mdash-roster-cta-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mdash-roster-count-badge {
+  font-size: 11px;
+  color: #34d399;
+  font-family: monospace;
+}
+
+/* ── Events Checklist Card ───────────────────────────────── */
+.mdash-events-card {
+  background: rgba(18, 18, 18, 0.85);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.mdash-events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mdash-events-header h2 {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.mdash-events-sub {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-family: monospace;
+}
+
+.mdash-events-timeline {
+  position: relative;
+  padding-left: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.mdash-cred-item + .mdash-cred-item {
-  border-top: 1px solid var(--border);
+.mdash-events-line {
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  background: var(--border);
 }
 
-.mdash-cred-label {
-  color: var(--text-tertiary);
+.mdash-event-item {
+  position: relative;
 }
 
-.mdash-val-row {
+.mdash-event-dot {
+  position: absolute;
+  left: -20px;
+  top: 16px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+}
+
+.dash-dot--neutral { background: var(--text-muted); }
+.dash-dot--amber { background: #f59e0b; }
+.dash-dot--green { background: #10b981; }
+.dash-dot--purple { background: #8b5cf6; }
+.dash-dot--cyan { background: #06b6d4; }
+
+.mdash-event-link {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.mdash-event-link:active {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-strong);
+}
+
+.mdash-event-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
 }
 
-.mdash-val-row strong {
-  font-family: var(--font-body);
-  font-size: 20px;
-  letter-spacing: 0.05em;
+.mdash-event-name {
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text);
 }
 
-.mdash-val-row button,
-.mdash-actions button {
-  background: transparent;
-  border: none;
-  color: var(--accent-light);
-  font-family: var(--font-label);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  padding: 0;
-  cursor: pointer;
-}
-
-.mdash-actions {
+.mdash-event-meta {
   display: flex;
-  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2px;
 }
 
-.mdash-footer {
-  padding: 16px;
-  border-top: 1px solid var(--border);
-  color: var(--text-muted);
-  text-align: center;
-  font-size: 9px;
+.mdash-event-limit {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mdash-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.dash-badge--neutral {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+  color: var(--text-tertiary);
+}
+
+.dash-badge--amber {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
+.dash-badge--green {
+  background: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: #34d399;
+}
+
+.dash-badge--purple {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #c084fc;
+}
+
+.dash-badge--cyan {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.3);
+  color: #22d3ee;
 }

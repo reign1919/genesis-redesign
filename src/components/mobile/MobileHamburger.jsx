@@ -6,7 +6,17 @@ import webDevIcon from '../../assets/web-development.png';
 
 const navItems = [
   { to: '/', label: 'HOME', icon: '⌂' },
-  { to: '/events', label: 'EVENTS', icon: '⚡' },
+  {
+    to: '/events',
+    label: 'EVENTS',
+    icon: (
+      <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(230, 57, 70, 0.35)" stroke="var(--accent, #E63946)" strokeWidth="2.2" strokeLinejoin="round">
+          <polygon points="12 2 22 12 12 22 2 12" />
+        </svg>
+      </span>
+    ),
+  },
   { to: '/contact', label: 'CONTACT', icon: '◈' },
   { to: '/login', label: 'REGISTER', icon: '◉' },
   { to: '/#about', label: 'ABOUT', hash: true, icon: '◎' },

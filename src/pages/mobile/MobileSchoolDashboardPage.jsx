@@ -218,29 +218,26 @@ export default function MobileSchoolDashboardPage() {
   const deadline = getDeadlineDetails();
 
   return (
-    <div className="mdash-wrapper min-h-screen bg-zinc-950 text-zinc-100 font-sans antialiased">
+    <div className="mdash-wrapper">
       <MobileBackground />
       <div className="m-grid-overlay" aria-hidden="true" />
       <MobileHamburger />
 
-      <main className="mdash-content max-w-xl mx-auto px-4 py-6 relative z-10 space-y-6">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+      <main className="mdash-content">
+        <header className="mdash-header">
           <div>
-            <div className="flex items-center gap-1.5 text-[11px] font-mono tracking-wide text-zinc-500 uppercase">
-              <Sparkles className="w-3 h-3 text-zinc-400" />
+            <div className="mdash-header-tag">
+              <Sparkles size={12} />
               Genesis Fest
             </div>
-            <h1 className="text-lg font-semibold text-zinc-100 mt-0.5">
+            <h1 className="mdash-header-title">
               {school?.school_name}
             </h1>
           </div>
-          <button
-            onClick={handleLogout}
-            className="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-xs text-zinc-400"
-          >
+          <button onClick={handleLogout} className="mdash-logout-btn">
             Log out
           </button>
-        </div>
+        </header>
 
         {/* Credentials Card */}
         {school && (
@@ -248,29 +245,29 @@ export default function MobileSchoolDashboardPage() {
             <div className="mdash-card-header">
               <span className="label-caps">Registered Institution</span>
               <h2>{school.school_name}</h2>
-              <span className="mdash-badge">APPROVED</span>
+              <span className="mdash-badge-approved">APPROVED</span>
             </div>
 
-            <div className="mdash-creds">
-              <div className="mdash-cred-item">
+            <div className="mdash-creds-list">
+              <div className="mdash-cred-row">
                 <span className="label-caps mdash-cred-label">School Code</span>
-                <div className="mdash-val-row">
+                <div className="mdash-cred-val-row">
                   <strong>{school.school_code}</strong>
-                  <button onClick={() => copyCredential('code', school.school_code)}>
+                  <button className="mdash-action-btn" onClick={() => copyCredential('code', school.school_code)}>
                     {copied === 'code' ? 'COPIED' : 'COPY'}
                   </button>
                 </div>
               </div>
 
-              <div className="mdash-cred-item">
+              <div className="mdash-cred-row">
                 <span className="label-caps mdash-cred-label">Password</span>
-                <div className="mdash-val-row">
+                <div className="mdash-cred-val-row">
                   <strong>{passwordVisible ? school.password : '••••••••••••••••'}</strong>
-                  <div className="mdash-actions">
-                    <button onClick={() => setPasswordVisible((v) => !v)}>
+                  <div className="mdash-actions-group">
+                    <button className="mdash-action-btn" onClick={() => setPasswordVisible((v) => !v)}>
                       {passwordVisible ? 'HIDE' : 'REVEAL'}
                     </button>
-                    <button onClick={() => copyCredential('password', school.password)}>
+                    <button className="mdash-action-btn" onClick={() => copyCredential('password', school.password)}>
                       {copied === 'password' ? 'COPIED' : 'COPY'}
                     </button>
                   </div>
@@ -280,115 +277,109 @@ export default function MobileSchoolDashboardPage() {
           </div>
         )}
 
-        {/* Metrics Row */}
-        <div className="grid grid-cols-3 gap-2 text-center text-xs">
-          <div className="p-2 rounded bg-zinc-900/80 border border-zinc-800">
-            <span className="block text-zinc-500 text-[10px] uppercase">Selected</span>
-            <span className="font-mono font-bold text-zinc-200">{selectedCount}/{maxEventsTarget}</span>
+        {/* Metrics Grid */}
+        <div className="mdash-metrics-grid">
+          <div className="mdash-metric-box">
+            <span className="mdash-metric-label">Selected</span>
+            <span className="mdash-metric-val">{selectedCount}/{maxEventsTarget}</span>
           </div>
 
-          <div className="p-2 rounded bg-zinc-900/80 border border-zinc-800 flex flex-col justify-center items-center">
-            <span className="block text-zinc-500 text-[9px] uppercase leading-tight font-sans">Minimum Required Roster</span>
-            <span className="font-mono font-bold text-emerald-400 mt-0.5">{completeCount}/{minCompleteTarget}</span>
+          <div className="mdash-metric-box">
+            <span className="mdash-metric-label">Min. Roster</span>
+            <span className="mdash-metric-val mdash-metric-val--green">{completeCount}/{minCompleteTarget}</span>
           </div>
 
-          <div className={`p-2 rounded border text-xs font-mono font-bold relative flex flex-col justify-center items-center ${deadline.badgeClass}`}>
-            <div className="flex items-center justify-center gap-1">
-              <span className="block text-[10px] uppercase font-sans font-normal opacity-75">Deadline</span>
-              <div className="relative inline-flex items-center">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowDeadlineTooltip((prev) => !prev);
-                  }}
-                  className="opacity-75 hover:opacity-100 transition-opacity p-0.5 focus:outline-none flex items-center justify-center cursor-pointer"
-                  aria-label="Deadline info"
-                >
-                  <HelpCircle size={11} />
-                </button>
+          <div className={`mdash-metric-box mdash-deadline-box ${deadline.badgeClass}`}>
+            <div className="flex items-center gap-1" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span className="mdash-metric-label" style={{ color: 'inherit' }}>Deadline</span>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowDeadlineTooltip((prev) => !prev);
+                }}
+                style={{ background: 'none', border: 'none', padding: 0, color: 'inherit', cursor: 'pointer', display: 'flex' }}
+                aria-label="Deadline info"
+              >
+                <HelpCircle size={11} />
+              </button>
 
-                {showDeadlineTooltip && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-40 bg-transparent"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowDeadlineTooltip(false);
-                      }}
-                    />
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-zinc-950 text-zinc-100 text-[11px] rounded border border-zinc-700 shadow-xl z-50 font-sans font-normal text-left leading-tight normal-case">
-                      Schools with at least 3 completed event rosters by September 14th will be automatically approved.
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-950 border-r border-b border-zinc-700 rotate-45" />
-                    </div>
-                  </>
-                )}
-              </div>
+              {showDeadlineTooltip && (
+                <>
+                  <div
+                    style={{ position: 'fixed', inset: 0, zIndex: 40 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowDeadlineTooltip(false);
+                    }}
+                  />
+                  <div className="mdash-tooltip-box">
+                    Schools with at least 3 completed event rosters by September 14th will be automatically approved.
+                    <div className="mdash-tooltip-arrow" />
+                  </div>
+                </>
+              )}
             </div>
-            <span className="font-sans font-bold">{deadline.formattedText}</span>
+            <span className="mdash-metric-val" style={{ color: 'inherit' }}>{deadline.formattedText}</span>
           </div>
         </div>
 
         {/* View Registration Summary Button */}
         <Link
           to="/dashboard/review"
-          className={`flex items-center justify-between p-3 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all border ${
+          className={`mdash-roster-cta ${
             completeCount >= 3
-              ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30 active:bg-emerald-500/25'
-              : 'bg-zinc-900/60 text-zinc-400 border-zinc-800'
+              ? 'mdash-roster-cta--active'
+              : 'mdash-roster-cta--muted'
           }`}
         >
-          <span>View Registration Roster Summary</span>
-          <div className="flex items-center gap-1">
-            <span className="text-[10px] text-emerald-400/80 font-mono">({completeCount}/3 Complete)</span>
+          <span>View Roster Summary</span>
+          <div className="mdash-roster-cta-meta">
+            <span className="mdash-roster-count-badge">({completeCount}/3 Complete)</span>
             <ChevronRight size={14} />
           </div>
         </Link>
 
-        {/* Vertical Event Timeline Sidebar */}
-        <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-800">
-            <h2 className="text-xs font-medium uppercase tracking-wider text-zinc-400">
-              Events Checklist ({eventsList.length})
-            </h2>
-            <span className="text-[11px] text-zinc-500 font-mono">Select 3–10 events</span>
+        {/* Events Checklist Section */}
+        <div className="mdash-events-card">
+          <div className="mdash-events-header">
+            <h2>Events Checklist ({eventsList.length})</h2>
+            <span className="mdash-events-sub">Select 3–10 events</span>
           </div>
 
-          <div className="relative pl-5 space-y-3">
-            <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-zinc-800" aria-hidden="true" />
+          <div className="mdash-events-timeline">
+            <div className="mdash-events-line" aria-hidden="true" />
 
             {eventsList.map((event) => {
               const config = STATUS_CONFIG[event.status] || STATUS_CONFIG.not_selected;
               const StatusIcon = config.icon;
 
               return (
-                <div key={event.event_id} className="relative group">
+                <div key={event.event_id} className="mdash-event-item">
                   <div
-                    className={`absolute -left-5 top-3 w-2 h-2 rounded-full ring-4 ${config.dotClass}`}
+                    className={`mdash-event-dot ${config.dotClass}`}
                     aria-hidden="true"
                   />
 
                   <Link
                     to={`/dashboard/${event.event_slug}`}
-                    className="block p-3 rounded-lg border border-zinc-800 bg-zinc-900/60 text-left"
+                    className="mdash-event-link"
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-medium text-xs text-zinc-200 truncate">
+                    <div className="mdash-event-top">
+                      <span className="mdash-event-name">
                         {event.event_name}
                       </span>
-                      <ChevronRight className="w-3.5 h-3.5 text-zinc-600 flex-shrink-0" />
+                      <ChevronRight size={14} style={{ color: 'var(--text-tertiary)' }} />
                     </div>
 
-                    <div className="mt-2 flex items-center justify-between gap-2">
-                      <span className="text-[11px] text-zinc-500 flex items-center gap-1 font-mono">
-                        <Users className="w-3 h-3 text-zinc-600" />
+                    <div className="mdash-event-meta">
+                      <span className="mdash-event-limit">
+                        <Users size={12} />
                         Limit: {event.participant_limit}
                       </span>
 
-                      <span
-                        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border ${config.badgeClass}`}
-                      >
-                        <StatusIcon className="w-3 h-3 flex-shrink-0" />
+                      <span className={`mdash-status-badge ${config.badgeClass}`}>
+                        <StatusIcon size={12} />
                         {config.label}
                       </span>
                     </div>

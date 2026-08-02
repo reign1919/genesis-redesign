@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import SecurePage from '../components/SecurePage';
+import RosterSummaryView from '../components/RosterSummaryView';
+import { fetchSchoolRoster } from '../lib/rosterHelper';
 import {
   listAdminRegistrations,
   updateAdminRegistration,
@@ -16,6 +18,9 @@ function AdminDashboard({ admin, onLogout }) {
   const [visiblePasswords, setVisiblePasswords] = useState(() => new Set());
   const [approvalNotice, setApprovalNotice] = useState(null);
   const [copied, setCopied] = useState('');
+  const [activeRosterSchool, setActiveRosterSchool] = useState(null);
+  const [rosterLoading, setRosterLoading] = useState(false);
+  const [schoolRosterData, setSchoolRosterData] = useState(null);
 
   const fetchRegistrations = useCallback(async () => {
     setLoading(true);
@@ -101,6 +106,20 @@ function AdminDashboard({ admin, onLogout }) {
     });
   };
 
+  const handleOpenRoster = async (registration) => {
+    setActiveRosterSchool(registration);
+    setRosterLoading(true);
+    setSchoolRosterData(null);
+
+    const result = await fetchSchoolRoster(registration.id);
+    setRosterLoading(false);
+    if (result.ok) {
+      setSchoolRosterData(result);
+    } else {
+      setSchoolRosterData({ rosters: [], completeCount: 0, totalSelectedCount: 0 });
+    }
+  };
+
   const filtered = useMemo(() => filter === 'all'
     ? registrations
     : registrations.filter(registration => registration.status === filter), [filter, registrations]);
@@ -164,6 +183,7 @@ function AdminDashboard({ admin, onLogout }) {
                 <th>Code</th>
                 <th>Password</th>
                 <th>Submitted</th>
+                <th>Roster Summary</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -196,6 +216,15 @@ function AdminDashboard({ admin, onLogout }) {
                   </td>
                   <td>{new Date(registration.created_at).toLocaleString('en-IN')}</td>
                   <td>
+                    <button
+                      type="button"
+                      className="admin-row-action admin-row-action--roster"
+                      onClick={() => handleOpenRoster(registration)}
+                    >
+                      View Roster Summary
+                    </button>
+                  </td>
+                  <td>
                     {registration.status === 'pending' ? (
                       <div className="admin-row-actions">
                         <button
@@ -221,6 +250,46 @@ function AdminDashboard({ admin, onLogout }) {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Admin Roster Modal */}
+      {activeRosterSchool && (
+        <div className="admin-modal-overlay no-print" onClick={() => setActiveRosterSchool(null)}>
+          <div className="admin-modal-content secure-card" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <div>
+                <span className="label-caps text-accent-light" style={{ color: 'var(--accent-light)', fontSize: '11px', letterSpacing: '0.1em' }}>
+                  Institution Roster Summary
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: '#ffffff', marginTop: '4px' }}>
+                  {activeRosterSchool.school_name}
+                </h2>
+              </div>
+              <button
+                type="button"
+                className="admin-modal-close"
+                onClick={() => setActiveRosterSchool(null)}
+                aria-label="Close roster view"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="admin-modal-body">
+              {rosterLoading ? (
+                <div className="secure-status p-8 text-center">Loading institution roster details…</div>
+              ) : (
+                <RosterSummaryView
+                  school={activeRosterSchool}
+                  eventRosters={schoolRosterData?.rosters || []}
+                  completeCount={schoolRosterData?.completeCount || 0}
+                  totalSelectedCount={schoolRosterData?.totalSelectedCount || 0}
+                  isAdminView={true}
+                />
+              )}
+            </div>
+          </div>
         </div>
       )}
     </SecurePage>

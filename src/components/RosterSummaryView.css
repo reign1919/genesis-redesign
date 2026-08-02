@@ -1,0 +1,656 @@
+/* ============================================================
+   ROSTER SUMMARY VIEW COMPONENT CSS
+   Contains Screen Styles + Mobile Responsive + PDF Print Spec
+   ============================================================ */
+
+.roster-summary-wrapper {
+  width: 100%;
+}
+
+/* Hide PDF Print Container on screen */
+.pdf-print-container {
+  display: none;
+}
+
+/* Screen UI Container */
+.screen-summary-ui {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 1. Gating Card */
+.review-gating-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 16px;
+  max-width: 640px;
+  margin: 20px auto;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  background: rgba(10, 10, 10, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 12px;
+}
+
+.review-gating-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.review-gating-card h2 {
+  font-family: var(--font-display, 'Orbit', sans-serif);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text, #F1F1F1);
+}
+
+.review-gating-card p {
+  color: var(--text-secondary, #CDC4C4);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 480px;
+}
+
+.review-gating-progress {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-tertiary, #8C716E);
+  margin-top: 8px;
+}
+
+.review-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.review-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #34d399);
+  transition: width 0.3s ease;
+}
+
+/* 2. Review Header Card */
+.review-header-card {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  background: rgba(10, 10, 10, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 12px;
+}
+
+.review-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.review-institution-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-light, #FF9A91);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+  font-family: var(--font-label, 'EB Garamond', serif);
+}
+
+.review-school-name {
+  font-family: var(--font-display, 'Orbit', sans-serif);
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 500;
+  color: var(--text, #F1F1F1);
+  line-height: 1.25;
+}
+
+.review-school-code {
+  color: var(--text-tertiary, #8C716E);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.review-school-code strong {
+  color: var(--text-secondary, #CDC4C4);
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.review-print-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  color: var(--text, #F1F1F1);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.review-print-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* 3. Automatic Status Banner */
+.review-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.review-status-banner--success {
+  background: rgba(52, 211, 153, 0.08);
+  border-color: rgba(52, 211, 153, 0.25);
+}
+
+.review-banner-icon {
+  color: #34d399;
+  flex-shrink: 0;
+}
+
+.review-banner-content {
+  flex: 1;
+}
+
+.review-banner-content h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #34d399;
+  margin-bottom: 4px;
+}
+
+.review-banner-content p {
+  font-size: 13px;
+  color: var(--text-secondary, #CDC4C4);
+  line-height: 1.5;
+}
+
+.review-banner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: #a7f3d0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+/* 4. Roster Section & Tables */
+.review-rosters-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.review-section-header h2 {
+  font-family: var(--font-display, 'Orbit', sans-serif);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text, #F1F1F1);
+}
+
+.review-roster-count {
+  color: var(--accent-light, #FF9A91);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.review-rosters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review-event-card {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  background: rgba(10, 10, 10, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 12px;
+}
+
+.review-event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.review-event-category {
+  color: var(--text-tertiary, #8C716E);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.review-event-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text, #F1F1F1);
+}
+
+.review-event-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-team-limit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-tertiary, #8C716E);
+}
+
+.review-badge-complete {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: #34d399;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.review-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 6px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  -webkit-overflow-scrolling: touch;
+}
+
+.review-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.review-table th {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-tertiary, #8C716E);
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+}
+
+.review-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary, #CDC4C4);
+}
+
+.review-table tr:last-child td {
+  border-bottom: none;
+}
+
+.review-td-num {
+  font-family: monospace;
+  color: var(--text-tertiary, #8C716E);
+}
+
+.review-td-name strong {
+  color: var(--text, #F1F1F1);
+  font-weight: 500;
+}
+
+.review-empty-val {
+  color: var(--text-tertiary, #8C716E);
+  font-style: italic;
+}
+
+/* 5. Buttons */
+.review-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.review-btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.review-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  color: var(--text-secondary, #CDC4C4);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.review-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text, #F1F1F1);
+}
+
+/* ── Mobile Responsive Adaptation ────────────────────────── */
+@media (max-width: 640px) {
+  .screen-summary-ui {
+    gap: 16px;
+  }
+
+  .review-header-card {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .review-header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .review-status-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .review-banner-badge {
+    align-self: flex-start;
+  }
+
+  .review-event-card {
+    padding: 16px;
+  }
+
+  .review-event-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .review-table th,
+  .review-table td {
+    padding: 10px 12px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PDF EXPORT & PRINT STYLES (@media print)
+   Strictly enforces:
+   - GENESIS in Orbit font
+   - Host School: Indus Valley World School
+   - Motto: innovate, ideate, inspire
+   - School Details Block
+   - Concise Roster Summary Tables
+   - EVERYTHING ELSE IS HIDDEN
+─────────────────────────────────────────────────────────────── */
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm 12mm 15mm;
+  }
+
+  /* Reset body and hide all standard web UI elements */
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: 'Space Grotesk', -apple-system, sans-serif !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Hide everything on page by default */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Hide specific screen components explicitly */
+  .no-print,
+  .screen-summary-ui,
+  header,
+  nav,
+  footer,
+  aside,
+  button,
+  .secure-page__tech-header,
+  .secure-page__heading,
+  .secure-page__background,
+  .secure-page__grid {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Show ONLY the .pdf-print-container and its descendants */
+  .pdf-print-container,
+  .pdf-print-container * {
+    visibility: visible !important;
+  }
+
+  .pdf-print-container {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* PDF Header */
+  .pdf-header {
+    text-align: center !important;
+    border-bottom: 2px solid #000000 !important;
+    padding-bottom: 14px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .pdf-genesis-title {
+    font-family: 'Orbit', sans-serif !important;
+    font-size: 32pt !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+    color: #000000 !important;
+    margin: 0 0 6px 0 !important;
+    line-height: 1 !important;
+  }
+
+  .pdf-school-host {
+    font-family: 'EB Garamond', Georgia, serif !important;
+    font-size: 15pt !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: #111111 !important;
+    margin: 0 0 4px 0 !important;
+  }
+
+  .pdf-motto {
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-size: 10.5pt !important;
+    font-style: italic !important;
+    letter-spacing: 0.16em !important;
+    text-transform: lowercase !important;
+    color: #333333 !important;
+    margin: 0 !important;
+  }
+
+  /* School Details Meta Box */
+  .pdf-meta-box {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px 16px !important;
+    padding: 12px 16px !important;
+    border: 1px dashed #666666 !important;
+    background: #f8fafc !important;
+    margin-bottom: 20px !important;
+    font-size: 9.5pt !important;
+  }
+
+  .pdf-meta-item {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .pdf-meta-label {
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin-right: 6px !important;
+    font-size: 9pt !important;
+  }
+
+  .pdf-meta-value {
+    color: #000000 !important;
+    font-weight: 600 !important;
+  }
+
+  .pdf-section-title {
+    font-family: 'Orbit', sans-serif !important;
+    font-size: 11pt !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 14px !important;
+    padding-bottom: 4px !important;
+    border-bottom: 1.5px solid #000000 !important;
+  }
+
+  .pdf-events-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .pdf-event-block {
+    margin-bottom: 14px !important;
+    page-break-inside: avoid !important;
+  }
+
+  .pdf-event-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background: #f1f5f9 !important;
+    padding: 6px 10px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-bottom: none !important;
+    font-size: 10pt !important;
+    font-weight: 700 !important;
+  }
+
+  .pdf-event-name {
+    color: #000000 !important;
+  }
+
+  .pdf-event-category {
+    font-size: 8.5pt !important;
+    color: #475569 !important;
+    font-weight: 500 !important;
+  }
+
+  .pdf-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 9pt !important;
+  }
+
+  .pdf-table th {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 8pt !important;
+    padding: 5px 8px !important;
+    border: 1px solid #cbd5e1 !important;
+    text-align: left !important;
+  }
+
+  .pdf-table td {
+    padding: 5px 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #1e293b !important;
+  }
+
+  .pdf-empty {
+    font-style: italic;
+    font-size: 10pt;
+    color: #666;
+  }
+}

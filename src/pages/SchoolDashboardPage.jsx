@@ -290,20 +290,19 @@ export default function SchoolDashboardPage() {
             </strong>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Link
-              to="/dashboard/review"
-              className={`px-3.5 py-2 rounded-md text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
-                completeCount >= 3
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
-                  : 'bg-zinc-800/60 text-zinc-400 border border-zinc-700/60 hover:text-zinc-200'
-              }`}
-            >
-              <span>View Roster Summary</span>
-              <ChevronRight size={13} />
-            </Link>
+          <Link
+            to="/dashboard/review"
+            className={`dash-roster-btn ${
+              completeCount >= 3
+                ? 'dash-roster-btn--active'
+                : 'dash-roster-btn--muted'
+            }`}
+          >
+            <span>View Roster Summary</span>
+            <ChevronRight size={14} />
+          </Link>
 
-            <div className={`dash-deadline-pill ${deadline.badgeClass}`}>
+          <div className={`dash-deadline-pill ${deadline.badgeClass}`}>
               <Calendar size={15} />
               <div>
                 <div className="flex items-center gap-1.5 relative">
@@ -341,7 +340,6 @@ export default function SchoolDashboardPage() {
                 <strong>{deadline.formattedText}</strong>
               </div>
             </div>
-          </div>
         </section>
 
         {/* 3. Vertical Line-Style Scroll Event Checklist Sidebar */}

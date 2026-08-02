@@ -6,18 +6,9 @@ import { useAuth } from '../../lib/authContext';
 import LoadingScreen from '../../components/LoadingScreen';
 import MobileBackground from '../../components/mobile/MobileBackground';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
+import RosterSummaryView from '../../components/RosterSummaryView';
 import { eventsData } from '../../lib/eventsData';
-import {
-  CheckCircle2,
-  AlertCircle,
-  ArrowLeft,
-  Printer,
-  Users,
-  Calendar,
-  Lock,
-  Sparkles,
-  Building2,
-} from 'lucide-react';
+import { ArrowLeft, Printer } from 'lucide-react';
 import './MobileReviewRegistrationPage.css';
 
 export default function MobileReviewRegistrationPage() {
@@ -90,6 +81,7 @@ export default function MobileReviewRegistrationPage() {
       const activeSelections = (dbStatuses || []).filter(
         (s) => s.status !== 'not_selected'
       );
+
       const completed = activeSelections.filter((s) =>
         ['selected_complete', 'locked', 'submitted'].includes(s.status)
       );
@@ -171,7 +163,7 @@ export default function MobileReviewRegistrationPage() {
       <MobileBackground />
       <MobileHamburger />
 
-      <header className="mob-review-header">
+      <header className="mob-review-header no-print">
         <Link to="/dashboard" className="mob-back-link">
           <ArrowLeft size={16} /> Back to Dashboard
         </Link>
@@ -180,80 +172,22 @@ export default function MobileReviewRegistrationPage() {
       </header>
 
       <main className="mob-review-container">
-        {!isEligible ? (
-          <div className="mob-card mob-gating-card">
-            <div className="mob-gating-icon">
-              <Lock size={28} />
-            </div>
-            <h2>Summary Locked</h2>
-            <p>
-              Complete participant rosters for at least 3 events to unlock your full registration summary. Currently completed: <strong>{completeCount}/3</strong> events.
-            </p>
-            <Link to="/dashboard" className="mob-btn-primary">
-              Return to Dashboard
-            </Link>
+        <RosterSummaryView
+          school={school}
+          eventRosters={eventRosters}
+          completeCount={completeCount}
+          totalSelectedCount={eventRosters.length}
+          onPrint={handlePrint}
+          isGated={!isEligible}
+          isAdminView={false}
+        />
+
+        {isEligible && (
+          <div className="mob-action-bar no-print">
+            <button type="button" className="mob-btn-primary" onClick={handlePrint}>
+              <Printer size={16} /> Print / Export PDF Summary
+            </button>
           </div>
-        ) : (
-          <>
-            {/* Institution Info & Status */}
-            <div className="mob-card mob-school-card">
-              <div className="mob-school-meta">
-                <span className="label-caps text-accent">Approved Institution</span>
-                <h2>{school?.school_name}</h2>
-                <p className="mob-code-text">Code: <strong>{school?.school_code}</strong></p>
-              </div>
-
-              <div className="mob-status-banner">
-                <div className="mob-status-top">
-                  <CheckCircle2 size={18} className="text-emerald-400" />
-                  <h3>Qualification Criteria Met</h3>
-                </div>
-                <p>
-                  You have completed participant rosters for <strong>{completeCount}</strong> events. Your registration is set for <strong>automatic approval on September 14th</strong>.
-                </p>
-              </div>
-            </div>
-
-            {/* Event Rosters */}
-            <div className="mob-rosters-list">
-              {eventRosters.map((event, idx) => (
-                <div key={event.selection_id || idx} className="mob-card mob-event-card">
-                  <div className="mob-event-top">
-                    <div>
-                      <span className="label-caps mob-cat-tag">{event.category}</span>
-                      <h3 className="mob-event-title">{event.event_name}</h3>
-                    </div>
-                    <span className="mob-complete-badge">
-                      <CheckCircle2 size={12} /> {event.teamLimit} Members
-                    </span>
-                  </div>
-
-                  <div className="mob-participants-list">
-                    {event.participants.map((p) => (
-                      <div key={p.row_index} className="mob-part-item">
-                        <div className="mob-part-idx">{p.row_index}</div>
-                        <div className="mob-part-info">
-                          <strong>{p.name !== '—' ? p.name : 'Not provided'}</strong>
-                          <div className="mob-part-details">
-                            <span>Class: {p.class}</span>
-                            <span>•</span>
-                            <span>Phone: {p.phone}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Action Bar */}
-            <div className="mob-action-bar no-print">
-              <button type="button" className="mob-btn-primary" onClick={handlePrint}>
-                <Printer size={16} /> Print / Save Summary
-              </button>
-            </div>
-          </>
         )}
       </main>
     </div>
