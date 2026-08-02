@@ -97,13 +97,15 @@
 
 /* Faint Scanline Settle Overlay (non-interactive texture layer) */
 .scanline-settle-overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   z-index: 1002;
+  contain: strict;
+  content-visibility: auto;
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0) 50%,
