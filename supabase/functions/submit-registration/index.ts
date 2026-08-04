@@ -16,7 +16,7 @@ const DUPLICATE_RESPONSES: Record<string, { code: string; message: string }> = {
   },
   duplicate_approved: {
     code: 'ALREADY_APPROVED',
-    message: 'Your school is already approved. Contact the core committee if you need the credentials again.',
+    message: 'Your school is already approved. Contact The Genesis Council if you need the credentials again.',
   },
   duplicate_rejected: {
     code: 'REGISTRATION_REJECTED',
@@ -113,7 +113,7 @@ export async function handleSubmitRegistration(
 
     safeLog('info', 'registration_created', requestId, { status: 'pending' });
     return jsonResponse(
-      stableBody(true, 'REGISTRATION_SUBMITTED', 'Application received. The core committee will contact approved schools on WhatsApp.', requestId),
+      stableBody(true, 'REGISTRATION_SUBMITTED', 'Application received. The Genesis Council will contact approved schools on WhatsApp.', requestId),
       201,
       cors.headers,
     );

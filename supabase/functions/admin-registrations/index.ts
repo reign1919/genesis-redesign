@@ -19,7 +19,7 @@ function whatsappMessage(registration: Record<string, unknown>, portalUrl: strin
     `Portal: ${portalUrl}`,
     '',
     'Please keep these credentials secure.',
-    '— Genesis Core Committee',
+    '— The Genesis Council',
   ].join('\n');
 }
 
@@ -84,6 +84,14 @@ export async function handleAdminRegistrations(
       return jsonResponse(
         stableBody(false, 'AUTH_INVALID', 'Sign in again to continue.', requestId),
         401,
+        cors.headers,
+      );
+    }
+    const admin = await checkAdmin(adminClient, user.id);
+    if (!admin) {
+      return jsonResponse(
+        stableBody(false, 'FORBIDDEN', 'Administrator access required.', requestId),
+        403,
         cors.headers,
       );
     }
@@ -200,81 +208,90 @@ export async function handleAdminRegistrations(
     }
 
     if (validated.value.status === 'approved') {
-      const { data: schoolRow, error: fetchError } = await adminClient
-        .from('schools')
-        .update({ status: 'approved' })
-        .eq('id', validated.value.registrationId)
-        .select('id, name, school_code, contact_email, contact_phone')
-        .maybeSingle();
+      try {
+        const { data: schoolRow, error: fetchError } = await adminClient
+          .from('schools')
+          .update({ status: 'approved' })
+          .eq('id', validated.value.registrationId)
+          .select('id, name, school_code, contact_email, contact_phone')
+          .maybeSingle();
 
-      if (fetchError || !schoolRow) {
+        if (fetchError || !schoolRow) {
+          return jsonResponse(
+            stableBody(false, 'PROVISIONING_FAILED', 'The registration could not be approved.', requestId),
+            503,
+            cors.headers,
+          );
+        }
+
+        const schoolCode = schoolRow.school_code || 'GEN-0001';
+        const email = schoolRow.contact_email || `${schoolCode.toLowerCase()}@schools.genesis.invalid`;
+        const password = generateSchoolPassword();
+
+        let authUserId: string | null = null;
+        const createdUser = await adminClient.auth.admin.createUser({
+          email,
+          password,
+          email_confirm: true,
+          user_metadata: { school_name: schoolRow.name },
+        });
+
+        if (createdUser.data?.user) {
+          authUserId = createdUser.data.user.id;
+        } else {
+          const { data: usersData } = await adminClient.auth.admin.listUsers();
+          const match = usersData?.users?.find((u) => u.email?.toLowerCase() === email.toLowerCase());
+          if (match) {
+            authUserId = match.id;
+            await adminClient.auth.admin.updateUserById(authUserId, { password });
+          }
+        }
+
+        if (authUserId) {
+          await adminClient
+            .from('school_users')
+            .upsert({ school_id: schoolRow.id, auth_user_id: authUserId, role: 'school_user' }, { onConflict: 'school_id,auth_user_id' });
+
+          await adminClient
+            .from('school_credentials')
+            .upsert({ school_id: schoolRow.id, auth_user_id: authUserId, password_text: password }, { onConflict: 'school_id' });
+        }
+
+        const withCredentials = {
+          id: schoolRow.id,
+          school_name: schoolRow.name,
+          school_code: schoolCode,
+          status: 'approved',
+          password,
+        };
+
+        const message = whatsappMessage(
+          withCredentials,
+          env('PUBLIC_PORTAL_URL') || 'https://genesis.example/#/portal',
+        );
+
         return jsonResponse(
-          stableBody(false, 'SERVICE_UNAVAILABLE', 'The registration could not be approved.', requestId),
+          stableBody(
+            true,
+            'REGISTRATION_UPDATED',
+            'Registration approved and credentials generated.',
+            requestId,
+            {
+              registration: withCredentials,
+              whatsappMessage: message,
+            },
+          ),
+          200,
+          cors.headers,
+        );
+      } catch (err) {
+        safeLog('error', 'admin_approval_failed', requestId, { error: String(err) });
+        return jsonResponse(
+          stableBody(false, 'PROVISIONING_FAILED', 'The registration could not be approved.', requestId),
           503,
           cors.headers,
         );
       }
-
-      const schoolCode = schoolRow.school_code || 'GEN-0001';
-      const email = schoolRow.contact_email || `${schoolCode.toLowerCase()}@schools.genesis.invalid`;
-      const password = generateSchoolPassword();
-
-      let authUserId: string | null = null;
-      const createdUser = await adminClient.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: true,
-        user_metadata: { school_name: schoolRow.name },
-      });
-
-      if (createdUser.data?.user) {
-        authUserId = createdUser.data.user.id;
-      } else {
-        const { data: usersData } = await adminClient.auth.admin.listUsers();
-        const match = usersData?.users?.find((u) => u.email?.toLowerCase() === email.toLowerCase());
-        if (match) {
-          authUserId = match.id;
-          await adminClient.auth.admin.updateUserById(authUserId, { password });
-        }
-      }
-
-      if (authUserId) {
-        await adminClient
-          .from('school_users')
-          .upsert({ school_id: schoolRow.id, auth_user_id: authUserId, role: 'school_user' }, { onConflict: 'school_id,auth_user_id' });
-
-        await adminClient
-          .from('school_credentials')
-          .upsert({ school_id: schoolRow.id, auth_user_id: authUserId, password_text: password }, { onConflict: 'school_id' });
-      }
-
-      const withCredentials = {
-        id: schoolRow.id,
-        school_name: schoolRow.name,
-        school_code: schoolCode,
-        status: 'approved',
-        password,
-      };
-
-      const message = whatsappMessage(
-        withCredentials,
-        env('PUBLIC_PORTAL_URL') || 'https://genesis.example/#/portal',
-      );
-
-      return jsonResponse(
-        stableBody(
-          true,
-          'REGISTRATION_UPDATED',
-          'Registration approved and credentials generated.',
-          requestId,
-          {
-            registration: withCredentials,
-            whatsappMessage: message,
-          },
-        ),
-        200,
-        cors.headers,
-      );
     }
 
     return jsonResponse(

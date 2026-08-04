@@ -223,7 +223,7 @@ export default function SchoolDashboardPage() {
     <SecurePage
       eyebrow="Approved School Access"
       title="School Dashboard"
-      subtitle="Credentials issued by the Genesis core committee. Keep them private and share them only with authorized school representatives."
+      subtitle="Credentials issued by The Genesis Council. Keep them private and share them only with authorized school representatives."
       action={
         <button type="button" className="secure-action" onClick={handleLogout}>
           Log out

@@ -15,7 +15,7 @@ function registrationMessage(result) {
     INVALID_SCHOOL_NAME: 'Enter a school name between 2 and 120 characters.',
     INVALID_PHONE: 'Use international phone format, such as +919876543210.',
     ALREADY_PENDING: 'Your school registration is already awaiting review.',
-    ALREADY_APPROVED: 'Your school is already approved. Contact the core committee if you need the credentials again.',
+    ALREADY_APPROVED: 'Your school is already approved. Contact The Genesis Council if you need the credentials again.',
     REGISTRATION_REJECTED: 'Thank you for your interest. Your school registration was not approved for this edition of Genesis.',
     RATE_LIMITED: 'Too many attempts. Try again later.',
     ENROLLMENT_CLOSED: 'School enrollment is temporarily closed.',
@@ -93,7 +93,7 @@ const LoginPage = () => {
       setTeacherWhatsapp('');
       setFormResult({
         ok: true,
-        message: 'Application received. The core committee will contact approved schools on WhatsApp.',
+        message: 'Application received. The Genesis Council will contact approved schools on WhatsApp.',
       });
       return;
     }
@@ -104,7 +104,7 @@ const LoginPage = () => {
     if (!result.ok) {
       setFormResult({
         ok: false,
-        message: 'Invalid school code or password. Check the credentials sent by the core committee.',
+        message: 'Invalid school code or password. Check the credentials sent by The Genesis Council.',
       });
       return;
     }

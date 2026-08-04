@@ -133,7 +133,7 @@ function AdminDashboard({ admin, onLogout }) {
 
   return (
     <SecurePage
-      eyebrow="Restricted Core Committee Access"
+      eyebrow="Restricted Genesis Council Access"
       title="Admin Portal"
       subtitle={`Signed in as ${admin.email}`}
       action={<button type="button" className="secure-action" onClick={() => onLogout('logout')}>Log out</button>}
@@ -355,7 +355,7 @@ export default function AdminPage() {
     <SecurePage
       eyebrow="Authorization Gate"
       title="Admin Access"
-      subtitle="Restricted to authorized Genesis core committee accounts."
+      subtitle="Restricted to authorized Genesis Council accounts."
     >
       <form className="admin-login secure-card" onSubmit={handleLogin}>
         <label>

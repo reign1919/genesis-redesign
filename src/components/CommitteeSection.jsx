@@ -11,7 +11,7 @@ const committeeMembers = [
 const CommitteeSection = () => {
   return (
     <div className="committee-container">
-      <h2 className="committee-title">The Core Committee</h2>
+      <h2 className="committee-title">The Genesis Council</h2>
 
       <div className="committee-cards-wrapper">
         {committeeMembers.map((member) => (
