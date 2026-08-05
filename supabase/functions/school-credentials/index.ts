@@ -45,7 +45,7 @@ export async function handleSchoolCredentials(request: Request): Promise<Respons
         .eq('school_code', userCode)
         .maybeSingle();
 
-      if (!existingSchool) {
+      if (!existingSchool && /^GEN-[0-9]{4}$/i.test(userCode)) {
         const { data: newSchool } = await adminClient
           .from('schools')
           .insert({

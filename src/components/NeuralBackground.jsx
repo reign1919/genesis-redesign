@@ -13,9 +13,11 @@ function randomBetween(a, b) {
   return a + Math.random() * (b - a);
 }
 
-const NEURO_PINK   = '255, 174, 216';      // primary neon pink
-const NEURO_CYAN   = '0, 238, 252';         // secondary cyan
-const NEURO_PURPLE = '161, 120, 255';       // tertiary deep purple
+const NEURO_RED     = '253, 98, 95';   // --accent-bright (#FD625F) bright crimson
+const NEURO_OXBLOOD = '172, 50, 46';   // --accent-mid (#AC322E) rich oxblood red
+const NEURO_CORAL   = '255, 154, 145'; // --accent-light (#FF9A91) glowing coral accent
+const NEURO_SILVER  = '205, 196, 196'; // --text-secondary (#CDC4C4) technical silver
+
 
 // Pre-render glows
 const createGlow = (rgb) => {
@@ -49,9 +51,10 @@ const NeuralBackground = () => {
     const ctx2d = canvas.getContext('2d');
 
     const glowCache = {
-      [NEURO_PINK]: createGlow(NEURO_PINK),
-      [NEURO_CYAN]: createGlow(NEURO_CYAN),
-      [NEURO_PURPLE]: createGlow(NEURO_PURPLE),
+      [NEURO_RED]: createGlow(NEURO_RED),
+      [NEURO_OXBLOOD]: createGlow(NEURO_OXBLOOD),
+      [NEURO_CORAL]: createGlow(NEURO_CORAL),
+      [NEURO_SILVER]: createGlow(NEURO_SILVER),
     };
 
     const resize = () => {
@@ -187,8 +190,12 @@ const NeuralBackground = () => {
             const cursorDistSq = cdx * cdx + cdy * cdy;
             const boost = cursorDistSq < (180 * 180) ? (1 - Math.sqrt(cursorDistSq) / 180) * 0.6 : 0;
 
-            const useAccent = (i + j) % 3 === 0;
-            const rgb = useAccent ? NEURO_PINK : NEURO_CYAN;
+            const edgeColorIdx = (i + j) % 4;
+            const rgb = edgeColorIdx === 0
+              ? NEURO_RED
+              : (edgeColorIdx === 1
+                ? NEURO_OXBLOOD
+                : (edgeColorIdx === 2 ? NEURO_CORAL : NEURO_SILVER));
 
             ctx2d.beginPath();
             ctx2d.moveTo(a.x, a.y);
@@ -216,7 +223,11 @@ const NeuralBackground = () => {
         }
 
         const r = n.radius * (1 + nearFactor * 1.8) * pulse;
-        const rgb = idx % 4 === 0 ? NEURO_PINK : (idx % 4 === 1 ? NEURO_CYAN : NEURO_PURPLE);
+        const rgb = idx % 4 === 0
+          ? NEURO_RED
+          : (idx % 4 === 1
+            ? NEURO_OXBLOOD
+            : (idx % 4 === 2 ? NEURO_CORAL : NEURO_SILVER));
         const alpha = 0.5 + nearFactor * 0.5;
 
         // Glow (using pre-rendered canvas)

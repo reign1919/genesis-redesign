@@ -15,7 +15,7 @@ const MobileCommittee = () => {
         <span className="m-committee-eyebrow label-caps">
           <span className="m-committee-dash">—</span> The People
         </span>
-        <h2 className="m-committee-title">Core Committee</h2>
+        <h2 className="m-committee-title">Meet the Genesis Council</h2>
       </div>
 
       <div className="m-committee-scroll">

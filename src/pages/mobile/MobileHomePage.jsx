@@ -39,7 +39,12 @@ const MobileHomePage = () => {
       {/* Content */}
       <main className="m-home-content">
         {/* Hero */}
-        <MobileHero />
+        <section aria-label="Hero Overview">
+          <h2 className="sr-only">Welcome to Genesis 2026</h2>
+          <h2 className="sr-only">Featured Competitions &amp; Technical Challenges</h2>
+          <h2 className="sr-only">School Portal &amp; Registration Dashboard</h2>
+          <MobileHero />
+        </section>
 
         {/* Countdown */}
         <section className="m-countdown-section">

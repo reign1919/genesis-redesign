@@ -64,7 +64,7 @@ const MobileLoginPage = () => {
       }
       setSchoolName('');
       setTeacherWhatsapp('');
-      setFormResult({ ok: true, message: 'Application received. The core committee will contact approved schools on WhatsApp.' });
+      setFormResult({ ok: true, message: 'Application received. The Genesis Council will contact approved schools on WhatsApp.' });
       return;
     }
 

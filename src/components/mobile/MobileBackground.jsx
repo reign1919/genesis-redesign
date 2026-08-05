@@ -73,7 +73,12 @@ const MobileBackground = () => {
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < CONNECTION_DIST) {
             const alpha = (1 - dist / CONNECTION_DIST) * 0.35;
-            const rgb = (i + j) % 3 === 0 ? '139, 26, 26' : '255, 255, 255';
+            const edgeColorIdx = (i + j) % 4;
+            const rgb = edgeColorIdx === 0
+              ? '253, 98, 95'
+              : (edgeColorIdx === 1
+                ? '172, 50, 46'
+                : (edgeColorIdx === 2 ? '255, 154, 145' : '205, 196, 196'));
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -89,7 +94,11 @@ const MobileBackground = () => {
         const p = particles[i];
         const pulse = 0.7 + 0.3 * Math.sin(t * 2 + p.pulseOffset);
         const r = p.radius * pulse;
-        const rgb = i % 3 === 0 ? '172, 50, 46' : (i % 3 === 1 ? '255, 174, 216' : '161, 120, 255');
+        const rgb = i % 4 === 0
+          ? '253, 98, 95'
+          : (i % 4 === 1
+            ? '172, 50, 46'
+            : (i % 4 === 2 ? '255, 154, 145' : '205, 196, 196'));
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${rgb}, 0.6)`;

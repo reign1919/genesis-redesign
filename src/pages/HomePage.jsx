@@ -70,8 +70,11 @@ const HomePage = () => {
       
       {/* 5. Main Content Container */}
       <div className="homepage-container">
-        {/* SECTION 1: HERO */}
-        <section className="hero-section">
+        {/* SECTION 1: HERO & OVERVIEW */}
+        <section className="hero-section" aria-label="Hero Overview">
+          <h2 className="sr-only">Welcome to Genesis 2026</h2>
+          <h2 className="sr-only">Featured Competitions &amp; Technical Challenges</h2>
+          <h2 className="sr-only">School Portal &amp; Registration Dashboard</h2>
           <div className="hero-left">
             <CountdownTimer />
             <BrandBlock />
@@ -82,12 +85,12 @@ const HomePage = () => {
         </section>
 
         {/* SECTION 2: FAQ */}
-        <section id="about" className="faq-section">
+        <section id="about" className="faq-section" aria-label="About and FAQ">
           <FAQCompass />
         </section>
 
         {/* SECTION 3: CORE COMMITTEE */}
-        <section className="committee-section">
+        <section className="committee-section" aria-label="Committee Council">
           <CommitteeSection />
         </section>
 

@@ -42,6 +42,7 @@ const FAQCompass = () => {
 
   return (
     <div className={`faq-compass-container ${activeQuestion ? 'panel-open' : ''}`}>
+      <h2 className="sr-only">About the Festival &amp; Frequently Asked Questions</h2>
       
       {/* Left side: Interactive Compass */}
       <div className="faq-interactive-zone">
