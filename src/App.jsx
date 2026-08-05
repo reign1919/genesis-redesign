@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './lib/authContext';
 import LoadingScreen from './components/LoadingScreen';
+import Layout from './components/Layout';
 import useIsMobile from './lib/useIsMobile';
 
 // Desktop Pages
@@ -30,25 +31,27 @@ function AppRouter() {
   const isMobile = useIsMobile();
 
   return (
-    <Suspense fallback={<LoadingScreen />}>
-      {isMobile && <MobileWarningPopup />}
-      <Routes>
-        <Route path="/" element={isMobile ? <MobileHomePage /> : <HomePage />} />
-        <Route path="/events" element={isMobile ? <MobileEventsPage /> : <EventsPage />} />
-        <Route path="/login" element={isMobile ? <MobileLoginPage /> : <LoginPage />} />
-        <Route path="/dashboard" element={isMobile ? <MobileSchoolDashboardPage /> : <SchoolDashboardPage />} />
-        <Route path="/dashboard/review" element={isMobile ? <MobileReviewRegistrationPage /> : <ReviewRegistrationPage />} />
-        <Route path="/dashboard/:eventSlug" element={<EventDetailPage />} />
-        <Route path="/contact" element={isMobile ? <MobileContactPage /> : <ContactPage />} />
-        <Route path="/docs" element={isMobile ? <MobileDocumentationPage /> : <DocumentationPage />} />
-        
-        {/* Admin stays desktop only */}
-        <Route path="/admin" element={<AdminPage />} />
+    <Layout>
+      <Suspense fallback={<LoadingScreen />}>
+        {isMobile && <MobileWarningPopup />}
+        <Routes>
+          <Route path="/" element={isMobile ? <MobileHomePage /> : <HomePage />} />
+          <Route path="/events" element={isMobile ? <MobileEventsPage /> : <EventsPage />} />
+          <Route path="/login" element={isMobile ? <MobileLoginPage /> : <LoginPage />} />
+          <Route path="/dashboard" element={isMobile ? <MobileSchoolDashboardPage /> : <SchoolDashboardPage />} />
+          <Route path="/dashboard/review" element={isMobile ? <MobileReviewRegistrationPage /> : <ReviewRegistrationPage />} />
+          <Route path="/dashboard/:eventSlug" element={<EventDetailPage />} />
+          <Route path="/contact" element={isMobile ? <MobileContactPage /> : <ContactPage />} />
+          <Route path="/docs" element={isMobile ? <MobileDocumentationPage /> : <DocumentationPage />} />
+          
+          {/* Admin stays desktop only */}
+          <Route path="/admin" element={<AdminPage />} />
 
-        {/* Catch-all 404 */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Suspense>
+          {/* Catch-all 404 */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
+    </Layout>
   );
 }
 

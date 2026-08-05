@@ -62,7 +62,7 @@ const MobileFAQ = () => {
         <span className="m-faq-eyebrow label-caps">
           <span className="m-faq-dash">—</span> About Genesis
         </span>
-        <h2 className="m-faq-title">Frequently Asked</h2>
+        <h2 className="m-faq-title">About the Festival &amp; Frequently Asked Questions</h2>
       </div>
 
       <div className="m-faq-list">

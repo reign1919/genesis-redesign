@@ -59,7 +59,8 @@ const MobileHero = () => {
       </div>
 
       {/* Title */}
-      <h1 className="m-hero-title">GENESIS</h1>
+      <h1 className="m-hero-title" title="Genesis: Innovate, Ideate, Inspire — The First Edition Inter-School Tech Festival">GENESIS</h1>
+      <span className="sr-only">Genesis: Innovate, Ideate, Inspire — The First Edition Inter-School Tech Festival</span>
 
       {/* Typewriter */}
       <div className="m-hero-typewriter">

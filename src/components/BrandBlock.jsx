@@ -52,9 +52,10 @@ const BrandBlock = () => {
         <code>{text}<span className="cursor blink">_</span></code>
       </div>
       
-      <h1 className="brand-title">
+      <h1 className="brand-title" title="Genesis: Innovate, Ideate, Inspire — The First Edition Inter-School Tech Festival">
         GENESIS
       </h1>
+      <span className="sr-only">Genesis: Innovate, Ideate, Inspire — The First Edition Inter-School Tech Festival</span>
       
       <DashboardButton />
     </div>
