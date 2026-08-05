@@ -271,4 +271,4 @@ If you have any questions about this Privacy Policy, You can contact us:
 
 
 
-- By visiting this page on our website: [genesistechfest.vercel.app/contact](genesistechfest.vercel.app/contact)
+- By visiting this page on our website: [genesisfest.ivwschool.com/contact](genesisfest.ivwschool.com/contact)

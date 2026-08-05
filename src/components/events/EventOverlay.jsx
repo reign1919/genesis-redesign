@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useEffect, memo } from 'react';
 import ProceduralEventVisual from './ProceduralEventVisual';
 import Reel from './Reel';
 import CircuitBackground from './CircuitBackground';
@@ -14,8 +14,6 @@ const EventOverlay = ({
   onClose,
   onNavigateEvent,
 }) => {
-  const [activeTab, setActiveTab] = useState('rules');
-
   // Keyboard Navigation Support (Arrow keys, Escape)
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -114,50 +112,25 @@ const EventOverlay = ({
           </div>
         </div>
 
-        {/* Tabbed Detail Section (Rules & Regulations, Timeline & Schedule) */}
+        {/* Rules & Regulations Section */}
         <div className="overlay-tabs-section">
           <div className="tabs-nav-bar">
-            <button
-              className={`tab-btn ${activeTab === 'rules' ? 'active' : ''}`}
-              onClick={() => setActiveTab('rules')}
-            >
+            <span className="tab-btn active">
               RULES & REGULATIONS
-            </button>
-            <button
-              className={`tab-btn ${activeTab === 'timeline' ? 'active' : ''}`}
-              onClick={() => setActiveTab('timeline')}
-            >
-              TIMELINE & SCHEDULE
-            </button>
+            </span>
           </div>
 
           <div className="tab-content-display">
-            {activeTab === 'rules' && (
-              <div className="tab-pane">
-                <ul className="rules-bullet-list">
-                  {event.rules.map((rule, idx) => (
-                    <li key={idx} className="rule-item">
-                      <span className="rule-index">[{String(idx + 1).padStart(2, '0')}]</span>
-                      <span className="rule-text">{rule}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {activeTab === 'timeline' && (
-              <div className="tab-pane">
-                <div className="timeline-step-list">
-                  {event.timeline.map((step, idx) => (
-                    <div key={idx} className="timeline-step">
-                      <div className="timeline-time">{step.time}</div>
-                      <div className="timeline-node" />
-                      <div className="timeline-event-name">{step.event}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <div className="tab-pane">
+              <ul className="rules-bullet-list">
+                {event.rules.map((rule, idx) => (
+                  <li key={idx} className="rule-item">
+                    <span className="rule-index">[{String(idx + 1).padStart(2, '0')}]</span>
+                    <span className="rule-text">{rule}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

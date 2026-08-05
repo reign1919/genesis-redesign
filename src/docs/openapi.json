@@ -1,0 +1,496 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Genesis Tech Fest API",
+    "version": "1.0.0",
+    "description": "JSON Schema & OpenAPI Specification for the Genesis Tech Fest platform authentication, school registration, and administration Edge Functions."
+  },
+  "servers": [
+    {
+      "url": "https://genesisfest.ivwschool.com/v1",
+      "description": "Production API Server"
+    },
+    {
+      "url": "https://kcnmvggxqcxlbbfgtrwq.supabase.co/functions/v1",
+      "description": "Production Edge Functions Server"
+    },
+    {
+      "url": "http://localhost:54321/functions/v1",
+      "description": "Local Supabase Edge Server"
+    }
+  ],
+  "paths": {
+    "/submit-registration": {
+      "post": {
+        "summary": "Submit School Registration Application",
+        "description": "Registers a participating school for Genesis Tech Fest. Requires school name and teacher WhatsApp number.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitRegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registration successfully submitted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error in submitted payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Registration duplicate or already existing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable or enrollment closed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/school-credentials": {
+      "get": {
+        "summary": "Retrieve Authenticated School Credentials",
+        "description": "Retrieves the authenticated school's code, status, and system password.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "School credentials retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchoolCredentialsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid Bearer token.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Origin not allowed or account missing school association.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin-registrations": {
+      "get": {
+        "summary": "List All School Registrations (Admin Only)",
+        "description": "Retrieves list of all submitted school registrations and their current status.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of school registrations loaded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminRegistrationsListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Approve or Reject School Registration (Admin Only)",
+        "description": "Updates the status of a pending school registration to approved or rejected.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminTransitionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminTransitionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid payload or status transition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "School Code & Password Login",
+        "description": "Authenticates a school user using their school code (e.g., GEN-0001) and password.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SchoolLoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchoolLoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "SubmitRegistrationRequest": {
+        "$id": "https://genesis.ivws.edu/schemas/SubmitRegistrationRequest.json",
+        "type": "object",
+        "description": "Payload required to register a participating school.",
+        "required": ["schoolName", "teacherWhatsapp"],
+        "additionalProperties": false,
+        "properties": {
+          "schoolName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 120,
+            "description": "Official name of the participating school."
+          },
+          "teacherWhatsapp": {
+            "type": "string",
+            "pattern": "^\\+[1-9][0-9]{7,14}$",
+            "description": "International E.164 formatted WhatsApp phone number of the teacher-in-charge (e.g. +919876543210)."
+          }
+        }
+      },
+      "AdminTransitionRequest": {
+        "$id": "https://genesis.ivws.edu/schemas/AdminTransitionRequest.json",
+        "type": "object",
+        "description": "Payload required to approve or reject a school registration.",
+        "required": ["registrationId", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "registrationId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "UUID of the school registration."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["approved", "rejected"],
+            "description": "New approval status."
+          }
+        }
+      },
+      "SchoolLoginRequest": {
+        "$id": "https://genesis.ivws.edu/schemas/SchoolLoginRequest.json",
+        "type": "object",
+        "description": "School login credentials.",
+        "required": ["school_code", "password"],
+        "additionalProperties": false,
+        "properties": {
+          "school_code": {
+            "type": "string",
+            "pattern": "^GEN-[0-9]{4}$",
+            "description": "Unique school identification code (e.g., GEN-0001)."
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "description": "Assigned 16-character secure school password."
+          }
+        }
+      },
+      "StandardSuccessResponse": {
+        "$id": "https://genesis.ivws.edu/schemas/StandardSuccessResponse.json",
+        "type": "object",
+        "required": ["ok", "code", "message", "requestId"],
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "const": true
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable status code."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable response message."
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique request tracing ID."
+          }
+        }
+      },
+      "StandardErrorResponse": {
+        "$id": "https://genesis.ivws.edu/schemas/StandardErrorResponse.json",
+        "type": "object",
+        "required": ["ok", "code", "message", "requestId"],
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "const": false
+          },
+          "code": {
+            "type": "string",
+            "description": "Error classification code (e.g. INVALID_PAYLOAD, AUTH_REQUIRED, FORBIDDEN)."
+          },
+          "message": {
+            "type": "string",
+            "description": "Descriptive error message for client display."
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique request tracing ID."
+          }
+        }
+      },
+      "SchoolCredentialsResponse": {
+        "$id": "https://genesis.ivws.edu/schemas/SchoolCredentialsResponse.json",
+        "type": "object",
+        "required": ["ok", "code", "message", "requestId", "school"],
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "const": true
+          },
+          "code": {
+            "type": "string",
+            "const": "SCHOOL_CREDENTIALS_LOADED"
+          },
+          "message": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "school": {
+            "type": "object",
+            "required": ["school_id", "school_name", "school_code", "status", "password"],
+            "properties": {
+              "school_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "school_name": {
+                "type": "string"
+              },
+              "school_code": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "AdminRegistrationsListResponse": {
+        "$id": "https://genesis.ivws.edu/schemas/AdminRegistrationsListResponse.json",
+        "type": "object",
+        "required": ["ok", "code", "message", "requestId", "registrations"],
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "const": true
+          },
+          "code": {
+            "type": "string",
+            "const": "REGISTRATIONS_LISTED"
+          },
+          "message": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "registrations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "school_name", "teacher_whatsapp", "school_code", "status", "password", "created_at"],
+              "properties": {
+                "id": { "type": "string", "format": "uuid" },
+                "school_name": { "type": "string" },
+                "teacher_whatsapp": { "type": "string" },
+                "school_code": { "type": "string" },
+                "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+                "password": { "type": "string" },
+                "created_at": { "type": "string", "format": "date-time" }
+              }
+            }
+          }
+        }
+      },
+      "AdminTransitionResponse": {
+        "$id": "https://genesis.ivws.edu/schemas/AdminTransitionResponse.json",
+        "type": "object",
+        "required": ["ok", "code", "message", "requestId", "registration"],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "registration": {
+            "type": "object"
+          },
+          "whatsappMessage": {
+            "type": "string",
+            "description": "Pre-formatted message to send to approved school via WhatsApp."
+          }
+        }
+      },
+      "SchoolLoginResponse": {
+        "$id": "https://genesis.ivws.edu/schemas/SchoolLoginResponse.json",
+        "type": "object",
+        "required": ["access_token", "token_type", "user"],
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "JWT Bearer access token."
+          },
+          "token_type": {
+            "type": "string",
+            "const": "bearer"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", "format": "uuid" },
+              "email": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
