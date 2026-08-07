@@ -22,7 +22,7 @@ function registrationMessage(result) {
     ORIGIN_NOT_ALLOWED: 'Registration requests from this origin are not allowed.',
     SERVICE_UNAVAILABLE: 'Registration server is temporarily unavailable. Please try again later.',
   };
-  return messages[result.code] || 'Registration is temporarily unavailable. Please try again later.';
+  return result?.message || messages[result?.code] || 'Registration is temporarily unavailable. Please try again later.';
 }
 
 const LoginPage = () => {
