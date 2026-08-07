@@ -23,6 +23,9 @@ const CreatorsPopup = ({ isOpen, onClose }) => {
           <div className="creator-card" onClick={() => setActiveQuote({ text: "Praise the Sun!", author: "Solaire of Astora" })}>
             <span className="creator-name body-lg">Dhritiman Das</span>
           </div>
+          <div className="creator-card" onClick={() => setActiveQuote({ text: "Sometimes you gotta run before you can walk.", author: "Tony Stark \"Iron Man\"" })}>
+            <span className="creator-name body-lg">Akshat R. Chowdhury</span>
+          </div>
         </div>
         
         {activeQuote && (
