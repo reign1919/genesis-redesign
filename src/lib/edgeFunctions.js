@@ -6,7 +6,10 @@ import {
 } from './supabase';
 
 async function callFunction(name, { method, body, authenticated = true }) {
-  if (!isSupabaseConfigured) return { ok: false, code: 'SERVICE_UNAVAILABLE' };
+  if (!isSupabaseConfigured) {
+    console.error('[Edge Function Configuration Error] Supabase URL or Anon Key is missing.', { publicSupabaseUrl });
+    return { ok: false, code: 'SERVICE_UNAVAILABLE' };
+  }
 
   let accessToken = null;
   if (authenticated) {
