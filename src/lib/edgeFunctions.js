@@ -38,7 +38,8 @@ async function callFunction(name, { method, body, authenticated = true }) {
   try {
     payload = await response.json();
   } catch (err) {
-    console.error(`[Edge Function ${name} Parse Error] Status: ${response?.status}`, err);
+    const contentType = response.headers.get('content-type') || '';
+    console.error(`[Edge Function ${name} Parse Error] Status: ${response?.status}, Content-Type: ${contentType}`, err);
     return { ok: false, code: 'SERVICE_UNAVAILABLE' };
   }
 
