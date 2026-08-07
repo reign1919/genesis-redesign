@@ -10,6 +10,36 @@
   position: relative;
 }
 
+.docs-topbar {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 20;
+}
+
+.docs-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-family: var(--font-label);
+  font-size: 0.9rem;
+  color: var(--text);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.docs-back-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-strong);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
 .docs-sidebar {
   width: 300px;
   flex-shrink: 0;
