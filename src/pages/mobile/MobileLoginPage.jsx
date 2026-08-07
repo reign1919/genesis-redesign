@@ -61,7 +61,9 @@ const MobileLoginPage = () => {
       const result = await submitRegistration({ schoolName, teacherWhatsapp });
       setSubmitting(false);
       if (!result.ok) {
-        setFormResult({ ok: false, message: registrationMessage(result) });
+        const errorMsg = registrationMessage(result);
+        console.error('[Mobile Registration Failed]', { code: result.code, message: errorMsg, raw: result });
+        setFormResult({ ok: false, message: errorMsg });
         return;
       }
       setSchoolName('');
@@ -74,6 +76,7 @@ const MobileLoginPage = () => {
     setSubmitting(false);
     setPassword('');
     if (!result.ok) {
+      console.error('[Mobile Login Failed]', result);
       setFormResult({ ok: false, message: 'Invalid school code or password.' });
       return;
     }

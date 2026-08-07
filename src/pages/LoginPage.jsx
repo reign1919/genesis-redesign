@@ -87,7 +87,9 @@ const LoginPage = () => {
       setSubmitting(false);
 
       if (!result.ok) {
-        setFormResult({ ok: false, message: registrationMessage(result) });
+        const errorMsg = registrationMessage(result);
+        console.error('[Registration Submission Failed]', { code: result.code, message: errorMsg, raw: result });
+        setFormResult({ ok: false, message: errorMsg });
         return;
       }
 
@@ -104,6 +106,7 @@ const LoginPage = () => {
     setSubmitting(false);
     setPassword('');
     if (!result.ok) {
+      console.error('[Login Failed]', result);
       setFormResult({
         ok: false,
         message: 'Invalid school code or password. Check the credentials sent by The Genesis Council.',

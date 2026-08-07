@@ -26,19 +26,26 @@ async function callFunction(name, { method, body, authenticated = true }) {
       },
       body: body ? JSON.stringify(body) : undefined,
     });
-  } catch {
+  } catch (err) {
+    console.error(`[Edge Function ${name} Fetch Network Error]`, err);
     return { ok: false, code: 'SERVICE_UNAVAILABLE' };
   }
 
   let payload;
   try {
     payload = await response.json();
-  } catch {
+  } catch (err) {
+    console.error(`[Edge Function ${name} Parse Error] Status: ${response?.status}`, err);
     return { ok: false, code: 'SERVICE_UNAVAILABLE' };
   }
 
   if (!payload || typeof payload !== 'object' || typeof payload.code !== 'string') {
+    console.error(`[Edge Function ${name} Invalid Payload]`, payload);
     return { ok: false, code: 'SERVICE_UNAVAILABLE' };
+  }
+
+  if (!response.ok || payload.ok !== true) {
+    console.error(`[Edge Function ${name} Error Response] Code: ${payload.code}, Message: ${payload.message}`);
   }
 
   return {
