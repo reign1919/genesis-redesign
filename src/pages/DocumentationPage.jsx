@@ -17,11 +17,16 @@ const DocumentationPage = () => {
 
   return (
     <div className="docs-container">
-      <div className="docs-topbar">
-        <a href="https://genesisfest.ivwschool.com/events" className="docs-back-btn" aria-label="Go back to Events">
-          ← BACK
+      <header className="docs-tech-header">
+        <span className="docs-header-link docs-header-left">GENESIS TECH FEST // DOCUMENTATION</span>
+        <a
+          href="https://genesisfest.ivwschool.com/events"
+          className="docs-header-link docs-header-right"
+          aria-label="Go back to Events"
+        >
+          RETURN TO EVENTS
         </a>
-      </div>
+      </header>
       <div className="docs-sidebar">
         <h2 className="docs-title">Documentation</h2>
         <div className="docs-list">
