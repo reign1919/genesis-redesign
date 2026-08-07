@@ -175,7 +175,7 @@ const LoginPage = () => {
               <span className="brand-tagline-code">git commit -m </span>
               <em>"innovate, ideate, inspire"</em>
             </p>
-            <div className="brand-year-tag label-caps">Tech Fest — 2025</div>
+            <div className="brand-year-tag label-caps">Tech Fest — 2026</div>
           </div>
 
           {/* Grid crosshair */}
