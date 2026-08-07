@@ -19,6 +19,8 @@ function registrationMessage(result) {
     REGISTRATION_REJECTED: 'Thank you for your interest. Your school registration was not approved for this edition of Genesis.',
     RATE_LIMITED: 'Too many attempts. Try again later.',
     ENROLLMENT_CLOSED: 'School enrollment is temporarily closed.',
+    ORIGIN_NOT_ALLOWED: 'Registration requests from this origin are not allowed.',
+    SERVICE_UNAVAILABLE: 'Registration server is temporarily unavailable. Please try again later.',
   };
   return messages[result.code] || 'Registration is temporarily unavailable. Please try again later.';
 }

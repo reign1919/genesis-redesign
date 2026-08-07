@@ -3,6 +3,8 @@ const LOCAL_DEVELOPMENT_ORIGINS = [
   'http://127.0.0.1:5173',
   'http://localhost:4173',
   'http://127.0.0.1:4173',
+  'https://genesisfest.ivwschool.com',
+  'http://genesisfest.ivwschool.com',
 ];
 
 export type CorsDecision = {
