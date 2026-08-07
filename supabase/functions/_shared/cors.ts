@@ -5,6 +5,7 @@ const LOCAL_DEVELOPMENT_ORIGINS = [
   'http://127.0.0.1:4173',
   'https://genesisfest.ivwschool.com',
   'http://genesisfest.ivwschool.com',
+  'https://genesistechfest.vercel.app',
 ];
 
 export type CorsDecision = {
