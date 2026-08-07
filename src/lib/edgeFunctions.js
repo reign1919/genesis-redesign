@@ -22,6 +22,7 @@ async function callFunction(name, { method, body, authenticated = true }) {
   try {
     response = await fetch(`${publicSupabaseUrl}/functions/v1/${name}`, {
       method,
+      cache: 'no-store',
       headers: {
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
         apikey: publicSupabaseKey,
@@ -36,7 +37,8 @@ async function callFunction(name, { method, body, authenticated = true }) {
 
   let payload;
   try {
-    payload = await response.json();
+    const text = await response.text();
+    payload = JSON.parse(text);
   } catch (err) {
     const contentType = response.headers.get('content-type') || '';
     console.error(`[Edge Function ${name} Parse Error] Status: ${response?.status}, Content-Type: ${contentType}`, err);
