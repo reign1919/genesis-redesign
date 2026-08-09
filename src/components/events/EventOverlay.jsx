@@ -78,10 +78,6 @@ const EventOverlay = ({
                 <span className="data-value">{event.date}</span>
               </div>
               <div className="data-row">
-                <span className="data-key">TIME / WINDOW</span>
-                <span className="data-value">{event.time}</span>
-              </div>
-              <div className="data-row">
                 <span className="data-key">TEAM SIZE</span>
                 <span className="data-value">{event.teamSize}</span>
               </div>
