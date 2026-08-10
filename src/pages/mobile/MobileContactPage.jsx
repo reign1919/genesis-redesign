@@ -41,7 +41,7 @@ const contacts = [
     ),
     label: 'LOCATION',
     value: 'Indus Valley World School, Kolkata',
-    href: 'https://maps.google.com',
+    href: 'https://www.google.com/maps/place/INDUS+VALLEY+WORLD+SCHOOL,+88,+Eastern+Metropolitan+Bypass,+near+PEERLESS+HOSPITAL,+behind+Satyajit+Ray+Film+Institution,+Ajoy+Nagar,+Pancha+Sayar,+Kolkata,+West+Bengal+700094/@22.4845545,88.398642,17z/data=!4m6!3m5!1s0x3a02715f26097ee7:0x8d795263e5b9976b!8m2!3d22.4845545!4d88.398642!16s%2Fg%2F11sb84xhtw?g_ep=Eg1tbF8yMDI2MDgwNF8wIOC7DCoASAJQAg%3D%3D',
     meta: 'Lat: 22.4845545°N / Lng: 88.3960671°E',
   },
 ];
