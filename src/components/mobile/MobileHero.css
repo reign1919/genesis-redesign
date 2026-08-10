@@ -142,6 +142,33 @@
   background: #1A1616;
 }
 
+.m-hero-partner-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: rgba(139, 26, 26, 0.25);
+  border: 1px solid var(--accent-bright, #FD625F);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  box-shadow: 0 0 16px rgba(253, 98, 95, 0.3);
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.m-hero-partner-cta:active {
+  background: var(--accent, #8B1A1A);
+  box-shadow: 0 0 24px rgba(253, 98, 95, 0.5);
+}
+
+.m-partner-star {
+  color: var(--accent-bright, #FD625F);
+  font-size: 14px;
+}
+
 .m-cta-arrow {
   font-size: 18px;
   transition: transform 0.25s var(--ease-out);

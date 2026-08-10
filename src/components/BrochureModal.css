@@ -1,0 +1,202 @@
+.brochure-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.brochure-modal {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--bg-surface, #1A1C1C);
+  border: 1px solid var(--border-accent, rgba(139, 26, 26, 0.45));
+  box-shadow: 0 0 40px rgba(139, 26, 26, 0.25);
+  padding: 32px;
+  color: var(--text, #F1F1F1);
+  font-family: var(--font-body, 'Space Grotesk', sans-serif);
+}
+
+.brochure-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-secondary, #CDC4C4);
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.brochure-close-btn:hover {
+  color: var(--accent-bright, #FD625F);
+}
+
+.brochure-header {
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.brochure-badge {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--accent-bright, #FD625F);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.brochure-title {
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  font-family: var(--font-display, 'Orbit', sans-serif);
+}
+
+.brochure-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary, #CDC4C4);
+  margin: 0;
+}
+
+.brochure-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.brochure-stat-card {
+  background: var(--bg-elevated, #111111);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  padding: 14px 10px;
+  text-align: center;
+}
+
+.stat-val {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent-bright, #FD625F);
+  font-family: var(--font-display, 'Orbit', sans-serif);
+}
+
+.stat-lbl {
+  font-size: 10px;
+  color: var(--text-secondary, #CDC4C4);
+  letter-spacing: 0.5px;
+}
+
+.brochure-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.brochure-section {
+  background: var(--bg-elevated, #111111);
+  border-left: 3px solid var(--accent, #8B1A1A);
+  padding: 14px 18px;
+}
+
+.section-heading {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-bright, #FD625F);
+  letter-spacing: 1px;
+  margin: 0 0 6px 0;
+}
+
+.section-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary, #CDC4C4);
+  margin: 0;
+}
+
+.brochure-contact-box {
+  background: rgba(139, 26, 26, 0.1);
+  border: 1px dashed var(--border-accent, rgba(139, 26, 26, 0.45));
+  padding: 16px;
+}
+
+.contact-heading {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-bright, #FD625F);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.contact-detail {
+  font-size: 13px;
+  color: var(--text, #F1F1F1);
+  margin: 4px 0;
+}
+
+.brochure-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.brochure-btn {
+  padding: 12px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  font-family: var(--font-label, serif);
+}
+
+.brochure-btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text, #F1F1F1);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+}
+
+.brochure-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-strong, rgba(255, 255, 255, 0.2));
+}
+
+.brochure-btn-primary {
+  background: var(--accent, #8B1A1A);
+  color: #ffffff;
+  border: 1px solid var(--accent-mid, #AC322E);
+}
+
+.brochure-btn-primary:hover {
+  background: var(--accent-mid, #AC322E);
+  box-shadow: 0 0 15px rgba(253, 98, 95, 0.3);
+}
+
+@media (max-width: 640px) {
+  .brochure-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .brochure-actions {
+    flex-direction: column;
+  }
+  .brochure-btn {
+    width: 100%;
+  }
+}

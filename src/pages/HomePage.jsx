@@ -54,15 +54,21 @@ const HomePage = () => {
         <Link to="/" className="home-header-link header-left" aria-label="Go to the home page">
           GENESIS TECH FEST
         </Link>
-        <a
-          href="https://www.ivwschool.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="home-header-link header-right"
-          aria-label="Visit the Indus Valley World School website in a new tab"
-        >
-          INDUS VALLEY WORLD SCHOOL
-        </a>
+        <div className="header-right-group">
+          <Link to="/partner" className="header-partner-btn label-caps">
+            <span className="partner-pulse-dot" />
+            <span>PARTNER WITH US</span>
+          </Link>
+          <a
+            href="https://www.ivwschool.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="home-header-link header-right"
+            aria-label="Visit the Indus Valley World School website in a new tab"
+          >
+            INDUS VALLEY WORLD SCHOOL
+          </a>
+        </div>
       </header>
       
       <div className="data-accent left-accent"><SysReadyCounter /></div>
@@ -96,7 +102,11 @@ const HomePage = () => {
 
         {/* FOOTER */}
         <footer className="homepage-footer">
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Link to="/partner" className="docs-link-btn partner-footer-highlight">
+              <span style={{ color: '#FD625F', fontWeight: 'bold' }}>✦</span>
+              <span>PARTNERSHIP</span>
+            </Link>
             <Link to="/docs" className="docs-link-btn">
               <img src={folderIcon} alt="Folder" className="footer-folder-icon" />
               <span>DOCUMENTATION</span>

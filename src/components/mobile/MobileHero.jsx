@@ -67,12 +67,13 @@ const MobileHero = () => {
         <code>{text}<span className="m-cursor blink">_</span></code>
       </div>
 
-      {/* CTA */}
+      {/* CTA Row */}
       <div className="m-hero-cta-row">
         <Link to="/login" className="m-hero-cta">
           <span>REGISTER NOW</span>
           <span className="m-cta-arrow">→</span>
         </Link>
+
         {isLoaded && isLoggedIn && (
           <Link to="/dashboard" className="m-hero-dashboard-btn">
             <span className="m-dash-icon">◉</span>

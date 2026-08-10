@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './MobileWarningPopup.css';
 
 export default function MobileWarningPopup() {
   const [isVisible, setIsVisible] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     // Check if the user has already dismissed the warning in this session
@@ -17,7 +19,8 @@ export default function MobileWarningPopup() {
     sessionStorage.setItem('genesis_mobile_warning_dismissed', 'true');
   };
 
-  if (!isVisible) return null;
+  // Do not render warning popup on the partners page or if already dismissed
+  if (!isVisible || location.pathname === '/partner') return null;
 
   return (
     <div className="m-warning-overlay">

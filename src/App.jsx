@@ -10,6 +10,7 @@ const HomePage = React.lazy(() => import('./pages/HomePage'));
 const EventsPage = React.lazy(() => import('./pages/EventsPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
+const PartnerPage = React.lazy(() => import('./pages/PartnerPage'));
 const SchoolDashboardPage = React.lazy(() => import('./pages/SchoolDashboardPage'));
 const ReviewRegistrationPage = React.lazy(() => import('./pages/ReviewRegistrationPage'));
 const EventDetailPage = React.lazy(() => import('./pages/EventDetailPage'));
@@ -22,6 +23,7 @@ const MobileHomePage = React.lazy(() => import('./pages/mobile/MobileHomePage'))
 const MobileEventsPage = React.lazy(() => import('./pages/mobile/MobileEventsPage'));
 const MobileLoginPage = React.lazy(() => import('./pages/mobile/MobileLoginPage'));
 const MobileContactPage = React.lazy(() => import('./pages/mobile/MobileContactPage'));
+const MobilePartnerPage = React.lazy(() => import('./pages/mobile/MobilePartnerPage'));
 const MobileSchoolDashboardPage = React.lazy(() => import('./pages/mobile/MobileSchoolDashboardPage'));
 const MobileReviewRegistrationPage = React.lazy(() => import('./pages/mobile/MobileReviewRegistrationPage'));
 const MobileDocumentationPage = React.lazy(() => import('./pages/mobile/MobileDocumentationPage'));
@@ -38,10 +40,11 @@ function AppRouter() {
           <Route path="/" element={isMobile ? <MobileHomePage /> : <HomePage />} />
           <Route path="/events" element={isMobile ? <MobileEventsPage /> : <EventsPage />} />
           <Route path="/login" element={isMobile ? <MobileLoginPage /> : <LoginPage />} />
+          <Route path="/contact" element={isMobile ? <MobileContactPage /> : <ContactPage />} />
+          <Route path="/partner" element={isMobile ? <MobilePartnerPage /> : <PartnerPage />} />
           <Route path="/dashboard" element={isMobile ? <MobileSchoolDashboardPage /> : <SchoolDashboardPage />} />
           <Route path="/dashboard/review" element={isMobile ? <MobileReviewRegistrationPage /> : <ReviewRegistrationPage />} />
           <Route path="/dashboard/:eventSlug" element={<EventDetailPage />} />
-          <Route path="/contact" element={isMobile ? <MobileContactPage /> : <ContactPage />} />
           <Route path="/docs" element={isMobile ? <MobileDocumentationPage /> : <DocumentationPage />} />
           
           {/* Admin stays desktop only */}

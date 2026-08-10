@@ -1,0 +1,121 @@
+.wa-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.wa-modal {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-surface, #1A1C1C);
+  border: 1px solid var(--border-accent, rgba(139, 26, 26, 0.45));
+  box-shadow: 0 0 40px rgba(139, 26, 26, 0.25);
+  padding: 32px;
+  color: var(--text, #F1F1F1);
+  font-family: var(--font-body, 'Space Grotesk', sans-serif);
+}
+
+.wa-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-secondary, #CDC4C4);
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.wa-close-btn:hover {
+  color: var(--accent-bright, #FD625F);
+}
+
+.wa-header {
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.wa-badge {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--accent-bright, #FD625F);
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.wa-title {
+  font-family: var(--font-display, 'Orbit', sans-serif);
+  font-size: 22px;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+}
+
+.wa-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary, #CDC4C4);
+  margin: 0;
+}
+
+.wa-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.wa-contact-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-elevated, #111111);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  border-left: 3px solid #25d366;
+  padding: 18px 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s var(--ease-out, ease);
+}
+
+.wa-contact-card:hover {
+  border-color: #25d366;
+  background: rgba(37, 211, 102, 0.08);
+  transform: translateX(4px);
+}
+
+.wa-card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.wa-contact-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.wa-contact-phone {
+  font-size: 13px;
+  color: var(--text-secondary, #CDC4C4);
+  margin-top: 2px;
+}
+
+.wa-contact-btn {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #25d366;
+  font-weight: 700;
+}

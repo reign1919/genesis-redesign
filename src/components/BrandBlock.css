@@ -61,6 +61,42 @@
   animation: crtPulse 4s infinite, glitchIn 0.8s ease-out forwards;
 }
 
+.brand-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.brand-partner-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 22px;
+  background: rgba(139, 26, 26, 0.2);
+  border: 1px solid var(--accent-bright, #FD625F);
+  color: #ffffff;
+  font-family: var(--font-body, 'Space Grotesk', sans-serif);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  border-radius: 2px;
+  box-shadow: 0 0 16px rgba(253, 98, 95, 0.25);
+  transition: all 0.25s ease;
+}
+
+.brand-partner-btn:hover {
+  background: var(--accent, #8B1A1A);
+  box-shadow: 0 0 28px rgba(253, 98, 95, 0.5);
+  transform: translateY(-2px);
+}
+
+.partner-star {
+  color: var(--accent-bright, #FD625F);
+}
+
 @keyframes crtPulse {
   0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
   50% { text-shadow: 0 0 40px rgba(255, 255, 255, 0.4); }
