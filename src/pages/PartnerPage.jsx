@@ -351,7 +351,7 @@ const PartnerPage = () => {
                     <div className="card-hud-corner top-left-mark">+</div>
                     <div className="card-hud-corner top-right-mark">+</div>
                     <span className="zigzag-phase label-caps">TALENT ACCESS</span>
-                    <h3 className="zigzag-title">High School Developer, Cybersecurity, & Creative Talent</h3>
+                    <h3 className="zigzag-title">High School Developer Cybersecurity & Creative Talent</h3>
                     <p className="zigzag-desc">
                       Connect directly with top-performing high school developers, builders, and cybersecurity talent for future recruitment and mentorship.
                     </p>
