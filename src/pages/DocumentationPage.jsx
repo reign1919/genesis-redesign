@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import SEO from '../components/SEO';
 import './DocumentationPage.css';
 import folderIcon from '../assets/folder.png';
 
@@ -17,6 +18,12 @@ const DocumentationPage = () => {
 
   return (
     <div className="docs-container">
+      <SEO
+        title="Documentation & Guidelines — Genesis 2026 | Tech Fest Rules & Privacy Policy"
+        description="Official documentation, event rules, API details, and privacy policy for Genesis 2026 Tech Fest by Indus Valley World School."
+        canonical="/docs"
+      />
+      <h1 className="sr-only">Genesis 2026 Documentation and Guidelines</h1>
       <header className="docs-tech-header">
         <span className="docs-header-link docs-header-left">GENESIS TECH FEST // DOCUMENTATION</span>
         <a
@@ -36,7 +43,7 @@ const DocumentationPage = () => {
               className={`doc-item ${activeDoc.id === doc.id ? 'active' : ''}`}
               onClick={() => setActiveDoc(doc)}
             >
-              <img src={folderIcon} alt="Folder" className="folder-icon" />
+              <img src={folderIcon} alt="Documentation Folder Icon" className="folder-icon" />
               <span>{doc.title}</span>
             </button>
           ))}

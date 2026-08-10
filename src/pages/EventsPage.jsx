@@ -7,6 +7,8 @@ import EventOverlay from '../components/events/EventOverlay';
 import SysReadyCounter from '../components/SysReadyCounter';
 import CreatorsPopup from '../components/CreatorsPopup';
 import { eventsData, getEventById } from '../lib/eventsData';
+import SEO from '../components/SEO';
+import { getMainEventSchema, getSpecificEventSchema } from '../lib/seoData';
 import folderIcon from '../assets/folder.png';
 import webDevIcon from '../assets/web-development.png';
 import './EventsPage.css';
@@ -67,6 +69,15 @@ const EventsPage = () => {
     setSearchParams({}, { replace: true });
   };
 
+  const seoTitle = activeEvent
+    ? `${activeEvent.title} — Genesis 2026 Tech Fest`
+    : 'Events Rack — Genesis 2026 | Hackathon, Coding, Robotics & Creative Competitions';
+  const seoDesc = activeEvent
+    ? activeEvent.brief
+    : 'Explore 10 flagship, technical, and creative events at Genesis 2026 Tech Fest: 48-Hour Hackathon, Buildathon, Zero Day CTF, Overclocked Robo Wars, Code Clash, and more.';
+  const seoCanonical = activeEvent ? `/events?id=${activeEvent.id}` : '/events';
+  const seoJsonLd = activeEvent ? getSpecificEventSchema(activeEvent) : getMainEventSchema();
+
   return (
     <div
       className="events-page-wrapper"
@@ -74,6 +85,14 @@ const EventsPage = () => {
       onMouseMove={handleMouseMove}
       style={{ '--mouse-x': '50%', '--mouse-y': '50%' }}
     >
+      <SEO
+        title={seoTitle}
+        description={seoDesc}
+        canonical={seoCanonical}
+        jsonLd={seoJsonLd}
+      />
+      <h1 className="sr-only">Genesis 2026 Tech Fest Events</h1>
+
       {/* 2. Dark Noise & Grid Overlays */}
       <div className="noise-overlay" />
       <div className="grid-overlay" />
@@ -136,11 +155,11 @@ const EventsPage = () => {
       <footer className="events-page-footer">
         <div style={{ display: 'flex', gap: '16px' }}>
           <Link to="/docs" className="docs-link-btn">
-            <img src={folderIcon} alt="Folder" className="footer-folder-icon" />
+            <img src={folderIcon} alt="Documentation Folder Icon" className="footer-folder-icon" />
             <span>DOCUMENTATION</span>
           </Link>
           <button className="docs-link-btn" onClick={() => setShowCreators(true)}>
-            <img src={webDevIcon} alt="Web Dev" className="footer-folder-icon" />
+            <img src={webDevIcon} alt="Developers Icon" className="footer-folder-icon" />
             <span>DEVELOPERS</span>
           </button>
         </div>

@@ -6,6 +6,7 @@ import { useAuth } from '../../lib/authContext';
 import LoadingScreen from '../../components/LoadingScreen';
 import MobileBackground from '../../components/mobile/MobileBackground';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
+import SEO from '../../components/SEO';
 import RosterSummaryView from '../../components/RosterSummaryView';
 import { fetchSchoolRoster } from '../../lib/rosterHelper';
 import { ArrowLeft, Printer } from 'lucide-react';
@@ -107,6 +108,11 @@ export default function MobileReviewRegistrationPage() {
 
   return (
     <div className="mob-review-page">
+      <SEO
+        title="Roster Review — Genesis 2026"
+        canonical="/dashboard/review"
+        noindex={true}
+      />
       <MobileBackground />
       <MobileHamburger />
 

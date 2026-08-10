@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 import MobileBackground from '../../components/mobile/MobileBackground';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
+import SEO from '../../components/SEO';
 import './MobileDocumentationPage.css';
 
 // Import raw markdown files
@@ -20,6 +21,11 @@ const MobileDocumentationPage = () => {
 
   return (
     <div className="mdocs-wrapper">
+      <SEO
+        title="Documentation & Guidelines — Genesis 2026 | Tech Fest Rules & Privacy Policy"
+        description="Official documentation, event rules, API details, and privacy policy for Genesis 2026 Tech Fest by Indus Valley World School."
+        canonical="/docs"
+      />
       <MobileBackground />
       <div className="m-grid-overlay" aria-hidden="true" />
       <MobileHamburger />

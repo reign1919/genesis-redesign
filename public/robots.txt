@@ -1,6 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /dashboard/
+Disallow: /dashboard
 Disallow: /admin/
+Disallow: /admin
+Disallow: /login
 
-Sitemap: https://genesisfest.in/sitemap.xml
+Sitemap: https://genesisfest.ivwschool.com/sitemap.xml

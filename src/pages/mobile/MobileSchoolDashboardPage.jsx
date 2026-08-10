@@ -6,6 +6,7 @@ import { useAuth } from '../../lib/authContext';
 import LoadingScreen from '../../components/LoadingScreen';
 import MobileBackground from '../../components/mobile/MobileBackground';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
+import SEO from '../../components/SEO';
 import { eventsData } from '../../lib/eventsData';
 import {
   CircleDashed,
@@ -219,6 +220,11 @@ export default function MobileSchoolDashboardPage() {
 
   return (
     <div className="mdash-wrapper">
+      <SEO
+        title="School Dashboard — Genesis 2026"
+        canonical="/dashboard"
+        noindex={true}
+      />
       <MobileBackground />
       <div className="m-grid-overlay" aria-hidden="true" />
       <MobileHamburger />

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MobileBackground from '../../components/mobile/MobileBackground';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
+import SEO from '../../components/SEO';
 import './MobileContactPage.css';
 
 const contacts = [
@@ -80,6 +81,11 @@ const MobileContactPage = () => {
 
   return (
     <div className="mc-wrapper">
+      <SEO
+        title="Contact & Support — Genesis 2026 | Indus Valley World School"
+        description="Get in touch with The Genesis Council for registrations, event guidelines, and queries regarding Genesis 2026 Inter-School Tech Fest."
+        canonical="/contact"
+      />
       <MobileBackground />
       <div className="m-grid-overlay" aria-hidden="true" />
       <MobileHamburger />

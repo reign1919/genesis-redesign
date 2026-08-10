@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './ContactPage.css';
 import NeuralBackground from '../components/NeuralBackground';
 import CompassSVG from '../components/CompassSVG';
+import SEO from '../components/SEO';
 
 /* ─── Morse code encoder for the decorative ticker ─── */
 const MORSE = {
@@ -122,6 +123,11 @@ const ContactPage = () => {
       onMouseMove={handleMouseMove}
       style={{ '--mouse-x': '50%', '--mouse-y': '50%' }}
     >
+      <SEO
+        title="Contact & Support — Genesis 2026 | Indus Valley World School"
+        description="Get in touch with The Genesis Council for registrations, event guidelines, and queries regarding Genesis 2026 Inter-School Tech Fest."
+        canonical="/contact"
+      />
       {/* Background */}
       <div className="contact-background">
         <NeuralBackground />

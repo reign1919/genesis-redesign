@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import SecurePage from '../components/SecurePage';
+import SEO from '../components/SEO';
 import { getEventById } from '../lib/eventsData';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/authContext';
@@ -553,6 +554,11 @@ export default function EventDetailPage() {
         </div>
       }
     >
+      <SEO
+        title={`${dbEvent.name} Registration — Genesis 2026`}
+        canonical={`/dashboard/${eventSlug}`}
+        noindex={true}
+      />
       <div className="event-detail-container">
         {/* Status Header Bar */}
         <div className="event-detail-status-bar secure-card">

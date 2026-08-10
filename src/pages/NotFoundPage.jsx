@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import NeuralBackground from '../components/NeuralBackground';
 import useIsMobile from '../lib/useIsMobile';
 import MobileBackground from '../components/mobile/MobileBackground';
+import SEO from '../components/SEO';
 import './NotFoundPage.css';
 
 export default function NotFoundPage() {
@@ -27,6 +28,11 @@ export default function NotFoundPage() {
 
   return (
     <div className="notfound-wrapper">
+      <SEO
+        title="404 Page Not Found — Genesis 2026"
+        description="The requested page could not be found."
+        noindex={true}
+      />
       {/* Show appropriate background based on device */}
       {isMobile ? <MobileBackground /> : <NeuralBackground />}
       
