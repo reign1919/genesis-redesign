@@ -5,8 +5,8 @@
 export const SITE_DOMAIN = import.meta.env.VITE_SITE_URL || 'https://genesisfest.ivwschool.com';
 
 export const DEFAULT_SEO = {
-  title: 'Genesis 2026 — git commit -m "Ideate, Innovate, Inspire"',
-  description: 'Genesis 2026 is the premier inter-school tech festival by Indus Valley World School. Explore hackathons, coding contests, robotics wars, cybersecurity CTF, and digital art challenges.',
+  title: 'Genesis 2026 | Inter-School Tech Fest by Indus Valley World School',
+  description: 'Genesis 2026 is the premier inter-school tech festival organized by Indus Valley World School (IVWS). Explore hackathons, coding contests, robotics wars, cybersecurity CTF, and digital art challenges.',
   siteName: 'Genesis 2026 Tech Fest',
   ogImage: '/og-image.png',
   twitterCard: 'summary_large_image',
@@ -34,8 +34,8 @@ export const getMainEventSchema = () => ({
   '@type': 'Event',
   'name': 'Genesis 2026 Tech Fest',
   'description': 'The premier first-edition inter-school tech festival organized by Indus Valley World School featuring 10 flagship, technical, and creative competitions.',
-  'startDate': '2026-10-24T09:00:00+05:30',
-  'endDate': '2026-10-26T19:00:00+05:30',
+  'startDate': '2026-09-26',
+  'endDate': '2026-09-26',
   'eventStatus': 'https://schema.org/EventScheduled',
   'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
   'location': {
@@ -79,8 +79,8 @@ export const getSpecificEventSchema = (event) => {
     '@type': 'Event',
     'name': `${event.title} — Genesis 2026`,
     'description': event.brief,
-    'startDate': '2026-10-24T09:00:00+05:30',
-    'endDate': '2026-10-26T19:00:00+05:30',
+    'startDate': '2026-09-26',
+    'endDate': '2026-09-26',
     'eventStatus': 'https://schema.org/EventScheduled',
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'location': {

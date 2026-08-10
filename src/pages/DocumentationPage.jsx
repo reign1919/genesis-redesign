@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import SEO from '../components/SEO';
 import './DocumentationPage.css';
@@ -26,13 +27,13 @@ const DocumentationPage = () => {
       <h1 className="sr-only">Genesis 2026 Documentation and Guidelines</h1>
       <header className="docs-tech-header">
         <span className="docs-header-link docs-header-left">GENESIS TECH FEST // DOCUMENTATION</span>
-        <a
-          href="https://genesisfest.ivwschool.com/events"
+        <Link
+          to="/events"
           className="docs-header-link docs-header-right"
           aria-label="Go back to Events"
         >
           RETURN TO EVENTS
-        </a>
+        </Link>
       </header>
       <div className="docs-sidebar">
         <h2 className="docs-title">Documentation</h2>

@@ -1,4 +1,5 @@
 import React, { useState, memo } from 'react';
+import { Link } from 'react-router-dom';
 import Reel from './Reel';
 import CircuitBackground from './CircuitBackground';
 import { EVENT_CLUSTERS } from '../../lib/eventsData';
@@ -80,8 +81,9 @@ const CircuitBoardGrid = ({
           const nodeSize = event.flagship ? 88 : 68;
 
           return (
-            <div
+            <Link
               key={event.id}
+              to={`/events?id=${event.id}`}
               className={`pcb-node-anchor ${event.flagship ? 'flagship-anchor' : ''} cluster-${event.category.toLowerCase()} ${isClusterMatch ? 'cluster-active' : ''}`}
               style={{
                 left: `${event.gridPosition.x}%`,
@@ -89,6 +91,13 @@ const CircuitBoardGrid = ({
               }}
               onMouseEnter={() => handleMouseEnter(event)}
               onMouseLeave={handleMouseLeave}
+              onClick={(e) => {
+                if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && e.button === 0) {
+                  e.preventDefault();
+                  onSelectEvent(event, e);
+                }
+              }}
+              aria-label={`View ${event.title} event details`}
             >
               <Reel
                 size={nodeSize}
@@ -97,9 +106,8 @@ const CircuitBoardGrid = ({
                 isActive={isSelected || isClusterMatch}
                 label={event.title}
                 reelNumber={event.reelIndex}
-                onClick={(e) => onSelectEvent(event, e)}
               />
-            </div>
+            </Link>
           );
         })}
       </div>

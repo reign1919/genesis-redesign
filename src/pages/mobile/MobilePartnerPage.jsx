@@ -4,6 +4,8 @@ import MobileBackground from '../../components/mobile/MobileBackground';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
 import BrochureModal from '../../components/BrochureModal';
 import WhatsAppModal from '../../components/WhatsAppModal';
+import SEO from '../../components/SEO';
+import { getOrganizationSchema } from '../../lib/seoData';
 import './MobilePartnerPage.css';
 
 const MobilePartnerPage = () => {
@@ -64,6 +66,12 @@ const MobilePartnerPage = () => {
 
   return (
     <div className="mp-wrapper">
+      <SEO
+        title="Partner With Genesis 2026 | IVWS"
+        description="Partner with Genesis 2026, the inter-school tech fest by Indus Valley World School (IVWS). Explore sponsorship tiers, track co-branding, and campus stall opportunities."
+        canonical="/partnerships"
+        jsonLd={getOrganizationSchema()}
+      />
       <MobileBackground />
       <div className="m-grid-overlay" aria-hidden="true" />
       <MobileHamburger />
@@ -89,7 +97,7 @@ const MobilePartnerPage = () => {
             Partner With <span className="mp-headline-accent">Genesis 2026</span>
           </h1>
           <p className="mp-subhead body-md">
-            Connect your brand with top-performing high school students, educators, and school leaders across Kolkata.
+            Connect your brand with top-performing high school students, educators, and school leaders across the inter-school tech fest by Indus Valley World School (IVWS).
           </p>
         </div>
 

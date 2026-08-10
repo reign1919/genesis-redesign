@@ -33,8 +33,8 @@ const HomePage = () => {
       style={{ '--mouse-x': '50%', '--mouse-y': '50%' }}
     >
       <SEO
-        title="Genesis 2026 — git commit -m &quot;Ideate, Innovate, Inspire&quot;"
-        description="Join Genesis 2026, the premier first-edition inter-school tech festival by Indus Valley World School. Featuring hackathons, robotics, cybersecurity CTF, coding contests, and digital art."
+        title="Genesis 2026 | Inter-School Tech Fest by Indus Valley World School"
+        description="Join Genesis 2026, the premier first-edition inter-school tech festival by Indus Valley World School (IVWS). Featuring hackathons, robotics, cybersecurity CTF, coding contests, and digital art."
         canonical="/"
         jsonLd={[getOrganizationSchema(), getMainEventSchema()]}
       />
@@ -63,7 +63,7 @@ const HomePage = () => {
           GENESIS TECH FEST
         </Link>
         <div className="header-right-group">
-          <Link to="/partner" className="header-partner-btn label-caps">
+          <Link to="/partnerships" className="header-partner-btn label-caps">
             <span className="partner-pulse-dot" />
             <span>PARTNER WITH US</span>
           </Link>
@@ -111,7 +111,7 @@ const HomePage = () => {
         {/* FOOTER */}
         <footer className="homepage-footer">
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Link to="/partner" className="docs-link-btn partner-footer-highlight">
+            <Link to="/partnerships" className="docs-link-btn partner-footer-highlight">
               <span style={{ color: '#FD625F', fontWeight: 'bold' }}>✦</span>
               <span>PARTNERSHIP</span>
             </Link>

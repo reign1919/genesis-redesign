@@ -60,6 +60,7 @@ const MobileHero = () => {
 
       {/* Title */}
       <h1 className="m-hero-title" title="Genesis: Innovate, Ideate, Inspire — The First Edition Inter-School Tech Festival">GENESIS</h1>
+      <p className="m-hero-subtitle label-caps">Inter-School Tech Fest | Indus Valley World School (IVWS)</p>
       <span className="sr-only">Genesis: Innovate, Ideate, Inspire — The First Edition Inter-School Tech Festival</span>
 
       {/* Typewriter */}

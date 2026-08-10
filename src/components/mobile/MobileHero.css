@@ -69,6 +69,16 @@
   animation: mobileGlitchIn 0.8s ease-out forwards, mobileCrtPulse 4s infinite;
 }
 
+.m-hero-subtitle {
+  font-family: var(--font-body, 'Space Grotesk', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--accent-bright, #FD625F);
+  text-transform: uppercase;
+  margin: -14px 0 0 0;
+}
+
 @keyframes mobileGlitchIn {
   0% { transform: translate(0); opacity: 0; }
   20% { transform: translate(-6px, 3px); text-shadow: 3px 0 var(--accent-bright), -3px 0 cyan; opacity: 1; }

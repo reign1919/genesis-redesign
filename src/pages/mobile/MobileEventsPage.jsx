@@ -86,10 +86,17 @@ const MobileEventsPage = () => {
             const isLeft = index % 2 === 0;
 
             return (
-              <div
+              <Link
                 key={event.id}
+                to={`/events?id=${event.id}`}
                 className={`mobile-node-item ${isLeft ? 'align-left' : 'align-right'} ${event.flagship ? 'flagship-item' : ''}`}
-                onClick={(e) => handleSelectEvent(event, e)}
+                onClick={(e) => {
+                  if (!e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && e.button === 0) {
+                    e.preventDefault();
+                    handleSelectEvent(event, e);
+                  }
+                }}
+                aria-label={`View ${event.title} details`}
               >
                 <div className="node-connector-line" />
                 <div className="node-reel-box">
@@ -105,7 +112,7 @@ const MobileEventsPage = () => {
                   <h3 className="node-title">{event.title}</h3>
                   <span className="node-category-tag">{event.category}</span>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

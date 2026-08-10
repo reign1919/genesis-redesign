@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './lib/authContext';
 import LoadingScreen from './components/LoadingScreen';
 import Layout from './components/Layout';
@@ -41,7 +41,8 @@ function AppRouter() {
           <Route path="/events" element={isMobile ? <MobileEventsPage /> : <EventsPage />} />
           <Route path="/login" element={isMobile ? <MobileLoginPage /> : <LoginPage />} />
           <Route path="/contact" element={isMobile ? <MobileContactPage /> : <ContactPage />} />
-          <Route path="/partner" element={isMobile ? <MobilePartnerPage /> : <PartnerPage />} />
+          <Route path="/partnerships" element={isMobile ? <MobilePartnerPage /> : <PartnerPage />} />
+          <Route path="/partner" element={<Navigate to="/partnerships" replace />} />
           <Route path="/dashboard" element={isMobile ? <MobileSchoolDashboardPage /> : <SchoolDashboardPage />} />
           <Route path="/dashboard/review" element={isMobile ? <MobileReviewRegistrationPage /> : <ReviewRegistrationPage />} />
           <Route path="/dashboard/:eventSlug" element={<EventDetailPage />} />

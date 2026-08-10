@@ -25,8 +25,8 @@ const MobileHomePage = () => {
   return (
     <div className="m-home-wrapper">
       <SEO
-        title="Genesis 2026 — git commit -m &quot;Ideate, Innovate, Inspire&quot;"
-        description="Join Genesis 2026, the premier first-edition inter-school tech festival by Indus Valley World School. Featuring hackathons, robotics, cybersecurity CTF, coding contests, and digital art."
+        title="Genesis 2026 | Inter-School Tech Fest by Indus Valley World School"
+        description="Join Genesis 2026, the premier first-edition inter-school tech festival by Indus Valley World School (IVWS). Featuring hackathons, robotics, cybersecurity CTF, coding contests, and digital art."
         canonical="/"
         jsonLd={[getOrganizationSchema(), getMainEventSchema()]}
       />

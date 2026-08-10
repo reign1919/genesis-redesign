@@ -4,6 +4,8 @@ import './PartnerPage.css';
 import NeuralBackground from '../components/NeuralBackground';
 import BrochureModal from '../components/BrochureModal';
 import WhatsAppModal from '../components/WhatsAppModal';
+import SEO from '../components/SEO';
+import { getOrganizationSchema } from '../lib/seoData';
 
 const SIGNAL_MSGS = [
   'PARTNERSHIP.OPEN // 2026',
@@ -105,6 +107,12 @@ const PartnerPage = () => {
       ref={wrapperRef}
       onMouseMove={handleMouseMove}
     >
+      <SEO
+        title="Partner With Genesis 2026 | IVWS"
+        description="Partner with Genesis 2026, the inter-school tech fest by Indus Valley World School (IVWS). Explore sponsorship tiers, track co-branding, and campus stall opportunities."
+        canonical="/partnerships"
+        jsonLd={getOrganizationSchema()}
+      />
       {/* Background & Overlays */}
       <div className="partner-background">
         <NeuralBackground />
@@ -155,7 +163,7 @@ const PartnerPage = () => {
             Partner With <span className="headline-accent">Genesis 2026</span>
           </h1>
           <p className="partner-subhead body-lg">
-            Connect your brand with top-performing high school developers, builders, and school leaders across Kolkata's premier inter-school festival.
+            Connect your brand with top-performing high school developers, builders, and school leaders across the inter-school tech fest by Indus Valley World School (IVWS).
           </p>
 
           <div className="partner-hero-actions">

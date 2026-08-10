@@ -55,6 +55,7 @@ const BrandBlock = () => {
       <h1 className="brand-title" title="Genesis: Innovate, Ideate, Inspire — The First Edition Inter-School Tech Festival">
         GENESIS
       </h1>
+      <p className="brand-subtitle label-caps">Inter-School Tech Fest | Indus Valley World School (IVWS)</p>
       <span className="sr-only">Genesis: Innovate, Ideate, Inspire — The First Edition Inter-School Tech Festival</span>
       
       <DashboardButton />

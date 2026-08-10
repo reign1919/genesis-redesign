@@ -61,6 +61,16 @@
   animation: crtPulse 4s infinite, glitchIn 0.8s ease-out forwards;
 }
 
+.brand-subtitle {
+  font-family: var(--font-body, 'Space Grotesk', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--accent-bright, #FD625F);
+  text-transform: uppercase;
+  margin: -12px 0 0 0;
+}
+
 .brand-cta-group {
   display: flex;
   align-items: center;
