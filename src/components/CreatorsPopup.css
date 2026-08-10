@@ -1,108 +1,140 @@
+/* ============================================================
+   DEVELOPERS / CREATORS POPUP — High-Octane Cyber Aesthetic
+   ============================================================ */
+
 .creators-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(10, 10, 10, 0.8);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 99999;
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: creatorsFadeIn var(--duration-normal) var(--ease-out);
+  padding: 16px;
+  animation: creatorsFadeIn 0.25s ease-out;
 }
 
 .creators-modal {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-strong);
+  background: var(--bg-surface, #1A1C1C);
+  border: 1px solid var(--border-accent, rgba(139, 26, 26, 0.5));
   border-radius: 4px;
-  padding: 32px;
-  min-width: 320px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 540px;
   position: relative;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  animation: creatorsSlideUp var(--duration-normal) var(--ease-out);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8), 0 0 24px rgba(139, 26, 26, 0.25);
+  animation: creatorsSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .creators-close-btn {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  color: var(--text-muted);
+  top: 14px;
+  right: 14px;
+  color: var(--text-secondary, #CDC4C4);
   font-size: 24px;
   line-height: 1;
-  transition: color var(--duration-fast) var(--ease-out);
-  background: none;
-  border: none;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  border-radius: 2px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.creators-close-btn:hover {
-  color: var(--accent);
+.creators-close-btn:hover,
+.creators-close-btn:active {
+  color: #ffffff;
+  background: var(--accent, #8B1A1A);
+  border-color: var(--accent-bright, #FD625F);
 }
 
 .creators-title {
-  color: var(--accent-light);
-  margin-bottom: 24px;
-  letter-spacing: 0.05em;
+  font-family: var(--font-display, 'Orbit', sans-serif);
+  color: var(--accent-bright, #FD625F);
+  margin-bottom: 20px;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .creators-list {
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: 12px;
   justify-content: center;
 }
 
 .creator-card {
-  background: var(--bg-surface-high);
-  padding: 16px 24px;
-  border-bottom: 2px solid var(--accent);
-  border-radius: 4px;
+  background: var(--bg-elevated, #111111);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border-bottom: 2px solid var(--accent, #8B1A1A);
+  padding: 14px 18px;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--duration-fast) var(--ease-out);
+  transition: all 0.25s ease;
   cursor: pointer;
   flex: 1;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.creator-card:hover {
-  transform: translateY(-4px);
-  border-bottom-color: var(--accent-bright);
-  background: var(--bg-surface-highest);
-}
-
-.creator-quote-box {
-  margin-top: 24px;
-  padding: 16px;
-  background: rgba(139, 26, 26, 0.1);
-  border: 1px solid var(--border-accent);
-  border-radius: 4px;
-  animation: quoteFadeIn 0.3s ease;
-}
-
-.creator-quote-text {
-  font-family: var(--font-display);
-  font-size: 18px;
-  color: var(--text);
-  font-style: italic;
-  margin-bottom: 8px;
-}
-
-.creator-quote-author {
-  font-family: var(--font-label);
-  font-size: 14px;
-  color: var(--accent-light);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+.creator-card:hover,
+.creator-card:active {
+  transform: translateY(-2px);
+  border-bottom-color: var(--accent-bright, #FD625F);
+  border-color: var(--border-accent, rgba(139, 26, 26, 0.6));
+  background: rgba(139, 26, 26, 0.2);
+  box-shadow: 0 4px 16px rgba(139, 26, 26, 0.3);
 }
 
 .creator-name {
-  color: var(--text);
-  font-weight: 500;
+  font-family: var(--font-body, 'Space Grotesk', sans-serif);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
   letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.creator-quote-box {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(139, 26, 26, 0.15);
+  border: 1px solid var(--border-accent, rgba(139, 26, 26, 0.45));
+  border-radius: 2px;
+  animation: quoteFadeIn 0.25s ease-out;
+}
+
+.creator-quote-text {
+  font-family: var(--font-display, 'Orbit', sans-serif);
+  font-size: 15px;
+  color: #ffffff;
+  font-style: italic;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.creator-quote-author {
+  font-family: var(--font-body, 'Space Grotesk', sans-serif);
+  font-size: 12px;
+  color: var(--accent-bright, #FD625F);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 @keyframes creatorsFadeIn {
@@ -111,11 +143,37 @@
 }
 
 @keyframes creatorsSlideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes quoteFadeIn {
-  from { opacity: 0; transform: translateY(5px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- MOBILE SPECIFIC FIXES --- */
+@media (max-width: 640px) {
+  .creators-modal {
+    padding: 24px 16px;
+  }
+
+  .creators-list {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .creator-card {
+    width: 100%;
+    padding: 14px;
+  }
+
+  .creator-name {
+    white-space: normal;
+    font-size: 14px;
+  }
+
+  .creator-quote-text {
+    font-size: 14px;
+  }
 }
