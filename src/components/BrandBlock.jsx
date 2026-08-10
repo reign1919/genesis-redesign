@@ -45,7 +45,7 @@ const BrandBlock = () => {
     <div className="brand-block-container">
       <div className="brand-logos">
         <img src={schoolLogo} alt="Indus Valley World School" className="logo-school" />
-        <img src={festLogo} alt="Genesis Brain Logo" className="logo-fest" />
+        <img src={festLogo} alt="Genesis Tech Fest Logo" className="logo-fest" />
       </div>
       
       <div className="brand-tagline">

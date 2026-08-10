@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import SecurePage from '../components/SecurePage';
+import SEO from '../components/SEO';
 import { loadSchoolCredentials } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/authContext';
@@ -230,6 +231,11 @@ export default function SchoolDashboardPage() {
         </button>
       }
     >
+      <SEO
+        title="School Dashboard — Genesis 2026"
+        canonical="/dashboard"
+        noindex={true}
+      />
       <div className="dash-workspace">
         {/* 1. School Credentials Card with Reveal & Copy buttons */}
         {school && (

@@ -11,6 +11,8 @@ import SysReadyCounter from '../components/SysReadyCounter';
 import folderIcon from '../assets/folder.png';
 import webDevIcon from '../assets/web-development.png';
 import CreatorsPopup from '../components/CreatorsPopup';
+import SEO from '../components/SEO';
+import { getOrganizationSchema, getMainEventSchema } from '../lib/seoData';
 
 const HomePage = () => {
   const [showCreators, setShowCreators] = useState(false);
@@ -30,6 +32,12 @@ const HomePage = () => {
       onMouseMove={handleMouseMove} 
       style={{ '--mouse-x': '50%', '--mouse-y': '50%' }}
     >
+      <SEO
+        title="Genesis 2026 — git commit -m &quot;Ideate, Innovate, Inspire&quot;"
+        description="Join Genesis 2026, the premier first-edition inter-school tech festival by Indus Valley World School. Featuring hackathons, robotics, cybersecurity CTF, coding contests, and digital art."
+        canonical="/"
+        jsonLd={[getOrganizationSchema(), getMainEventSchema()]}
+      />
       
       {/* 1. Constellation Background */}
       <div className="homepage-background">
@@ -108,11 +116,11 @@ const HomePage = () => {
               <span>PARTNERSHIP</span>
             </Link>
             <Link to="/docs" className="docs-link-btn">
-              <img src={folderIcon} alt="Folder" className="footer-folder-icon" />
+              <img src={folderIcon} alt="Documentation Folder Icon" className="footer-folder-icon" />
               <span>DOCUMENTATION</span>
             </Link>
             <button className="docs-link-btn" onClick={() => setShowCreators(true)}>
-              <img src={webDevIcon} alt="Web Dev" className="footer-folder-icon" />
+              <img src={webDevIcon} alt="Developers Icon" className="footer-folder-icon" />
               <span>DEVELOPERS</span>
             </button>
           </div>

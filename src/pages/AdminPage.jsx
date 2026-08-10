@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import SecurePage from '../components/SecurePage';
+import SEO from '../components/SEO';
 import RosterSummaryView from '../components/RosterSummaryView';
 import { fetchSchoolRoster } from '../lib/rosterHelper';
 import {
@@ -138,6 +139,11 @@ function AdminDashboard({ admin, onLogout }) {
       subtitle={`Signed in as ${admin.email}`}
       action={<button type="button" className="secure-action" onClick={() => onLogout('logout')}>Log out</button>}
     >
+      <SEO
+        title="Admin Portal — Genesis 2026"
+        canonical="/admin"
+        noindex={true}
+      />
       {error && <div className="secure-card secure-status secure-status--error" role="alert">{error}</div>}
 
       {approvalNotice && (
@@ -357,6 +363,11 @@ export default function AdminPage() {
       title="Admin Access"
       subtitle="Restricted to authorized Genesis Council accounts."
     >
+      <SEO
+        title="Admin Login — Genesis 2026"
+        canonical="/admin"
+        noindex={true}
+      />
       <form className="admin-login secure-card" onSubmit={handleLogin}>
         <label>
           <span className="label-caps">Email</span>

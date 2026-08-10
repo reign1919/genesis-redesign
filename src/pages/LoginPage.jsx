@@ -7,6 +7,7 @@ import { signInSchool } from '../lib/auth';
 import { loadSchoolCredentials, submitRegistration } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/authContext';
+import SEO from '../components/SEO';
 
 const enrollmentEnabled = import.meta.env.VITE_ENROLLMENT_ENABLED !== 'false';
 
@@ -123,6 +124,12 @@ const LoginPage = () => {
       onMouseMove={handleMouseMove}
       style={{ '--mouse-x': '50%', '--mouse-y': '50%' }}
     >
+      <SEO
+        title="School Portal Login — Genesis 2026"
+        description="School portal login and registration for Genesis 2026."
+        canonical="/login"
+        noindex={true}
+      />
       {/* Background layer */}
       <div className="login-background">
         <NeuralBackground />

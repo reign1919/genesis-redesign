@@ -5,6 +5,8 @@ import ProjectorBeamWipe from '../../components/events/ProjectorBeamWipe';
 import EventOverlay from '../../components/events/EventOverlay';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
 import { eventsData, getEventById } from '../../lib/eventsData';
+import SEO from '../../components/SEO';
+import { getMainEventSchema, getSpecificEventSchema } from '../../lib/seoData';
 import './MobileEventsPage.css';
 
 /**
@@ -39,8 +41,23 @@ const MobileEventsPage = () => {
     setSearchParams({}, { replace: true });
   };
 
+  const seoTitle = activeEvent
+    ? `${activeEvent.title} — Genesis 2026 Tech Fest`
+    : 'Events Rack — Genesis 2026 | Hackathon, Coding, Robotics & Creative Competitions';
+  const seoDesc = activeEvent
+    ? activeEvent.brief
+    : 'Explore 10 flagship, technical, and creative events at Genesis 2026 Tech Fest: 48-Hour Hackathon, Buildathon, Zero Day CTF, Overclocked Robo Wars, Code Clash, and more.';
+  const seoCanonical = activeEvent ? `/events?id=${activeEvent.id}` : '/events';
+  const seoJsonLd = activeEvent ? getSpecificEventSchema(activeEvent) : getMainEventSchema();
+
   return (
     <div className="mobile-events-wrapper">
+      <SEO
+        title={seoTitle}
+        description={seoDesc}
+        canonical={seoCanonical}
+        jsonLd={seoJsonLd}
+      />
       {/* Mobile Top Header Navigation */}
       <header className="mobile-events-header">
         <Link to="/" className="mobile-brand-title">

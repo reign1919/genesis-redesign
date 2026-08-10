@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import SecurePage from '../components/SecurePage';
+import SEO from '../components/SEO';
 import { loadSchoolCredentials } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/authContext';
@@ -117,6 +118,11 @@ export default function ReviewRegistrationPage() {
         </Link>
       }
     >
+      <SEO
+        title="Roster Review — Genesis 2026"
+        canonical="/dashboard/review"
+        noindex={true}
+      />
       <div className="review-workspace">
         <RosterSummaryView
           school={school}

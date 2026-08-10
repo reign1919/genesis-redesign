@@ -6,6 +6,8 @@ import MobileHero from '../../components/mobile/MobileHero';
 import MobileCountdown from '../../components/mobile/MobileCountdown';
 import MobileFAQ from '../../components/mobile/MobileFAQ';
 import MobileCommittee from '../../components/mobile/MobileCommittee';
+import SEO from '../../components/SEO';
+import { getOrganizationSchema, getMainEventSchema } from '../../lib/seoData';
 import './MobileHomePage.css';
 
 const MobileHomePage = () => {
@@ -22,6 +24,12 @@ const MobileHomePage = () => {
 
   return (
     <div className="m-home-wrapper">
+      <SEO
+        title="Genesis 2026 — git commit -m &quot;Ideate, Innovate, Inspire&quot;"
+        description="Join Genesis 2026, the premier first-edition inter-school tech festival by Indus Valley World School. Featuring hackathons, robotics, cybersecurity CTF, coding contests, and digital art."
+        canonical="/"
+        jsonLd={[getOrganizationSchema(), getMainEventSchema()]}
+      />
       {/* Background */}
       <MobileBackground />
 

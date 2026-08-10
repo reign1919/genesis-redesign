@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MobileBackground from '../../components/mobile/MobileBackground';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
+import SEO from '../../components/SEO';
 import { signInSchool } from '../../lib/auth';
 import { loadSchoolCredentials, submitRegistration } from '../../lib/edgeFunctions';
 import { supabase } from '../../lib/supabase';
@@ -85,6 +86,12 @@ const MobileLoginPage = () => {
 
   return (
     <div className="ml-wrapper">
+      <SEO
+        title="School Portal Login — Genesis 2026"
+        description="School portal login and registration for Genesis 2026."
+        canonical="/login"
+        noindex={true}
+      />
       <MobileBackground />
       <div className="m-grid-overlay" aria-hidden="true" />
       <MobileHamburger />

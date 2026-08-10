@@ -53,9 +53,9 @@ const MobileHero = () => {
 
       {/* Logos */}
       <div className="m-hero-logos">
-        <img src={schoolLogo} alt="Indus Valley World School" className="m-hero-logo" />
+        <img src={schoolLogo} alt="Indus Valley World School Logo" className="m-hero-logo" />
         <div className="m-hero-logo-divider" />
-        <img src={festLogo} alt="Genesis" className="m-hero-logo" />
+        <img src={festLogo} alt="Genesis Tech Fest Logo" className="m-hero-logo" />
       </div>
 
       {/* Title */}
