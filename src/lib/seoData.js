@@ -58,6 +58,17 @@ export const getMainEventSchema = () => ({
     'name': 'The Genesis Council — Indus Valley World School',
     'url': SITE_DOMAIN,
   },
+  'performer': {
+    '@type': 'PerformingGroup',
+    'name': 'Participant Schools & Student Innovators',
+  },
+  'offers': {
+    '@type': 'Offer',
+    'price': '0',
+    'priceCurrency': 'INR',
+    'availability': 'https://schema.org/InStock',
+    'url': SITE_DOMAIN,
+  },
   'image': `${SITE_DOMAIN}/og-image.png`,
 });
 
@@ -86,6 +97,17 @@ export const getSpecificEventSchema = (event) => {
       '@type': 'Organization',
       'name': 'The Genesis Council',
       'url': SITE_DOMAIN,
+    },
+    'performer': {
+      '@type': 'PerformingGroup',
+      'name': 'Participant Schools & Student Innovators',
+    },
+    'offers': {
+      '@type': 'Offer',
+      'price': '0',
+      'priceCurrency': 'INR',
+      'availability': 'https://schema.org/InStock',
+      'url': `${SITE_DOMAIN}/events?id=${event.id}`,
     },
     'image': `${SITE_DOMAIN}/og-image.png`,
   };
