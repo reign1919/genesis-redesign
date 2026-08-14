@@ -6,6 +6,7 @@ import { fetchSchoolRoster } from '../lib/rosterHelper';
 import {
   listAdminRegistrations,
   updateAdminRegistration,
+  deleteAdminRegistration,
 } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
 import './AdminPage.css';
@@ -22,6 +23,8 @@ function AdminDashboard({ admin, onLogout }) {
   const [activeRosterSchool, setActiveRosterSchool] = useState(null);
   const [rosterLoading, setRosterLoading] = useState(false);
   const [schoolRosterData, setSchoolRosterData] = useState(null);
+  const [confirmAction, setConfirmAction] = useState(null);
+  const [purgeConfirmText, setPurgeConfirmText] = useState('');
 
   const fetchRegistrations = useCallback(async () => {
     setLoading(true);
@@ -66,7 +69,7 @@ function AdminDashboard({ admin, onLogout }) {
         return;
       }
       setError(result.code === 'INVALID_TRANSITION'
-        ? 'That registration is no longer pending.'
+        ? 'The registration status could not be updated.'
         : result.code === 'PROVISIONING_FAILED' && result.stage
           ? `Approval failed during ${result.stage.replaceAll('_', ' ')}.`
           : 'The status could not be updated. Try again later.');
@@ -80,6 +83,33 @@ function AdminDashboard({ admin, onLogout }) {
         message: result.whatsappMessage,
       });
     }
+    await fetchRegistrations();
+  };
+
+  const handlePurge = async (id) => {
+    setActionLoading(id);
+    setError('');
+    setApprovalNotice(null);
+    const result = await deleteAdminRegistration(id);
+    setActionLoading(null);
+
+    if (!result.ok) {
+      if (result.code === 'FORBIDDEN') {
+        await onLogout('forbidden');
+        return;
+      }
+      if (result.code === 'AUTH_REQUIRED' || result.code === 'AUTH_INVALID') {
+        await onLogout('invalid-session');
+        return;
+      }
+      setError(result.code === 'INVALID_TRANSITION'
+        ? 'Only rejected registrations can be purged.'
+        : result.code === 'NOT_FOUND'
+          ? 'That registration no longer exists.'
+          : 'The registration could not be purged. Try again later.');
+      return;
+    }
+
     await fetchRegistrations();
   };
 
@@ -231,26 +261,38 @@ function AdminDashboard({ admin, onLogout }) {
                     </button>
                   </td>
                   <td>
-                    {registration.status === 'pending' ? (
-                      <div className="admin-row-actions">
+                    <div className="admin-row-actions">
+                      {(registration.status === 'pending' || registration.status === 'rejected') && (
                         <button
                           type="button"
                           className="admin-row-action admin-row-action--approve"
-                          onClick={() => handleTransition(registration.id, 'approved')}
+                          onClick={() => { setPurgeConfirmText(''); setConfirmAction({ registration, kind: 'approve' }); }}
                           disabled={actionLoading === registration.id}
                         >
                           {actionLoading === registration.id ? 'Working…' : 'Approve'}
                         </button>
+                      )}
+                      {(registration.status === 'pending' || registration.status === 'approved') && (
                         <button
                           type="button"
                           className="admin-row-action admin-row-action--reject"
-                          onClick={() => handleTransition(registration.id, 'rejected')}
+                          onClick={() => setConfirmAction({ registration, kind: 'reject' })}
                           disabled={actionLoading === registration.id}
                         >
                           Reject
                         </button>
-                      </div>
-                    ) : <span className="admin-final">Final</span>}
+                      )}
+                      {registration.status === 'rejected' && (
+                        <button
+                          type="button"
+                          className="admin-row-action admin-row-action--purge"
+                          onClick={() => { setPurgeConfirmText(''); setConfirmAction({ registration, kind: 'purge' }); }}
+                          disabled={actionLoading === registration.id}
+                        >
+                          Purge
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -294,6 +336,86 @@ function AdminDashboard({ admin, onLogout }) {
                   isAdminView={true}
                 />
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm Action Modal */}
+      {confirmAction && (
+        <div className="admin-modal-overlay no-print" onClick={() => setConfirmAction(null)}>
+          <div className="admin-modal-content admin-confirm-modal" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <div>
+                <span className="label-caps text-accent-light" style={{ color: 'var(--accent-light)', fontSize: '11px', letterSpacing: '0.1em' }}>
+                  Confirm Action
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: '#ffffff', marginTop: '4px' }}>
+                  {confirmAction.kind === 'purge' ? 'Purge Registration' : confirmAction.kind === 'approve' ? 'Approve Registration' : 'Reject Registration'}
+                </h2>
+              </div>
+              <button
+                type="button"
+                className="admin-modal-close"
+                onClick={() => setConfirmAction(null)}
+                aria-label="Cancel action"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="admin-modal-body admin-confirm-body">
+              {confirmAction.kind === 'purge' ? (
+                <>
+                  <p className="admin-confirm-warning">
+                    This will permanently delete this registration and all its data from the backend. The school will be able to register again.
+                  </p>
+                  <p className="admin-confirm-school">{confirmAction.registration.school_name}</p>
+                  <p>Type <strong className="admin-confirm-typed">purge</strong> to confirm.</p>
+                  <input
+                    type="text"
+                    className="admin-confirm-input"
+                    value={purgeConfirmText}
+                    onChange={event => setPurgeConfirmText(event.target.value)}
+                    placeholder="purge"
+                    autoComplete="off"
+                    autoFocus
+                  />
+                </>
+              ) : (
+                <>
+                  <p>
+                    Are you sure you want to <strong>{confirmAction.kind === 'approve' ? 'approve' : 'reject'}</strong> this registration?
+                  </p>
+                  <p className="admin-confirm-school">{confirmAction.registration.school_name}</p>
+                  {confirmAction.kind === 'reject' && (
+                    <p className="admin-confirm-warning">
+                      This will revoke the school&apos;s login credentials and remove its access.
+                    </p>
+                  )}
+                </>
+              )}
+              <div className="admin-confirm-actions">
+                <button
+                  type="button"
+                  className="admin-row-action"
+                  onClick={() => setConfirmAction(null)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className={`admin-row-action ${confirmAction.kind === 'reject' ? 'admin-row-action--reject' : confirmAction.kind === 'purge' ? 'admin-row-action--purge' : 'admin-row-action--approve'}`}
+                  onClick={() => {
+                    const { registration, kind } = confirmAction;
+                    setConfirmAction(null);
+                    if (kind === 'purge') handlePurge(registration.id);
+                    else handleTransition(registration.id, kind === 'approve' ? 'approved' : 'rejected');
+                  }}
+                  disabled={actionLoading === confirmAction.registration.id || (confirmAction.kind === 'purge' && purgeConfirmText !== 'purge')}
+                >
+                  {actionLoading === confirmAction.registration.id ? 'Working…' : `Confirm ${confirmAction.kind}`}
+                </button>
+              </div>
             </div>
           </div>
         </div>

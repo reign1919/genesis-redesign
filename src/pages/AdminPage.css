@@ -181,6 +181,18 @@
   color: var(--accent-pale);
 }
 
+.admin-row-action--purge {
+  border-color: rgba(239, 68, 68, 0.6);
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.admin-row-action--purge:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.9);
+  color: #fecaca;
+}
+
 .admin-row-action--roster {
   border-color: rgba(56, 189, 248, 0.4);
   color: #7dd3fc;
@@ -257,5 +269,68 @@
 .admin-modal-body {
   padding: 24px;
   overflow-y: auto;
+}
+
+.admin-confirm-modal {
+  width: min(480px, 100%);
+}
+
+.admin-confirm-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-confirm-body p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.admin-confirm-school {
+  color: var(--text) !important;
+  font-family: var(--font-display);
+  font-size: 16px !important;
+  letter-spacing: 0.04em;
+}
+
+.admin-confirm-warning {
+  color: var(--accent-pale) !important;
+  font-size: 12px !important;
+}
+
+.admin-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.admin-confirm-actions .admin-row-action {
+  padding: 8px 14px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.admin-confirm-typed {
+  color: #fca5a5;
+  letter-spacing: 0.1em;
+}
+
+.admin-confirm-input {
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border-strong);
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+}
+
+.admin-confirm-input:focus {
+  border-bottom-color: var(--accent-mid);
 }
 

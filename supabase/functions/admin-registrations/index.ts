@@ -7,7 +7,7 @@ import { createRequestId, jsonResponse, readJsonObject, stableBody } from '../_s
 import { safeLog } from '../_shared/logging.ts';
 import { bearerToken } from '../_shared/security.ts';
 import { authenticate, createAdminClient, isAdmin } from '../_shared/supabase.ts';
-import { validateAdminTransition } from '../_shared/validation.ts';
+import { validateAdminTransition, validateRegistrationId } from '../_shared/validation.ts';
 
 function whatsappMessage(registration: Record<string, unknown>, portalUrl: string): string {
   return [
@@ -37,7 +37,7 @@ export async function handleAdminRegistrations(
   const authenticateUser = dependencies.authenticate || authenticate;
   const checkAdmin = dependencies.isAdmin || isAdmin;
   const requestId = createRequestId();
-  const cors = corsDecision(request, ['GET', 'PATCH'], env('ALLOWED_ORIGINS'));
+  const cors = corsDecision(request, ['GET', 'PATCH', 'DELETE'], env('ALLOWED_ORIGINS'));
 
   try {
     if (!cors.allowed) {
@@ -50,7 +50,7 @@ export async function handleAdminRegistrations(
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: cors.headers });
     }
-    if (request.method !== 'GET' && request.method !== 'PATCH') {
+    if (request.method !== 'GET' && request.method !== 'PATCH' && request.method !== 'DELETE') {
       return jsonResponse(
         stableBody(false, 'METHOD_NOT_ALLOWED', 'This request method is not allowed.', requestId),
         405,
@@ -164,6 +164,92 @@ export async function handleAdminRegistrations(
       );
     }
 
+    // DELETE: Purge a rejected registration entirely so the school can re-register.
+    // The schools row cascades linked rows (registrations, selections, credentials);
+    // linked Auth users are revoked explicitly.
+    if (request.method === 'DELETE') {
+      const payload = await readJsonObject(request, 2048);
+      if (!payload) {
+        return jsonResponse(
+          stableBody(false, 'INVALID_PAYLOAD', 'Check the requested purge.', requestId),
+          400,
+          cors.headers,
+        );
+      }
+      const validated = validateRegistrationId(payload);
+      if (!validated.ok) {
+        return jsonResponse(
+          stableBody(false, validated.code, 'Check the requested purge.', requestId),
+          400,
+          cors.headers,
+        );
+      }
+
+      const { data: existingSchool, error: fetchError } = await adminClient
+        .from('schools')
+        .select('id, name, status')
+        .eq('id', validated.value.registrationId)
+        .maybeSingle();
+
+      if (fetchError || !existingSchool) {
+        return jsonResponse(
+          stableBody(false, 'NOT_FOUND', 'The registration does not exist.', requestId),
+          404,
+          cors.headers,
+        );
+      }
+      if (existingSchool.status !== 'rejected') {
+        return jsonResponse(
+          stableBody(false, 'INVALID_TRANSITION', 'Only rejected registrations can be purged.', requestId),
+          400,
+          cors.headers,
+        );
+      }
+
+      let linkedUserIds: string[] = [];
+      const { data: linkedUsers, error: linkError } = await adminClient
+        .from('school_users')
+        .select('auth_user_id')
+        .eq('school_id', validated.value.registrationId);
+      if (!linkError && Array.isArray(linkedUsers)) {
+        linkedUserIds = linkedUsers
+          .map((link) => {
+            const value = link && typeof link === 'object'
+              ? String((link as Record<string, unknown>).auth_user_id)
+              : '';
+            return value;
+          })
+          .filter((value) => value !== '');
+      }
+
+      const { error: deleteError } = await adminClient
+        .from('schools')
+        .delete()
+        .eq('id', validated.value.registrationId);
+      if (deleteError) {
+        safeLog('error', 'admin_purge_failed', requestId, { error: deleteError.message });
+        return jsonResponse(
+          stableBody(false, 'SERVICE_UNAVAILABLE', 'The registration could not be purged.', requestId),
+          503,
+          cors.headers,
+        );
+      }
+
+      for (const authUserId of linkedUserIds) {
+        try {
+          await adminClient.auth.admin.deleteUser(authUserId);
+        } catch (err) {
+          safeLog('error', 'admin_purge_user_failed', requestId, { error: String(err) });
+        }
+      }
+
+      return jsonResponse(
+        stableBody(true, 'REGISTRATION_DELETED', 'Registration purged.', requestId),
+        200,
+        cors.headers,
+      );
+    }
+
     // PATCH: Handle Approve / Reject status transitions
     const payload = await readJsonObject(request, 2048);
     if (!payload) {
@@ -196,6 +282,26 @@ export async function handleAdminRegistrations(
           503,
           cors.headers,
         );
+      }
+
+      // Revoke access: remove linked Auth users so a rejected school can no longer
+      // sign in. school_users and school_credentials rows cascade on user deletion.
+      try {
+        const { data: linkedUsers, error: linkError } = await adminClient
+          .from('school_users')
+          .select('auth_user_id')
+          .eq('school_id', validated.value.registrationId);
+
+        if (!linkError && Array.isArray(linkedUsers)) {
+          for (const link of linkedUsers) {
+            const authUserId = link && typeof link === 'object' ? String((link as Record<string, unknown>).auth_user_id) : '';
+            if (authUserId) {
+              await adminClient.auth.admin.deleteUser(authUserId);
+            }
+          }
+        }
+      } catch (err) {
+        safeLog('error', 'admin_rejection_cleanup_failed', requestId, { error: String(err) });
       }
 
       return jsonResponse(

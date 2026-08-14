@@ -75,6 +75,13 @@ export function updateAdminRegistration(registrationId, status) {
   });
 }
 
+export function deleteAdminRegistration(registrationId) {
+  return callFunction('admin-registrations', {
+    method: 'DELETE',
+    body: { registrationId },
+  });
+}
+
 export function loadSchoolCredentials() {
   return callFunction('school-credentials', { method: 'GET' });
 }

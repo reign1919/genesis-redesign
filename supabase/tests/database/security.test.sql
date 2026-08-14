@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(42);
+select plan(45);
 
 select has_table('public', 'registrations', 'active registrations table exists');
 select has_table('public', 'school_credentials', 'final credentials table exists');
@@ -43,6 +43,22 @@ select is(
   public.create_public_registration('School B Again', '+919876543211'),
   'duplicate_pending',
   'repeat WhatsApp for the second school is detected'
+);
+select is(
+  public.create_public_registration('SCHOOL   A', '+919876543299'),
+  'duplicate_pending',
+  'same school name under a different WhatsApp is blocked (case and space insensitive)'
+);
+select is(
+  public.create_public_registration('school-b', '+919876543298'),
+  'created',
+  'an unrelated school name can still register'
+);
+update public.schools set status = 'approved' where name = 'School B';
+select is(
+  public.create_public_registration('SCHOOL B', '+919876543297'),
+  'duplicate_approved',
+  'name match reports the existing approved state'
 );
 select is(
   public.consume_public_registration_attempt(repeat('3', 64), repeat('4', 64)),

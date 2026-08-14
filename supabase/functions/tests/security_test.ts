@@ -360,6 +360,16 @@ Deno.test('normal users cannot invoke any admin list or transition operation', a
       method: 'GET',
       headers: { Authorization: 'Bearer school-token' },
     }),
+    new Request('https://function.example', {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer school-token',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        registrationId: '10000000-0000-4000-8000-000000000001',
+      }),
+    }),
     ...(['approved', 'rejected'] as const).map((status) =>
       new Request('https://function.example', {
         method: 'PATCH',
@@ -510,8 +520,23 @@ Deno.test('admin mutations require a bearer token and are not ambient-cookie CSR
 });
 
 Deno.test('admin handler lists credentials and performs explicit rejection', async () => {
-  const makeClient = (updatedStatus = 'approved') => ({
-    from() {
+  let deletedUserIds: string[] = [];
+  const makeClient = (updatedStatus = 'approved') => {
+    const from = (table: string) => {
+      if (table === 'school_users') {
+        return {
+          select() {
+            return {
+              eq() {
+                return Promise.resolve({
+                  data: [{ auth_user_id: '20000000-0000-4000-8000-000000000002' }],
+                  error: null,
+                });
+              },
+            };
+          },
+        };
+      }
       const chain = {
         select() {
           return chain;
@@ -539,8 +564,19 @@ Deno.test('admin handler lists credentials and performs explicit rejection', asy
         },
       };
       return chain;
-    },
-  });
+    };
+    return {
+      from,
+      auth: {
+        admin: {
+          deleteUser: (userId: string) => {
+            deletedUserIds.push(userId);
+            return Promise.resolve({ data: null, error: null });
+          },
+        },
+      },
+    };
+  };
   const authDependencies = (status?: string) => ({
     env: (name: string) =>
       name === 'SCHOOL_CREDENTIAL_ENCRYPTION_KEY' ? btoa('12345678901234567890123456789012') : '',
@@ -584,6 +620,101 @@ Deno.test('admin handler lists credentials and performs explicit rejection', asy
       `${status} code`,
     );
   }
+  assertEquals(
+    deletedUserIds,
+    ['20000000-0000-4000-8000-000000000002'],
+    'rejection revokes the linked Auth user',
+  );
+});
+
+Deno.test('admin handler purges only rejected schools and revokes their Auth users', async () => {
+  let deletedUserIds: string[] = [];
+  const makeClient = (schoolStatus = 'rejected') => {
+    const from = (table: string) => {
+      if (table === 'school_users') {
+        return {
+          select() {
+            return {
+              eq() {
+                return Promise.resolve({
+                  data: [{ auth_user_id: '30000000-0000-4000-8000-000000000003' }],
+                  error: null,
+                });
+              },
+            };
+          },
+        };
+      }
+      const chain = {
+        select() {
+          return chain;
+        },
+        eq() {
+          return chain;
+        },
+        delete() {
+          return chain;
+        },
+        maybeSingle() {
+          return Promise.resolve({
+            data: {
+              id: '10000000-0000-4000-8000-000000000001',
+              name: 'Rejected School',
+              status: schoolStatus,
+            },
+            error: null,
+          });
+        },
+      };
+      return chain;
+    };
+    return {
+      from,
+      auth: {
+        admin: {
+          deleteUser: (userId: string) => {
+            deletedUserIds.push(userId);
+            return Promise.resolve({ data: null, error: null });
+          },
+        },
+      },
+    };
+  };
+  const dependencies = (status?: string) => ({
+    env: () => '',
+    createAdminClient: () => makeClient(status) as never,
+    authenticate: () => Promise.resolve({ id: 'admin-user' } as never),
+    isAdmin: () => Promise.resolve(true),
+  });
+  const purgeRequest = () =>
+    new Request('https://function.example', {
+      method: 'DELETE',
+      headers: {
+        Authorization: 'Bearer admin',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        registrationId: '10000000-0000-4000-8000-000000000001',
+      }),
+    });
+
+  const blocked = await handleAdminRegistrations(purgeRequest(), dependencies('approved'));
+  assertEquals(blocked.status, 400, 'purge of non-rejected is refused');
+  assertEquals(
+    (await responseBody(blocked)).code,
+    'INVALID_TRANSITION',
+    'purge guard refuses non-rejected status',
+  );
+  assertEquals(deletedUserIds, [], 'blocked purge never deletes a user');
+
+  const ok = await handleAdminRegistrations(purgeRequest(), dependencies('rejected'));
+  assertEquals(ok.status, 200, 'purge status');
+  assertEquals((await responseBody(ok)).code, 'REGISTRATION_DELETED', 'purge code');
+  assertEquals(
+    deletedUserIds,
+    ['30000000-0000-4000-8000-000000000003'],
+    'purge revokes the linked Auth user',
+  );
 });
 
 Deno.test('approval failure never deletes a previously linked Auth user or exposes upstream details', async () => {

@@ -96,3 +96,28 @@ export function validateAdminTransition(
     },
   };
 }
+
+export type RegistrationIdInput = {
+  registrationId: string;
+};
+
+export function validateRegistrationId(
+  payload: Record<string, unknown>,
+): ValidationResult<RegistrationIdInput> {
+  if (!exactKeys(payload, ['registrationId'])) {
+    return { ok: false, code: 'INVALID_PAYLOAD' };
+  }
+
+  if (
+    typeof payload.registrationId !== 'string' ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu
+      .test(payload.registrationId)
+  ) {
+    return { ok: false, code: 'INVALID_TRANSITION' };
+  }
+
+  return {
+    ok: true,
+    value: { registrationId: payload.registrationId.toLowerCase() },
+  };
+}
