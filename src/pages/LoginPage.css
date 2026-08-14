@@ -477,6 +477,28 @@
   border-bottom-color: var(--accent-mid);
 }
 
+/* ── Register warning ─────────────────────────────────────── */
+.register-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-accent);
+  background: rgba(139, 26, 26, 0.08);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--accent-pale);
+  line-height: 1.5;
+}
+
+.register-warning-icon {
+  color: var(--accent-mid);
+  font-size: 16px;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
 /* ── Submit button ────────────────────────────────────────── */
 .submit-btn {
   display: flex;

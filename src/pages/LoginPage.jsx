@@ -372,6 +372,13 @@ const LoginPage = () => {
                   <span>{submitting ? 'SUBMITTING...' : enrollmentEnabled ? 'REGISTER' : 'ENROLLMENT CLOSED'}</span>
                   <span className="submit-arrow">→</span>
                 </button>
+
+                <div className="register-warning">
+                  <span className="register-warning-icon">⊠</span>
+                  <span>
+                    Registration is for schools as a whole and is to be done by Teacher-in-Charge ONLY. Students are NOT supposed to register here.
+                  </span>
+                </div>
               </div>
             )}
 
