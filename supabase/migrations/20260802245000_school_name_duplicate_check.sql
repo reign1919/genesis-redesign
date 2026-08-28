@@ -1,7 +1,6 @@
--- Migration: 20260802245000_school_name_duplicate_check.sql
--- Description: Block duplicate school registrations by normalized name
+-- block duplicate school registrations by normalized name
 -- (100% match on spelling, case-insensitive and whitespace-insensitive) so a
--- school cannot register twice under a different WhatsApp number.
+-- school cannot register twice under a different wp number.
 
 begin;
 
@@ -16,20 +15,30 @@ set search_path = ''
 as $$
 declare
   v_status text;
+  v_normalized text;
   v_count int;
   v_next_num int;
   v_code text;
   v_school_id uuid;
 begin
-  -- Reject duplicate school names: strip all whitespace and lowercase before comparing
+  -- some regex magic (splitting whitespaces, turning str to lower, uniform comparison broski)
+  v_normalized := regexp_replace(lower(p_school_name), '\s', '', 'g');
   select status into v_status
   from public.schools
-  where regexp_replace(lower(name), '\s', '', 'g') = regexp_replace(lower(p_school_name), '\s', '', 'g')
+  where regexp_replace(lower(name), '\s', '', 'g') = v_normalized
   order by created_at desc
   limit 1;
 
   if v_status is not null then
     return 'duplicate_' || v_status;
+  end if;
+
+ -- this may look dumb, but the people registering apparently CANNOT read "Enter SCHOOL Name"...
+  if v_normalized not like '%school%'
+    and v_normalized not like '%academy%'
+    and v_normalized not like '%vidyamandir%'
+    and v_normalized not like '%institute%' then
+    return 'NOT_A_SCHOOL_NAME';
   end if;
 
   -- Check duplicate phone number
