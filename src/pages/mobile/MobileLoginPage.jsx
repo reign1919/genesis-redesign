@@ -18,7 +18,7 @@ function registrationMessage(result) {
     ALREADY_PENDING: 'Your school registration is already awaiting review.',
     ALREADY_APPROVED: 'Your school is already approved.',
     REGISTRATION_REJECTED: 'Your school registration was not approved.',
-    NOT_A_SCHOOL_NAME: 'A school name must contain one of: School, Academy, Vidya Mandir, Institute',
+    NOT_A_SCHOOL_NAME: 'A school name must contain one of: School, Academy, Vidya Mandir, Institute, International',
     RATE_LIMITED: 'Too many attempts. Try again later.',
     ENROLLMENT_CLOSED: 'School enrollment is temporarily closed.',
     ORIGIN_NOT_ALLOWED: 'Registration requests from this origin are not allowed.',

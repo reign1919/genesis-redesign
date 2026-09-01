@@ -18,6 +18,7 @@ function registrationMessage(result) {
     ALREADY_PENDING: 'Your school registration is already awaiting review.',
     ALREADY_APPROVED: 'Your school is already approved. Contact The Genesis Council if you need the credentials again.',
     REGISTRATION_REJECTED: 'Thank you for your interest. Your school registration was not approved for this edition of Genesis.',
+    NOT_A_SCHOOL_NAME: 'A school name must contain one of: School, Academy, Vidya Mandir, Institute, International',
     RATE_LIMITED: 'Too many attempts. Try again later.',
     ENROLLMENT_CLOSED: 'School enrollment is temporarily closed.',
     ORIGIN_NOT_ALLOWED: 'Registration requests from this origin are not allowed.',

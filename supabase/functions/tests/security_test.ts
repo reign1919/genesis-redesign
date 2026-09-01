@@ -59,7 +59,7 @@ Deno.test('school passwords use sixteen unambiguous mixed characters and encrypt
     assert(/^[A-HJ-NP-Za-km-z2-9!@#$%]{16}$/u.test(password), 'password alphabet and length');
     assert(
       /[A-Z]/u.test(password) && /[a-z]/u.test(password) && /[0-9]/u.test(password) &&
-        /[!@#$%]/u.test(password),
+      /[!@#$%]/u.test(password),
       'password must contain uppercase, lowercase, digit, and symbol',
     );
   }

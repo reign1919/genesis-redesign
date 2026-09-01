@@ -37,7 +37,8 @@ begin
   if v_normalized not like '%school%'
     and v_normalized not like '%academy%'
     and v_normalized not like '%vidyamandir%'
-    and v_normalized not like '%institute%' then
+    and v_normalized not like '%institute%'
+    and v_normalized not like '%international%' then
     return 'NOT_A_SCHOOL_NAME';
   end if;
 

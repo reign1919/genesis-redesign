@@ -23,9 +23,9 @@ const DUPLICATE_RESPONSES: Record<string, { code: string; message: string }> = {
     message: 'Thank you for your interest. Your school registration was not approved for this edition of Genesis.',
   },
   NOT_A_SCHOOL_NAME: {
-  code: 'NOT_A_SCHOOL_NAME',
-  message: 'INVALID SCHOOL NAME: A school name must contain one of these: " School", "Academy", "Vidya Mandir", "Institute"',
- },
+    code: 'NOT_A_SCHOOL_NAME',
+    message: 'INVALID SCHOOL NAME: A school name must contain one of these: "School", "Academy", "Vidya Mandir", "Institute", "International"',
+  },
 };
 
 export async function handleSubmitRegistration(
