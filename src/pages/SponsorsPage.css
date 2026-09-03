@@ -411,71 +411,6 @@
   transform: translate(2px, -2px);
 }
 
-/* Bottom Partnership Callout Banner */
-.sponsors-partner-callout {
-  margin-bottom: 64px;
-}
-
-.callout-frame {
-  position: relative;
-  background: linear-gradient(135deg, rgba(26, 28, 28, 0.95) 0%, rgba(35, 20, 22, 0.95) 100%);
-  border: 1px solid rgba(253, 98, 95, 0.45);
-  padding: 40px 48px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-}
-
-.callout-hud-tag {
-  font-size: 0.75rem;
-  letter-spacing: 0.16em;
-  color: #FD625F;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
-
-.callout-title {
-  font-family: var(--font-display, 'Orbitron', monospace);
-  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
-  font-weight: 800;
-  color: #FFFFFF;
-  margin-bottom: 14px;
-  max-width: 760px;
-}
-
-.callout-desc {
-  font-size: 0.98rem;
-  line-height: 1.6;
-  color: #B4B9BF;
-  max-width: 680px;
-  margin-bottom: 28px;
-}
-
-.callout-primary-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 32px;
-  background: #FD625F;
-  color: #0D0F11;
-  font-family: var(--font-display, 'Orbitron', monospace);
-  font-size: 0.85rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-decoration: none;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 20px rgba(253, 98, 95, 0.35);
-}
-
-.callout-primary-btn:hover {
-  background: #FFFFFF;
-  color: #0D0F11;
-  box-shadow: 0 6px 28px rgba(255, 255, 255, 0.4);
-  transform: translateY(-2px);
-}
-
 /* Footer */
 .sponsors-page-footer {
   display: flex;
@@ -511,10 +446,6 @@
     flex-direction: column;
     gap: 12px;
     text-align: center;
-  }
-
-  .callout-frame {
-    padding: 32px 20px;
   }
 
   .sponsors-page-footer {

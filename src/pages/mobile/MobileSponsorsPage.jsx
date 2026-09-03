@@ -95,20 +95,6 @@ const MobileSponsorsPage = () => {
           ))}
         </section>
 
-        {/* Bottom Partnership Callout Banner */}
-        <section className="m-callout-section">
-          <div className="m-callout-card">
-            <span className="m-callout-badge label-caps">// PARTNER WITH US</span>
-            <h2 className="m-callout-title">Interested in Sponsoring Genesis 2026?</h2>
-            <p className="m-callout-text">
-              Showcase your platform, connect with 500+ student developers, or host a free campus stall.
-            </p>
-            <Link to="/partnerships" className="m-callout-btn label-caps">
-              <span>BECOME A PARTNER →</span>
-            </Link>
-          </div>
-        </section>
-
         {/* Footer */}
         <footer className="m-sponsors-footer">
           <Link to="/" className="m-footer-home-btn label-caps">

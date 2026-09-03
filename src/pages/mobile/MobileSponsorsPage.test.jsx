@@ -59,9 +59,8 @@ describe('MobileSponsorsPage', () => {
     expect(studyinLink).toHaveAttribute('target', '_blank');
   });
 
-  it('renders mobile partnership banner linking to /partnerships', () => {
+  it('does not render become a partner callout on mobile sponsors page', () => {
     renderComponent();
-    const partnerLink = screen.getByRole('link', { name: /become a partner/i });
-    expect(partnerLink).toHaveAttribute('href', '/partnerships');
+    expect(screen.queryByRole('link', { name: /become a partner/i })).not.toBeInTheDocument();
   });
 });

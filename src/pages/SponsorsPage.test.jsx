@@ -60,10 +60,9 @@ describe('SponsorsPage (Desktop)', () => {
     expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
   });
 
-  it('renders partner CTA banner linking to /partnerships', () => {
+  it('does not render become a partner callout on sponsors directory page', () => {
     renderComponent();
-    const partnerCta = screen.getByRole('link', { name: /become a partner/i });
-    expect(partnerCta).toHaveAttribute('href', '/partnerships');
+    expect(screen.queryByRole('link', { name: /become a partner/i })).not.toBeInTheDocument();
   });
 
   it('renders all 6 sponsor logos with alt text', () => {

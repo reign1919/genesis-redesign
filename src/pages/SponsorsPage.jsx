@@ -137,24 +137,6 @@ const SponsorsPage = () => {
           </div>
         </section>
 
-        {/* Bottom Partnership Recruitment Callout */}
-        <section className="sponsors-partner-callout" aria-label="Partnership Inquiry Callout">
-          <div className="callout-frame">
-            <div className="callout-hud-tag label-caps">// INAUGURAL EDITION SPONSORSHIP</div>
-            <h2 className="callout-title headline-md">
-              Want to Power Eastern India's Premier High School Tech Fest?
-            </h2>
-            <p className="callout-desc body-md">
-              Connect your brand with 25+ top schools, 500+ student developers, and future tech leaders. Explore financial sponsorship, track co-branding, and campus stall spaces.
-            </p>
-            <div className="callout-actions">
-              <Link to="/partnerships" className="callout-primary-btn label-caps">
-                <span>BECOME A PARTNER →</span>
-              </Link>
-            </div>
-          </div>
-        </section>
-
         {/* Footer */}
         <footer className="sponsors-page-footer">
           <span className="footer-coord label-caps">IVWS // 22.4845545°N / 88.3960671°E</span>
