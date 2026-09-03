@@ -58,7 +58,6 @@ const MobileSponsorsPage = () => {
               {/* Card Meta Header */}
               <div className="m-card-meta">
                 <span className="m-card-index label-caps">// 0{index + 1}</span>
-                <span className="m-card-role label-caps">{sponsor.role}</span>
               </div>
 
               {/* Recessed Logo Container */}

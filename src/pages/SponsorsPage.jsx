@@ -93,9 +93,6 @@ const SponsorsPage = () => {
                   <span className="sponsor-index-tag label-caps">
                     // SPONSOR.0{index + 1}
                   </span>
-                  <span className="sponsor-role-badge label-caps">
-                    {sponsor.role}
-                  </span>
                 </div>
 
                 {/* Recessed Logo Display Chamber */}

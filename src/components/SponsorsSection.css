@@ -120,14 +120,14 @@
   height: 100%;
 }
 
-/* Top row glides LEFT */
+/* Top row glides LEFT smoothly */
 .sponsors-track-left {
-  animation: sponsor-glide-left 25s linear infinite;
+  animation: sponsor-glide-left 90s linear infinite;
 }
 
-/* Bottom row glides RIGHT */
+/* Bottom row glides RIGHT smoothly */
 .sponsors-track-right {
-  animation: sponsor-glide-right 25s linear infinite;
+  animation: sponsor-glide-right 90s linear infinite;
 }
 
 /* Pause track strictly on hover so users can view/click logos; immediately resumes when hover ends */
@@ -139,6 +139,7 @@
   0% {
     transform: translate3d(0, 0, 0);
   }
+
   100% {
     transform: translate3d(-50%, 0, 0);
   }
@@ -148,6 +149,7 @@
   0% {
     transform: translate3d(-50%, 0, 0);
   }
+
   100% {
     transform: translate3d(0, 0, 0);
   }
@@ -186,6 +188,9 @@
   pointer-events: none;
   outline: none;
   border: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
   transition: filter 0.22s ease;
 }
@@ -202,10 +207,12 @@
 
 /* ACCESSIBILITY: REDUCED MOTION */
 @media (prefers-reduced-motion: reduce) {
+
   .sponsors-track-left,
   .sponsors-track-right {
     animation: none;
   }
+
   .sponsors-row-banner {
     overflow-x: auto;
     mask-image: none;
@@ -241,10 +248,10 @@
   }
 
   .sponsors-track-left {
-    animation-duration: 20s;
+    animation-duration: 60s;
   }
 
   .sponsors-track-right {
-    animation-duration: 20s;
+    animation-duration: 60s;
   }
 }
