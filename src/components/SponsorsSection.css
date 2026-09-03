@@ -157,17 +157,9 @@
   filter: drop-shadow(0 0 10px rgba(253, 98, 95, 0.6));
 }
 
-/* Per-logo visual contrast balance */
-.sponsor-studyin {
-  filter: brightness(1.25) contrast(1.1) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
-}
-
+/* Per-logo visual sizing balance */
 .sponsor-xyz {
   max-height: 56px;
-}
-
-.sponsor-item:hover .sponsor-studyin {
-  filter: brightness(1.3) contrast(1.15) drop-shadow(0 0 10px rgba(253, 98, 95, 0.6));
 }
 
 /* ACCESSIBILITY: REDUCED MOTION */
