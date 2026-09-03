@@ -130,9 +130,8 @@
   animation: sponsor-glide-right 25s linear infinite;
 }
 
-/* Pause track on hover or focus so users can read logos */
-.sponsors-row-banner:hover .sponsors-track,
-.sponsors-row-banner:focus-within .sponsors-track {
+/* Pause track strictly on hover so users can view/click logos; immediately resumes when hover ends */
+.sponsors-row-banner:hover .sponsors-track {
   animation-play-state: paused;
 }
 
@@ -154,7 +153,7 @@
   }
 }
 
-/* SPONSOR ITEM (No separate box per sponsor) */
+/* SPONSOR ITEM (Clickable link without separate box) */
 .sponsor-item {
   display: flex;
   align-items: center;
@@ -165,6 +164,8 @@
   cursor: pointer;
   outline: none;
   border: none;
+  text-decoration: none;
+  color: inherit;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.22s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }

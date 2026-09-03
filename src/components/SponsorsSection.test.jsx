@@ -44,4 +44,23 @@ describe('SponsorsSection', () => {
     expect(reactkolkataLogos.length).toBeGreaterThanOrEqual(2);
     expect(youngmetroLogos.length).toBeGreaterThanOrEqual(2);
   });
+
+  it('renders sponsor logos as external links to their official websites', () => {
+    render(
+      <MemoryRouter>
+        <SponsorsSection />
+      </MemoryRouter>
+    );
+
+    const n8nLinks = screen.getAllByRole('link', { name: /visit n8n website/i });
+    expect(n8nLinks[0]).toHaveAttribute('href', 'https://n8n.io/');
+    expect(n8nLinks[0]).toHaveAttribute('target', '_blank');
+    expect(n8nLinks[0]).toHaveAttribute('rel', expect.stringContaining('noopener'));
+
+    const studyinLinks = screen.getAllByRole('link', { name: /visit studyin website/i });
+    expect(studyinLinks[0]).toHaveAttribute('href', 'https://gostudyin.com/');
+
+    const xyzLinks = screen.getAllByRole('link', { name: /visit \.xyz website/i });
+    expect(xyzLinks[0]).toHaveAttribute('href', 'https://gen.xyz/');
+  });
 });

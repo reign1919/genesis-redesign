@@ -11,15 +11,15 @@ import reactkolkataLogo from '../../sponsor-logos/raact-kolkata-logo-full-light.
 import youngmetroLogo from '../../sponsor-logos/young-metro-removebg-preview.png';
 
 const row1Sponsors = [
-  { id: 'n8n', name: 'n8n', logo: n8nLogo, alt: 'n8n' },
-  { id: 'studyin', name: 'Studyin', logo: studyinLogo, alt: 'Studyin' },
-  { id: 'friendsfm', name: '91.9 Friends FM', logo: friendsfmLogo, alt: '91.9 Friends FM' },
+  { id: 'n8n', name: 'n8n', logo: n8nLogo, alt: 'n8n', website: 'https://n8n.io/' },
+  { id: 'studyin', name: 'StudyIn', logo: studyinLogo, alt: 'StudyIn', website: 'https://gostudyin.com/' },
+  { id: 'friendsfm', name: '91.9 Friends FM', logo: friendsfmLogo, alt: '91.9 Friends FM', website: 'https://www.youtube.com/919friendsfm' },
 ];
 
 const row2Sponsors = [
-  { id: 'xyz', name: '.xyz', logo: xyzLogo, alt: '.xyz' },
-  { id: 'reactkolkata', name: 'React Kolkata', logo: reactkolkataLogo, alt: 'React Kolkata' },
-  { id: 'youngmetro', name: 'Young Metro', logo: youngmetroLogo, alt: 'Young Metro' },
+  { id: 'xyz', name: '.xyz', logo: xyzLogo, alt: '.xyz', website: 'https://gen.xyz/' },
+  { id: 'reactkolkata', name: 'React Kolkata', logo: reactkolkataLogo, alt: 'React Kolkata', website: 'https://reactkolkata.com/en' },
+  { id: 'youngmetro', name: 'The Telegraph: Young Metro', logo: youngmetroLogo, alt: 'The Telegraph: Young Metro', website: 'https://www.telegraphindia.com/topic/the-telegraph-young-metro' },
 ];
 
 // Duplicate items for continuous, uninterrupted marquee looping
@@ -43,11 +43,14 @@ const SponsorsSection = () => {
         <div className="sponsors-row-banner" aria-label="Sponsors Row 1">
           <div className="sponsors-track sponsors-track-left">
             {track1Items.map((sponsor, index) => (
-              <div 
+              <a 
                 key={`row1-${sponsor.id}-${index}`} 
+                href={sponsor.website}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="sponsor-item"
-                tabIndex={0}
-                aria-label={sponsor.name}
+                aria-label={`Visit ${sponsor.name} website (opens in new tab)`}
+                onClick={(e) => e.currentTarget.blur()}
               >
                 <img 
                   src={sponsor.logo} 
@@ -55,7 +58,7 @@ const SponsorsSection = () => {
                   className={`sponsor-logo-img sponsor-${sponsor.id}`} 
                   loading="lazy" 
                 />
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -64,11 +67,14 @@ const SponsorsSection = () => {
         <div className="sponsors-row-banner" aria-label="Sponsors Row 2">
           <div className="sponsors-track sponsors-track-right">
             {track2Items.map((sponsor, index) => (
-              <div 
+              <a 
                 key={`row2-${sponsor.id}-${index}`} 
+                href={sponsor.website}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="sponsor-item"
-                tabIndex={0}
-                aria-label={sponsor.name}
+                aria-label={`Visit ${sponsor.name} website (opens in new tab)`}
+                onClick={(e) => e.currentTarget.blur()}
               >
                 <img 
                   src={sponsor.logo} 
@@ -76,7 +82,7 @@ const SponsorsSection = () => {
                   className={`sponsor-logo-img sponsor-${sponsor.id}`} 
                   loading="lazy" 
                 />
-              </div>
+              </a>
             ))}
           </div>
         </div>
