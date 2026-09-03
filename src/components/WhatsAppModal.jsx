@@ -1,11 +1,11 @@
 import React from 'react';
 import './WhatsAppModal.css';
 
-const WhatsAppModal = ({ isOpen, onClose, activeTab = 'SPONSORSHIP' }) => {
+const WhatsAppModal = ({ isOpen, onClose, activeTab = 'STALL SETUP' }) => {
   if (!isOpen) return null;
 
   const defaultMessage = encodeURIComponent(
-    `Hi Genesis Team, I saw the Partnership page for Genesis 2026 and would like to inquire about ${activeTab.toUpperCase()} opportunities!`
+    `Hi Genesis Team, I saw the Partnership page for Genesis and would like to inquire about ${activeTab.toUpperCase()} opportunities!`
   );
 
   const contacts = [

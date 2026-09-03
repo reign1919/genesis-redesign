@@ -8,14 +8,15 @@ import SEO from '../components/SEO';
 import { getOrganizationSchema } from '../lib/seoData';
 
 const SIGNAL_MSGS = [
-  'PARTNERSHIP.OPEN // 2026',
+  'PARTNERSHIP // GENESIS',
   'STALLS: 100% FREE SETUP',
   'PREMIER SCHOOLS: 25+',
   'SEPTEMBER 26 // IVWS'
 ];
 
 const PartnerPage = () => {
-  const [activeTab, setActiveTab] = useState('sponsorship'); // 'sponsorship' | 'track' | 'stall'
+  const [activeTab, setActiveTab] = useState('stall'); // 'stall' | 'track' | 'sponsorship'
+  const [partnershipType, setPartnershipType] = useState("Stall Setup (Genesis '26)");
   const [signalIdx, setSignalIdx] = useState(0);
   const [formStatus, setFormStatus] = useState('idle'); // idle | sending | sent
   const [showBrochureModal, setShowBrochureModal] = useState(false);
@@ -50,6 +51,17 @@ const PartnerPage = () => {
     }
   };
 
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'stall') {
+      setPartnershipType("Stall Setup (Genesis '26)");
+    } else if (tab === 'track') {
+      setPartnershipType("Track Partnership (Genesis '27)");
+    } else if (tab === 'sponsorship') {
+      setPartnershipType("Sponsorship (Genesis '27)");
+    }
+  };
+
   const scrollToForm = () => {
     if (formRef.current) {
       formRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -67,14 +79,16 @@ const PartnerPage = () => {
     setFormStatus('sending');
 
     const formData = new FormData(e.target);
+    const selectedType = formData.get('partnership_type') || partnershipType || 'Sponsorship / Stall Setup';
+    const company = formData.get('company') || 'Partner';
     const data = {
       name: formData.get('name'),
-      company: formData.get('company'),
+      company: company,
       phone: formData.get('phone'),
       email: formData.get('email'),
-      partnership_type: activeTab.toUpperCase(),
+      partnership_type: selectedType,
       message: formData.get('message'),
-      _subject: `Genesis Tech Fest - New ${activeTab.toUpperCase()} Partnership Inquiry`,
+      _subject: `Genesis Tech Fest - Registration for Sponsorship/Stall Setup: ${company} (${selectedType})`,
       _template: 'box'
     };
 
@@ -147,8 +161,8 @@ const PartnerPage = () => {
       {/* Data Accents */}
       <div className="data-accent left-accent">{SIGNAL_MSGS[signalIdx]}</div>
       <div className="data-accent right-accent">
-        STATUS: INAUGURAL EDITION<br />
-        EARLY BIRD OPEN
+        STATUS: STALLS OPEN<br />
+        '26 SPONSORSHIPS CLOSED
       </div>
 
       {/* Main Container */}
@@ -160,7 +174,7 @@ const PartnerPage = () => {
             <span className="eyebrow-dash">—</span> INAUGURAL EDITION // SEPTEMBER 26, 2026
           </div>
           <h1 className="partner-headline display-lg">
-            Partner With <span className="headline-accent">Genesis 2026</span>
+            Partner With <span className="headline-accent">Genesis</span>
           </h1>
           <p className="partner-subhead body-lg">
             Connect your brand with top-performing high school developers, builders, and school leaders across the inter-school tech fest by Indus Valley World School (IVWS).
@@ -201,37 +215,37 @@ const PartnerPage = () => {
           </div>
           <div className="gateway-tabs">
             <button
-              className={`gateway-tab ${activeTab === 'sponsorship' ? 'gateway-tab--active' : ''}`}
-              onClick={() => setActiveTab('sponsorship')}
+              className={`gateway-tab ${activeTab === 'stall' ? 'gateway-tab--active' : ''}`}
+              onClick={() => handleTabChange('stall')}
             >
               <span className="tab-badge label-caps">01</span>
               <div className="tab-text">
-                <span className="tab-title label-caps">SPONSORSHIP</span>
-                <span className="tab-desc">Financial Backing Protocol</span>
+                <span className="tab-title label-caps">STALL SETUP</span>
+                <span className="tab-desc">100% Free Campus Booth • Accepting Now</span>
               </div>
               <div className="tab-glow-indicator" />
             </button>
 
             <button
               className={`gateway-tab ${activeTab === 'track' ? 'gateway-tab--active' : ''}`}
-              onClick={() => setActiveTab('track')}
+              onClick={() => handleTabChange('track')}
             >
               <span className="tab-badge label-caps">02</span>
               <div className="tab-text">
                 <span className="tab-title label-caps">TRACK PARTNERSHIP</span>
-                <span className="tab-desc">Event Track Collaboration</span>
+                <span className="tab-desc">Event Track Collaboration • Closed for '26</span>
               </div>
               <div className="tab-glow-indicator" />
             </button>
 
             <button
-              className={`gateway-tab ${activeTab === 'stall' ? 'gateway-tab--active' : ''}`}
-              onClick={() => setActiveTab('stall')}
+              className={`gateway-tab ${activeTab === 'sponsorship' ? 'gateway-tab--active' : ''}`}
+              onClick={() => handleTabChange('sponsorship')}
             >
               <span className="tab-badge label-caps">03</span>
               <div className="tab-text">
-                <span className="tab-title label-caps">STALL SETUP</span>
-                <span className="tab-desc">100% Free Campus Booth</span>
+                <span className="tab-title label-caps">SPONSORSHIP</span>
+                <span className="tab-desc">Financial Backing • Closed for '26</span>
               </div>
               <div className="tab-glow-indicator" />
             </button>
@@ -240,38 +254,6 @@ const PartnerPage = () => {
 
         {/* Live Terminal Summary HUD Ticker */}
         <div className="mode-metrics-ticker">
-          {activeTab === 'sponsorship' && (
-            <div className="metrics-row animate-fade">
-              <div className="metric-chip">
-                <span className="m-val">MAIN EVENT BANNERS</span>
-                <span className="m-lbl label-caps">NAMED PLACEMENT ACROSS FESTIVAL</span>
-              </div>
-              <div className="metric-chip">
-                <span className="m-val">DIGITAL SPOTLIGHTS</span>
-                <span className="m-lbl label-caps">DEDICATED PR SOCIAL MEDIA REELS</span>
-              </div>
-              <div className="metric-chip">
-                <span className="m-val">TALENT ACCESS</span>
-                <span className="m-lbl label-caps">TOP HIGH SCHOOL DEVELOPERS</span>
-              </div>
-            </div>
-          )}
-          {activeTab === 'track' && (
-            <div className="metrics-row animate-fade">
-              <div className="metric-chip">
-                <span className="m-val">PRODUCT INTEGRATION</span>
-                <span className="m-lbl label-caps">DIRECT USAGE IN COMPETITIONS</span>
-              </div>
-              <div className="metric-chip">
-                <span className="m-val">CO-BRANDED MERCH</span>
-                <span className="m-lbl label-caps">T-SHIRTS, STICKERS & SWAG KITS</span>
-              </div>
-              <div className="metric-chip">
-                <span className="m-val">TRACK COLLABORATION</span>
-                <span className="m-lbl label-caps">OFFICIAL EVENT CO-NAMING</span>
-              </div>
-            </div>
-          )}
           {activeTab === 'stall' && (
             <div className="metrics-row animate-fade">
               <div className="metric-chip">
@@ -279,12 +261,44 @@ const PartnerPage = () => {
                 <span className="m-lbl label-caps">HIGH-FOOTFALL BOOTH SPACE</span>
               </div>
               <div className="metric-chip">
-                <span className="m-val">DIRECT LEAD GENERATION</span>
-                <span className="m-lbl label-caps">MINI-GAMES, FLYERS & SIGN-UPS</span>
+                <span className="m-val">100% FREE SETUP</span>
+                <span className="m-lbl label-caps">ELECTRICITY & TABLES PROVIDED</span>
               </div>
               <div className="metric-chip">
-                <span className="m-val">MERCH & DEMOS</span>
-                <span className="m-lbl label-caps">SHOWCASE HARDWARE & GOODIES</span>
+                <span className="m-val">APPLICATIONS OPEN</span>
+                <span className="m-lbl label-caps">STALL SETUPS STILL ACCEPTED</span>
+              </div>
+            </div>
+          )}
+          {activeTab === 'track' && (
+            <div className="metrics-row animate-fade">
+              <div className="metric-chip">
+                <span className="m-val">'26 REGISTRATIONS CLOSED</span>
+                <span className="m-lbl label-caps">JOIN US FOR GENESIS '27</span>
+              </div>
+              <div className="metric-chip">
+                <span className="m-val">PRODUCT INTEGRATION</span>
+                <span className="m-lbl label-caps">DIRECT USAGE IN ROUNDS</span>
+              </div>
+              <div className="metric-chip">
+                <span className="m-val">EARLY ACCESS '27</span>
+                <span className="m-lbl label-caps">REGISTER INTEREST BELOW</span>
+              </div>
+            </div>
+          )}
+          {activeTab === 'sponsorship' && (
+            <div className="metrics-row animate-fade">
+              <div className="metric-chip">
+                <span className="m-val">'26 REGISTRATIONS CLOSED</span>
+                <span className="m-lbl label-caps">JOIN US FOR GENESIS '27</span>
+              </div>
+              <div className="metric-chip">
+                <span className="m-val">BRAND EXPOSURE</span>
+                <span className="m-lbl label-caps">MAIN EVENT BANNERS & PR</span>
+              </div>
+              <div className="metric-chip">
+                <span className="m-val">EARLY ACCESS '27</span>
+                <span className="m-lbl label-caps">REGISTER INTEREST BELOW</span>
               </div>
             </div>
           )}
@@ -293,15 +307,224 @@ const PartnerPage = () => {
         {/* Dynamic Mode Pathway Container */}
         <section className="mode-details-section">
           
-          {/* 1. SPONSORSHIP MODE ZIGZAG PATHWAY */}
-          {activeTab === 'sponsorship' && (
+          {/* 1. STALL SETUP MODE */}
+          {activeTab === 'stall' && (
             <div className="mode-view animate-fade">
+              <div className="status-callout status-callout--open">
+                <div className="status-callout-header">
+                  <span className="status-indicator-dot" />
+                  <span className="status-callout-tag label-caps">// STATUS: APPLICATIONS ACTIVELY ACCEPTED</span>
+                </div>
+                <p className="status-callout-message">
+                  Stall setups are still being accepted! Showcase your brand, interactive games, products, or food directly on campus to attendees with zero setup fees or commissions.
+                </p>
+              </div>
+
               <div className="view-header">
-                <h2 className="view-title headline-md">Financial Sponsorship Protocol</h2>
-                <span className="view-tag label-caps">Flexible Contribution</span>
+                <h2 className="view-title headline-md">Stall Setup Logistics & Key Details</h2>
+                <span className="view-tag label-caps highlight-tag">100% FREE STALL ALLOCATION</span>
               </div>
               <p className="view-intro body-md">
-                Provide financial support for the festival. You decide your contribution level—we focus on building long-term, high-ROI collaborative relationships.
+                Features a dedicated physical setup on campus throughout the event. Absolutely zero booth fee or commission required.
+              </p>
+
+              {/* Specification Grid */}
+              <div className="stall-specs-grid">
+                <div className="spec-card">
+                  <span className="spec-label label-caps">DAY AND DATE</span>
+                  <span className="spec-value">Saturday, 26th September, 2026</span>
+                </div>
+                <div className="spec-card">
+                  <span className="spec-label label-caps">VENUE</span>
+                  <span className="spec-value">Indus Valley World School</span>
+                </div>
+                <div className="spec-card">
+                  <span className="spec-label label-caps">TIME</span>
+                  <span className="spec-value">Approx 7:00 AM to 4:30 PM</span>
+                </div>
+                <div className="spec-card">
+                  <span className="spec-label label-caps">AUDIENCE</span>
+                  <span className="spec-value">13–18 years of age, grades 9 to 12</span>
+                </div>
+                <div className="spec-card">
+                  <span className="spec-label label-caps">MINIMUM FOOTFALL</span>
+                  <span className="spec-value">250 (minimum approx)</span>
+                </div>
+                <div className="spec-card">
+                  <span className="spec-label label-caps">PROVISIONS</span>
+                  <span className="spec-value">Electricity and Tables</span>
+                </div>
+                <div className="spec-card spec-card--highlight">
+                  <span className="spec-label label-caps">FEE</span>
+                  <span className="spec-value">No commissions, or setup fee needed</span>
+                </div>
+              </div>
+
+              {/* ZIGZAG CENTER SPINE TIMELINE */}
+              <div className="zigzag-timeline">
+                <div className="zigzag-spine-line">
+                  <div className="laser-pulse-dot" />
+                </div>
+                
+                {/* Step 01 - LEFT */}
+                <div className="zigzag-step step-left">
+                  <div className="zigzag-card">
+                    <div className="card-spotlight" />
+                    <div className="card-hud-corner top-left-mark">+</div>
+                    <div className="card-hud-corner top-right-mark">+</div>
+                    <span className="zigzag-phase label-caps">PRIME CAMPUS LOCATION</span>
+                    <h3 className="zigzag-title">High-Footfall Lawn Booth Space</h3>
+                    <p className="zigzag-desc">
+                      Dedicated high-footfall booth/stall space throughout the event. Setup tables, chairs, and power sockets provided out of the box at ₹0 booth fee.
+                    </p>
+                  </div>
+                  <div className="zigzag-diamond-wrapper">
+                    <div className="diamond-hud-ring" />
+                    <div className="zigzag-diamond-node">
+                      <span className="node-num label-caps">01</span>
+                    </div>
+                  </div>
+                  <div className="zigzag-empty-space" />
+                </div>
+
+                {/* Step 02 - RIGHT */}
+                <div className="zigzag-step step-right">
+                  <div className="zigzag-empty-space" />
+                  <div className="zigzag-diamond-wrapper">
+                    <div className="diamond-hud-ring" />
+                    <div className="zigzag-diamond-node">
+                      <span className="node-num label-caps">02</span>
+                    </div>
+                  </div>
+                  <div className="zigzag-card">
+                    <div className="card-spotlight" />
+                    <div className="card-hud-corner top-left-mark">+</div>
+                    <div className="card-hud-corner top-right-mark">+</div>
+                    <span className="zigzag-phase label-caps">DIRECT LEAD GENERATION</span>
+                    <h3 className="zigzag-title">Interactive Mini-Games & Sign-Ups</h3>
+                    <p className="zigzag-desc">
+                      Host interactive mini-games, distribute promotional flyers, or collect user sign-ups directly from participants and visitors.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 03 - LEFT */}
+                <div className="zigzag-step step-left">
+                  <div className="zigzag-card">
+                    <div className="card-spotlight" />
+                    <div className="card-hud-corner top-left-mark">+</div>
+                    <div className="card-hud-corner top-right-mark">+</div>
+                    <span className="zigzag-phase label-caps">MERCHANDISE DISTRIBUTION</span>
+                    <h3 className="zigzag-title">Branded Goodies & Live Tech Showcase</h3>
+                    <p className="zigzag-desc">
+                      Opportunity to hand out branded goodies, sell merchandise/food, or showcase hardware/tech live at your booth.
+                    </p>
+                  </div>
+                  <div className="zigzag-diamond-wrapper">
+                    <div className="diamond-hud-ring" />
+                    <div className="zigzag-diamond-node">
+                      <span className="node-num label-caps">03</span>
+                    </div>
+                  </div>
+                  <div className="zigzag-empty-space" />
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* 2. TRACK PARTNERSHIP MODE */}
+          {activeTab === 'track' && (
+            <div className="mode-view animate-fade">
+              <div className="status-callout status-callout--closed">
+                <div className="status-callout-header">
+                  <span className="status-indicator-dot" />
+                  <span className="status-callout-tag label-caps">// NOTICE: '26 PARTNERSHIPS CLOSED</span>
+                </div>
+                <p className="status-callout-message">
+                  Sponsorships and track partnerships for Genesis '26 have closed, but we would love to have you for '27! Submit your details below to connect with us for the next edition.
+                </p>
+              </div>
+
+              <div className="view-header">
+                <h2 className="view-title headline-md">Track Partnership Protocol</h2>
+                <span className="view-tag label-caps">CLOSED FOR '26 // OPEN FOR '27</span>
+              </div>
+              <p className="view-intro body-md">
+                Deep collaboration for specific tracks of the festival or festival logistics. Sponsorships for Genesis '26 have closed, but we would love to have you for '27.
+              </p>
+
+              {/* ZIGZAG CENTER SPINE TIMELINE */}
+              <div className="zigzag-timeline">
+                <div className="zigzag-spine-line">
+                  <div className="laser-pulse-dot" />
+                </div>
+                
+                {/* Step 01 - LEFT */}
+                <div className="zigzag-step step-left">
+                  <div className="zigzag-card">
+                    <div className="card-spotlight" />
+                    <div className="card-hud-corner top-left-mark">+</div>
+                    <div className="card-hud-corner top-right-mark">+</div>
+                    <span className="zigzag-phase label-caps">PRODUCT INTEGRATION</span>
+                    <h3 className="zigzag-title">Direct Product Usage During Competition Rounds</h3>
+                    <p className="zigzag-desc">
+                      Direct usage and integration of your product or platform during official competition rounds and participant challenges.
+                    </p>
+                  </div>
+                  <div className="zigzag-diamond-wrapper">
+                    <div className="diamond-hud-ring" />
+                    <div className="zigzag-diamond-node">
+                      <span className="node-num label-caps">01</span>
+                    </div>
+                  </div>
+                  <div className="zigzag-empty-space" />
+                </div>
+
+                {/* Step 02 - RIGHT */}
+                <div className="zigzag-step step-right">
+                  <div className="zigzag-empty-space" />
+                  <div className="zigzag-diamond-wrapper">
+                    <div className="diamond-hud-ring" />
+                    <div className="zigzag-diamond-node">
+                      <span className="node-num label-caps">02</span>
+                    </div>
+                  </div>
+                  <div className="zigzag-card">
+                    <div className="card-spotlight" />
+                    <div className="card-hud-corner top-left-mark">+</div>
+                    <div className="card-hud-corner top-right-mark">+</div>
+                    <span className="zigzag-phase label-caps">CO-BRANDED MERCH</span>
+                    <h3 className="zigzag-title">T-Shirts, Stickers & Swag Kits</h3>
+                    <p className="zigzag-desc">
+                      Your logo featured alongside Genesis branding on official event t-shirts, stickers, and swag kits distributed to all teams.
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* 3. SPONSORSHIP MODE */}
+          {activeTab === 'sponsorship' && (
+            <div className="mode-view animate-fade">
+              <div className="status-callout status-callout--closed">
+                <div className="status-callout-header">
+                  <span className="status-indicator-dot" />
+                  <span className="status-callout-tag label-caps">// NOTICE: '26 SPONSORSHIPS CLOSED</span>
+                </div>
+                <p className="status-callout-message">
+                  Sponsorships for Genesis '26 have closed, but we would love to have you for '27! Submit your interest below to connect with our team for the next edition.
+                </p>
+              </div>
+
+              <div className="view-header">
+                <h2 className="view-title headline-md">Financial Sponsorship Protocol</h2>
+                <span className="view-tag label-caps">CLOSED FOR '26 // OPEN FOR '27</span>
+              </div>
+              <p className="view-intro body-md">
+                Sponsorships for Genesis '26 have closed, but we would love to have you for '27. Provide financial support for the festival and build long-term relationships with top talent.
               </p>
 
               {/* ZIGZAG CENTER SPINE TIMELINE */}
@@ -376,153 +599,6 @@ const PartnerPage = () => {
               </div>
             </div>
           )}
-
-          {/* 2. TRACK PARTNERSHIP MODE ZIGZAG PATHWAY */}
-          {activeTab === 'track' && (
-            <div className="mode-view animate-fade">
-              <div className="view-header">
-                <h2 className="view-title headline-md">Track Partnership Protocol</h2>
-                <span className="view-tag label-caps">Event Track Co-Branding</span>
-              </div>
-              <p className="view-intro body-md">
-                Deep collaboration for specific tracks of the festival or festival logistics.
-              </p>
-
-              {/* ZIGZAG CENTER SPINE TIMELINE */}
-              <div className="zigzag-timeline">
-                <div className="zigzag-spine-line">
-                  <div className="laser-pulse-dot" />
-                </div>
-                
-                {/* Step 01 - LEFT */}
-                <div className="zigzag-step step-left">
-                  <div className="zigzag-card">
-                    <div className="card-spotlight" />
-                    <div className="card-hud-corner top-left-mark">+</div>
-                    <div className="card-hud-corner top-right-mark">+</div>
-                    <span className="zigzag-phase label-caps">PRODUCT INTEGRATION</span>
-                    <h3 className="zigzag-title">Direct Product Usage During Competition Rounds</h3>
-                    <p className="zigzag-desc">
-                      Direct usage and integration of your product or platform during official competition rounds and participant challenges.
-                    </p>
-                  </div>
-                  <div className="zigzag-diamond-wrapper">
-                    <div className="diamond-hud-ring" />
-                    <div className="zigzag-diamond-node">
-                      <span className="node-num label-caps">01</span>
-                    </div>
-                  </div>
-                  <div className="zigzag-empty-space" />
-                </div>
-
-                {/* Step 02 - RIGHT */}
-                <div className="zigzag-step step-right">
-                  <div className="zigzag-empty-space" />
-                  <div className="zigzag-diamond-wrapper">
-                    <div className="diamond-hud-ring" />
-                    <div className="zigzag-diamond-node">
-                      <span className="node-num label-caps">02</span>
-                    </div>
-                  </div>
-                  <div className="zigzag-card">
-                    <div className="card-spotlight" />
-                    <div className="card-hud-corner top-left-mark">+</div>
-                    <div className="card-hud-corner top-right-mark">+</div>
-                    <span className="zigzag-phase label-caps">CO-BRANDED MERCH</span>
-                    <h3 className="zigzag-title">T-Shirts, Stickers & Swag Kits</h3>
-                    <p className="zigzag-desc">
-                      Your logo featured alongside Genesis branding on official event t-shirts, stickers, and swag kits distributed to all teams.
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          )}
-
-          {/* 3. STALL SETUP MODE ZIGZAG PATHWAY */}
-          {activeTab === 'stall' && (
-            <div className="mode-view animate-fade">
-              <div className="view-header">
-                <h2 className="view-title headline-md">Stall Setup Chronological Pathway</h2>
-                <span className="view-tag label-caps highlight-tag">100% FREE STALL ALLOCATION</span>
-              </div>
-              <p className="view-intro body-md">
-                Features a dedicated physical setup on campus throughout the event. Absolutely zero booth fee required.
-              </p>
-
-              {/* ZIGZAG CENTER SPINE TIMELINE */}
-              <div className="zigzag-timeline">
-                <div className="zigzag-spine-line">
-                  <div className="laser-pulse-dot" />
-                </div>
-                
-                {/* Step 01 - LEFT */}
-                <div className="zigzag-step step-left">
-                  <div className="zigzag-card">
-                    <div className="card-spotlight" />
-                    <div className="card-hud-corner top-left-mark">+</div>
-                    <div className="card-hud-corner top-right-mark">+</div>
-                    <span className="zigzag-phase label-caps">PRIME CAMPUS LOCATION</span>
-                    <h3 className="zigzag-title">High-Footfall Lawn Booth Space</h3>
-                    <p className="zigzag-desc">
-                      Dedicated high-footfall booth/stall space throughout the event. Setup tables, chairs, and 5A/15A power sockets provided out of the box at ₹0 booth fee.
-                    </p>
-                  </div>
-                  <div className="zigzag-diamond-wrapper">
-                    <div className="diamond-hud-ring" />
-                    <div className="zigzag-diamond-node">
-                      <span className="node-num label-caps">01</span>
-                    </div>
-                  </div>
-                  <div className="zigzag-empty-space" />
-                </div>
-
-                {/* Step 02 - RIGHT */}
-                <div className="zigzag-step step-right">
-                  <div className="zigzag-empty-space" />
-                  <div className="zigzag-diamond-wrapper">
-                    <div className="diamond-hud-ring" />
-                    <div className="zigzag-diamond-node">
-                      <span className="node-num label-caps">02</span>
-                    </div>
-                  </div>
-                  <div className="zigzag-card">
-                    <div className="card-spotlight" />
-                    <div className="card-hud-corner top-left-mark">+</div>
-                    <div className="card-hud-corner top-right-mark">+</div>
-                    <span className="zigzag-phase label-caps">DIRECT LEAD GENERATION</span>
-                    <h3 className="zigzag-title">Interactive Mini-Games & Sign-Ups</h3>
-                    <p className="zigzag-desc">
-                      Host interactive mini-games, distribute promotional flyers, or collect user sign-ups directly from participants and visitors.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Step 03 - LEFT */}
-                <div className="zigzag-step step-left">
-                  <div className="zigzag-card">
-                    <div className="card-spotlight" />
-                    <div className="card-hud-corner top-left-mark">+</div>
-                    <div className="card-hud-corner top-right-mark">+</div>
-                    <span className="zigzag-phase label-caps">MERCHANDISE DISTRIBUTION</span>
-                    <h3 className="zigzag-title">Branded Goodies & Live Tech Showcase</h3>
-                    <p className="zigzag-desc">
-                      Opportunity to hand out branded goodies, sell merchandise/food, or showcase hardware/tech live at your booth.
-                    </p>
-                  </div>
-                  <div className="zigzag-diamond-wrapper">
-                    <div className="diamond-hud-ring" />
-                    <div className="zigzag-diamond-node">
-                      <span className="node-num label-caps">03</span>
-                    </div>
-                  </div>
-                  <div className="zigzag-empty-space" />
-                </div>
-
-              </div>
-            </div>
-          )}
         </section>
 
         {/* Contact Form Section */}
@@ -534,9 +610,7 @@ const PartnerPage = () => {
             </div>
 
             <h2 className="form-heading headline-sm">
-              {activeTab === 'sponsorship' && 'Register for Financial Sponsorship'}
-              {activeTab === 'track' && 'Register for Track Partnership'}
-              {activeTab === 'stall' && 'Apply for Free Stall Setup'}
+              Register for Sponsorship/Stall Setup
             </h2>
             <p className="form-subtext body-md">
               Zero commitment required. Our team will get back to you within 24 hours to confirm details.
@@ -573,17 +647,30 @@ const PartnerPage = () => {
                 </div>
 
                 <div className="form-field">
+                  <label className="field-label label-caps" htmlFor="p-type">Registration Category *</label>
+                  <select
+                    id="p-type"
+                    name="partnership_type"
+                    className="field-input field-select"
+                    value={partnershipType}
+                    onChange={(e) => setPartnershipType(e.target.value)}
+                    required
+                  >
+                    <option value="Stall Setup (Genesis '26)">Stall Setup (Genesis '26 — Accepting Applications)</option>
+                    <option value="Sponsorship (Genesis '27)">Sponsorship (Genesis '27 — Future Edition)</option>
+                    <option value="Track Partnership (Genesis '27)">Track Partnership (Genesis '27 — Future Edition)</option>
+                    <option value="Both Stall Setup & Future Sponsorship">Both Stall Setup & Future Sponsorship</option>
+                  </select>
+                </div>
+
+                <div className="form-field">
                   <label className="field-label label-caps" htmlFor="p-msg">Partnership / Exhibit Details *</label>
                   <textarea
                     id="p-msg"
                     name="message"
                     className="field-input field-textarea"
                     rows="3"
-                    placeholder={
-                      activeTab === 'stall'
-                        ? "Briefly describe what you plan to showcase or sell at your stall..."
-                        : "Tell us a bit about how you'd like to partner with Genesis 2026..."
-                    }
+                    placeholder="Tell us about your brand, stall setup plans, or sponsorship inquiries..."
                     required
                   />
                 </div>

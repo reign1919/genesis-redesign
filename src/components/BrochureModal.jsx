@@ -31,28 +31,26 @@ const BrochureModal = ({ isOpen, onClose, onRegisterClick }) => {
         {/* Key Modes Summary */}
         <div className="brochure-content">
           <div className="brochure-section">
-            <h3 className="section-heading label-caps">01. SPONSORSHIP (Financial Support)</h3>
+            <h3 className="section-heading label-caps">01. STALL SETUP (Campus Presence // Open for '26)</h3>
             <p className="section-desc">
-              <strong>Branding:</strong> Named placement across main event banners, flags, and backdrops.<br />
-              <strong>Digital Reach:</strong> Dedicated social media spotlights and reels produced by PR team.<br />
-              <strong>Talent Access:</strong> Connect directly with top-performing high school developers and cybersecurity talent.
+              <strong>Status:</strong> Applications actively accepted.<br />
+              <strong>Logistics:</strong> Saturday, 26th September, 2026 at Indus Valley World School (approx 7:00 AM – 4:30 PM).<br />
+              <strong>Audience:</strong> 13–18 years of age (Grades 9–12), 250+ minimum footfall.<br />
+              <strong>Provisions & Fee:</strong> Electricity and tables provided. ₹0 setup fee and no commissions.
             </p>
           </div>
 
           <div className="brochure-section">
-            <h3 className="section-heading label-caps">02. TRACK PARTNERSHIP (Collaboration)</h3>
+            <h3 className="section-heading label-caps">02. TRACK PARTNERSHIP (Closed for '26)</h3>
             <p className="section-desc">
-              <strong>Product Integration:</strong> Direct usage of your product during competition rounds.<br />
-              <strong>Co-Branded Merch:</strong> Your logo featured alongside Genesis branding on official event t-shirts, stickers, and swag kits distributed to all teams.
+              Sponsorships and track partnerships for Genesis '26 have closed, but we would love to have you for '27.
             </p>
           </div>
 
           <div className="brochure-section">
-            <h3 className="section-heading label-caps">03. STALL SETUP (Campus Presence)</h3>
+            <h3 className="section-heading label-caps">03. SPONSORSHIP (Closed for '26)</h3>
             <p className="section-desc">
-              <strong>Prime Campus Location:</strong> Dedicated high-footfall booth/stall space throughout the event at ₹0 booth fee.<br />
-              <strong>Direct Lead Generation:</strong> Host interactive mini-games, distribute promotional flyers, or collect user sign-ups directly.<br />
-              <strong>Merchandise Distribution:</strong> Opportunity to hand out branded goodies, or showcase hardware/tech live at your booth.
+              Sponsorships for Genesis '26 have closed, but we would love to have you for '27.
             </p>
           </div>
 
