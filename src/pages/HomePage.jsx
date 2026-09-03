@@ -5,6 +5,7 @@ import CountdownTimer from '../components/CountdownTimer';
 import BrandBlock from '../components/BrandBlock';
 import CompassNav from '../components/CompassNav';
 import FAQCompass from '../components/FAQCompass';
+import SponsorsSection from '../components/SponsorsSection';
 import CommitteeSection from '../components/CommitteeSection';
 import NeuralBackground from '../components/NeuralBackground';
 import SysReadyCounter from '../components/SysReadyCounter';
@@ -103,7 +104,12 @@ const HomePage = () => {
           <FAQCompass />
         </section>
 
-        {/* SECTION 3: CORE COMMITTEE */}
+        {/* SECTION 3: SPONSORS */}
+        <section className="home-sponsors-section" aria-label="Meet Our Sponsors">
+          <SponsorsSection />
+        </section>
+
+        {/* SECTION 4: CORE COMMITTEE */}
         <section className="committee-section" aria-label="Committee Council">
           <CommitteeSection />
         </section>

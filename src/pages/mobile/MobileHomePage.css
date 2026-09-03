@@ -55,6 +55,12 @@
   justify-content: center;
 }
 
+/* ── Sponsors section ────────────────────────────────────── */
+.m-sponsors-section {
+  padding: 32px 0;
+  width: 100%;
+}
+
 /* ── Footer ──────────────────────────────────────────────── */
 .m-home-footer {
   position: relative;

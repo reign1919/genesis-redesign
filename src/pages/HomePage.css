@@ -221,6 +221,15 @@
   box-sizing: border-box;
 }
 
+.home-sponsors-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0;
+  box-sizing: border-box;
+}
+
 .committee-section {
   width: 100%;
   min-height: 100vh;

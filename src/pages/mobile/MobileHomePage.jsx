@@ -5,6 +5,7 @@ import MobileHamburger from '../../components/mobile/MobileHamburger';
 import MobileHero from '../../components/mobile/MobileHero';
 import MobileCountdown from '../../components/mobile/MobileCountdown';
 import MobileFAQ from '../../components/mobile/MobileFAQ';
+import SponsorsSection from '../../components/SponsorsSection';
 import MobileCommittee from '../../components/mobile/MobileCommittee';
 import SEO from '../../components/SEO';
 import { getOrganizationSchema, getMainEventSchema } from '../../lib/seoData';
@@ -61,6 +62,11 @@ const MobileHomePage = () => {
 
         {/* FAQ / About */}
         <MobileFAQ />
+
+        {/* Sponsors */}
+        <section className="m-sponsors-section" aria-label="Meet Our Sponsors">
+          <SponsorsSection />
+        </section>
 
         {/* Committee */}
         <MobileCommittee />
