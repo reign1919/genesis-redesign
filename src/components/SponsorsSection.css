@@ -1,6 +1,6 @@
 /* ============================================================
-   GENESIS — Sponsors Section & Marquee Banners
-   Editorial Minimalism × Dark Technical Aesthetic
+   GENESIS — Sponsors Moving Banners
+   Continuous Row Boxes (Top Left, Bottom Right)
    ============================================================ */
 
 .sponsors-section {
@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 36px;
   position: relative;
   box-sizing: border-box;
 }
@@ -38,49 +38,71 @@
   margin: 0;
 }
 
-/* MARQUEE RUNWAY */
+/* MARQUEE CONTAINER */
 .sponsors-marquee-container {
   width: 100%;
-  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
   overflow: hidden;
 }
 
-.sponsors-track-wrapper {
+/* CONTINUOUS BOX FOR EACH ROW */
+.sponsors-row-banner {
   width: 100%;
-  overflow: hidden;
+  height: 96px;
+  background: rgba(26, 28, 28, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border-accent, rgba(139, 26, 26, 0.45));
+  border-bottom: 1px solid var(--border-accent, rgba(139, 26, 26, 0.45));
   position: relative;
+  overflow: hidden;
   display: flex;
+  align-items: center;
+  box-sizing: border-box;
   mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
+.sponsors-row-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-bright, #FD625F), transparent);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* MARQUEE TRACKS */
 .sponsors-track {
   display: flex;
-  gap: 24px;
+  align-items: center;
   width: max-content;
   will-change: transform;
-  padding: 8px 0;
+  height: 100%;
 }
 
-/* Infinite continuous gliding */
-.sponsors-track-row1 {
-  animation: sponsor-glide 24s linear infinite;
+/* Top row glides LEFT */
+.sponsors-track-left {
+  animation: sponsor-glide-left 25s linear infinite;
 }
 
-.sponsors-track-row2 {
-  animation: sponsor-glide 28s linear infinite;
+/* Bottom row glides RIGHT */
+.sponsors-track-right {
+  animation: sponsor-glide-right 25s linear infinite;
 }
 
 /* Pause track on hover or focus so users can read logos */
-.sponsors-track:hover,
-.sponsors-track:focus-within {
+.sponsors-row-banner:hover .sponsors-track,
+.sponsors-row-banner:focus-within .sponsors-track {
   animation-play-state: paused;
 }
 
-@keyframes sponsor-glide {
+@keyframes sponsor-glide-left {
   0% {
     transform: translate3d(0, 0, 0);
   }
@@ -89,77 +111,72 @@
   }
 }
 
-/* SPONSOR CARD */
-.sponsor-card {
-  width: 260px;
-  height: 110px;
-  background: var(--bg-surface, #1A1C1C);
-  border: 1px solid var(--border-accent, rgba(139, 26, 26, 0.45));
-  border-radius: 4px;
-  padding: 16px 24px;
+@keyframes sponsor-glide-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* SPONSOR ITEM (No separate box per sponsor) */
+.sponsor-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
+  padding: 0 48px;
+  height: 100%;
   flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
   cursor: pointer;
   outline: none;
-  transition: transform 0.25s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
-              border-color 0.25s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
-              box-shadow 0.25s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
-}
-
-.sponsor-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(to right, var(--accent-bright, #FD625F), transparent);
-  opacity: 0.4;
-  transition: opacity 0.25s ease;
+  transition: transform 0.25s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
 /* Basic hover animation */
-.sponsor-card:hover,
-.sponsor-card:focus-visible {
-  transform: translateY(-3px) scale(1.02);
-  border-color: var(--accent-bright, #FD625F);
-  box-shadow: 0 6px 20px rgba(172, 50, 46, 0.35);
-}
-
-.sponsor-card:hover::before,
-.sponsor-card:focus-visible::before {
-  opacity: 1;
+.sponsor-item:hover,
+.sponsor-item:focus-visible {
+  transform: scale(1.08);
 }
 
 /* LOGO IMAGE STYLING */
 .sponsor-logo-img {
-  max-width: 85%;
-  max-height: 65%;
+  max-height: 52px;
+  max-width: 220px;
   width: auto;
   height: auto;
   object-fit: contain;
   display: block;
   pointer-events: none;
-  border-radius: 2px;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-  transition: transform 0.25s ease;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+  transition: filter 0.25s ease;
 }
 
-.sponsor-card:hover .sponsor-logo-img {
-  transform: scale(1.03);
+.sponsor-item:hover .sponsor-logo-img,
+.sponsor-item:focus-visible .sponsor-logo-img {
+  filter: drop-shadow(0 0 10px rgba(253, 98, 95, 0.6));
+}
+
+/* Per-logo visual contrast balance */
+.sponsor-studyin {
+  filter: brightness(1.25) contrast(1.1) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+}
+
+.sponsor-xyz {
+  max-height: 56px;
+}
+
+.sponsor-item:hover .sponsor-studyin {
+  filter: brightness(1.3) contrast(1.15) drop-shadow(0 0 10px rgba(253, 98, 95, 0.6));
 }
 
 /* ACCESSIBILITY: REDUCED MOTION */
 @media (prefers-reduced-motion: reduce) {
-  .sponsors-track {
+  .sponsors-track-left,
+  .sponsors-track-right {
     animation: none;
   }
-  .sponsors-track-wrapper {
+  .sponsors-row-banner {
     overflow-x: auto;
     mask-image: none;
     -webkit-mask-image: none;
@@ -169,33 +186,35 @@
 /* RESPONSIVENESS */
 @media (max-width: 768px) {
   .sponsors-section {
-    gap: 28px;
+    gap: 24px;
   }
 
   .sponsors-title {
     font-size: 28px;
   }
 
-  .sponsors-card {
-    width: 180px;
-    height: 80px;
-    padding: 10px 16px;
+  .sponsors-row-banner {
+    height: 72px;
   }
 
-  .sponsors-track {
-    gap: 16px;
-    padding: 6px 0;
+  .sponsor-item {
+    padding: 0 28px;
   }
 
-  .sponsors-marquee-container {
-    gap: 14px;
+  .sponsor-logo-img {
+    max-height: 40px;
+    max-width: 160px;
   }
 
-  .sponsors-track-row1 {
+  .sponsor-xyz {
+    max-height: 44px;
+  }
+
+  .sponsors-track-left {
     animation-duration: 20s;
   }
 
-  .sponsors-track-row2 {
-    animation-duration: 24s;
+  .sponsors-track-right {
+    animation-duration: 20s;
   }
 }
