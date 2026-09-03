@@ -38,6 +38,40 @@
   margin: 0;
 }
 
+.sponsors-view-directory-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 8px 18px;
+  font-family: var(--font-display, 'Orbitron', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #FD625F;
+  text-decoration: none;
+  background: rgba(253, 98, 95, 0.08);
+  border: 1px solid rgba(253, 98, 95, 0.35);
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.sponsors-view-directory-btn:hover {
+  background: #FD625F;
+  color: #0D0F11;
+  border-color: #FD625F;
+  box-shadow: 0 0 16px rgba(253, 98, 95, 0.35);
+  transform: translateY(-1px);
+}
+
+.sponsors-view-directory-btn .btn-arrow {
+  transition: transform 0.2s ease;
+}
+
+.sponsors-view-directory-btn:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
 /* MARQUEE CONTAINER */
 .sponsors-marquee-container {
   width: 100%;

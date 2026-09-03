@@ -1,20 +1,32 @@
 import { describe, it, expect } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import SponsorsSection from './SponsorsSection';
 
 describe('SponsorsSection', () => {
   it('renders the sponsors section heading and landmark', () => {
-    render(<SponsorsSection />);
+    render(
+      <MemoryRouter>
+        <SponsorsSection />
+      </MemoryRouter>
+    );
     const section = screen.getByRole('region', { name: /meet our sponsors/i });
     expect(section).toBeInTheDocument();
 
     const heading = screen.getByRole('heading', { level: 2, name: /meet our sponsors/i });
     expect(heading).toBeInTheDocument();
+
+    const dirLink = screen.getByRole('link', { name: /view all sponsors & briefs/i });
+    expect(dirLink).toHaveAttribute('href', '/sponsors');
   });
 
   it('renders all 6 unique sponsors in the marquee tracks', () => {
-    render(<SponsorsSection />);
+    render(
+      <MemoryRouter>
+        <SponsorsSection />
+      </MemoryRouter>
+    );
 
     // Check alt texts
     const n8nLogos = screen.getAllByAltText(/n8n/i);

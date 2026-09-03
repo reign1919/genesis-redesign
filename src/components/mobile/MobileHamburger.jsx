@@ -19,6 +19,7 @@ const navItems = [
     ),
   },
   { to: '/partnerships', label: 'PARTNERSHIP', icon: '✦' },
+  { to: '/sponsors', label: 'SPONSORS', icon: '★' },
   { to: '/contact', label: 'CONTACT', icon: '◈' },
   { to: '/login', label: 'REGISTER', icon: '◉' },
   { to: '/docs', label: 'DOCUMENTATION', icon: '⊞' },

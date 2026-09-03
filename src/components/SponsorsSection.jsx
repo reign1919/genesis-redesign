@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { Link } from 'react-router-dom';
 import './SponsorsSection.css';
 
 // Direct imports from sponsor-logos with updated transparent assets
@@ -31,6 +32,10 @@ const SponsorsSection = () => {
       <div className="sponsors-header">
         <span className="sponsors-tag label-caps">[OFFICIAL PARTNERS &amp; SPONSORS]</span>
         <h2 className="sponsors-title">MEET OUR SPONSORS</h2>
+        <Link to="/sponsors" className="sponsors-view-directory-btn label-caps">
+          <span>VIEW ALL SPONSORS &amp; BRIEFS</span>
+          <span className="btn-arrow" aria-hidden="true">→</span>
+        </Link>
       </div>
 
       <div className="sponsors-marquee-container">

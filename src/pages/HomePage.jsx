@@ -121,6 +121,10 @@ const HomePage = () => {
               <span style={{ color: '#FD625F', fontWeight: 'bold' }}>✦</span>
               <span>PARTNERSHIP</span>
             </Link>
+            <Link to="/sponsors" className="docs-link-btn">
+              <span style={{ color: '#FD625F', fontWeight: 'bold' }}>★</span>
+              <span>SPONSORS</span>
+            </Link>
             <Link to="/docs" className="docs-link-btn">
               <img src={folderIcon} alt="Documentation Folder Icon" className="footer-folder-icon" />
               <span>DOCUMENTATION</span>

@@ -16,6 +16,7 @@ const ReviewRegistrationPage = React.lazy(() => import('./pages/ReviewRegistrati
 const EventDetailPage = React.lazy(() => import('./pages/EventDetailPage'));
 const AdminPage = React.lazy(() => import('./pages/AdminPage'));
 const DocumentationPage = React.lazy(() => import('./pages/DocumentationPage'));
+const SponsorsPage = React.lazy(() => import('./pages/SponsorsPage'));
 const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'));
 
 // Mobile Pages
@@ -27,6 +28,7 @@ const MobilePartnerPage = React.lazy(() => import('./pages/mobile/MobilePartnerP
 const MobileSchoolDashboardPage = React.lazy(() => import('./pages/mobile/MobileSchoolDashboardPage'));
 const MobileReviewRegistrationPage = React.lazy(() => import('./pages/mobile/MobileReviewRegistrationPage'));
 const MobileDocumentationPage = React.lazy(() => import('./pages/mobile/MobileDocumentationPage'));
+const MobileSponsorsPage = React.lazy(() => import('./pages/mobile/MobileSponsorsPage'));
 const MobileWarningPopup = React.lazy(() => import('./components/mobile/MobileWarningPopup'));
 
 function AppRouter() {
@@ -43,6 +45,8 @@ function AppRouter() {
           <Route path="/contact" element={isMobile ? <MobileContactPage /> : <ContactPage />} />
           <Route path="/partnerships" element={isMobile ? <MobilePartnerPage /> : <PartnerPage />} />
           <Route path="/partner" element={<Navigate to="/partnerships" replace />} />
+          <Route path="/sponsors" element={isMobile ? <MobileSponsorsPage /> : <SponsorsPage />} />
+          <Route path="/sponsor" element={<Navigate to="/sponsors" replace />} />
           <Route path="/dashboard" element={isMobile ? <MobileSchoolDashboardPage /> : <SchoolDashboardPage />} />
           <Route path="/dashboard/review" element={isMobile ? <MobileReviewRegistrationPage /> : <ReviewRegistrationPage />} />
           <Route path="/dashboard/:eventSlug" element={<EventDetailPage />} />
