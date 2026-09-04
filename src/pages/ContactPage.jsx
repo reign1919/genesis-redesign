@@ -253,8 +253,8 @@ const ContactPage = () => {
               <Link to="/login" className="nav-label label-left">
                 <span className="nav-text">REGISTER</span>
               </Link>
-              <a href="/#about" className="nav-label label-right">
-                <span className="nav-text">ABOUT</span>
+              <a href="/#faq" className="nav-label label-right">
+                <span className="nav-text">FAQ</span>
               </a>
               <a href="/#" className="nav-label label-bottom">
                 <span className="nav-text">HOME</span>

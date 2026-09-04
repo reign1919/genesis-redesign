@@ -57,7 +57,8 @@ const MobileFAQ = () => {
   };
 
   return (
-    <section className="m-faq-section" id="about">
+    <section className="m-faq-section" id="faq">
+      <span id="about" className="sr-only" tabIndex={-1} />
       <div className="m-faq-header">
         <span className="m-faq-eyebrow label-caps">
           <span className="m-faq-dash">—</span> About Genesis

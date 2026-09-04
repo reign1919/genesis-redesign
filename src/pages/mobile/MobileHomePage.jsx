@@ -13,8 +13,9 @@ import './MobileHomePage.css';
 
 const MobileHomePage = () => {
   useEffect(() => {
-    if (window.location.hash === '#about') {
-      const el = document.getElementById('about');
+    if (window.location.hash === '#faq' || window.location.hash === '#about') {
+      const id = window.location.hash.substring(1);
+      const el = document.getElementById(id) || document.getElementById('faq') || document.getElementById('about');
       if (el) {
         setTimeout(() => {
           el.scrollIntoView({ behavior: 'smooth' });
@@ -60,13 +61,13 @@ const MobileHomePage = () => {
           <MobileCountdown />
         </section>
 
-        {/* FAQ / About */}
-        <MobileFAQ />
-
-        {/* Sponsors */}
+        {/* Sponsors (Moved above FAQ) */}
         <section className="m-sponsors-section" aria-label="Meet Our Sponsors">
           <SponsorsSection />
         </section>
+
+        {/* FAQ */}
+        <MobileFAQ />
 
         {/* Committee */}
         <MobileCommittee />
