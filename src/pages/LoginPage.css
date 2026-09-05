@@ -499,6 +499,101 @@
   flex-shrink: 0;
 }
 
+/* ── Registration Closed Card ─────────────────────────────── */
+.registration-closed-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: rgba(18, 12, 12, 0.7);
+  border: 1px solid var(--border-accent);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.registration-closed-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--accent-mid);
+}
+
+.registration-closed-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.registration-closed-text {
+  font-family: var(--font-label);
+  font-size: 17px;
+  color: var(--text);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.registration-closed-contact {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.registration-contact-email {
+  color: var(--accent-pale);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: color var(--duration-fast);
+}
+
+.registration-contact-email:hover,
+.registration-contact-email:focus-visible {
+  color: #fff;
+}
+
+.registration-closed-action {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-strong);
+}
+
+.registration-return-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(172, 50, 46, 0.12);
+  border: 1px solid var(--border-accent);
+  color: var(--text);
+  font-family: var(--font-label);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background var(--duration-fast), border-color var(--duration-fast);
+}
+
+.registration-return-btn:hover,
+.registration-return-btn:focus-visible {
+  background: rgba(172, 50, 46, 0.25);
+  border-color: var(--accent-mid);
+}
+
+.return-arrow {
+  font-size: 15px;
+  color: var(--accent-mid);
+  transition: transform var(--duration-fast);
+}
+
+.registration-return-btn:hover .return-arrow {
+  transform: translateX(4px);
+}
+
 /* ── Submit button ────────────────────────────────────────── */
 .submit-btn {
   display: flex;

@@ -4,28 +4,10 @@ import './LoginPage.css';
 import NeuralBackground from '../components/NeuralBackground';
 import CompassSVG from '../components/CompassSVG';
 import { signInSchool } from '../lib/auth';
-import { loadSchoolCredentials, submitRegistration } from '../lib/edgeFunctions';
+import { loadSchoolCredentials } from '../lib/edgeFunctions';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/authContext';
 import SEO from '../components/SEO';
-
-const enrollmentEnabled = import.meta.env.VITE_ENROLLMENT_ENABLED !== 'false';
-
-function registrationMessage(result) {
-  const messages = {
-    INVALID_SCHOOL_NAME: 'Enter a school name between 2 and 120 characters.',
-    INVALID_PHONE: 'Use international phone format, such as +919876543210.',
-    ALREADY_PENDING: 'Your school registration is already awaiting review.',
-    ALREADY_APPROVED: 'Your school is already approved. Contact The Genesis Council if you need the credentials again.',
-    REGISTRATION_REJECTED: 'Thank you for your interest. Your school registration was not approved for this edition of Genesis.',
-    NOT_A_SCHOOL_NAME: 'A school name must contain one of: School, Academy, Vidya Mandir, Institute, International',
-    RATE_LIMITED: 'Too many attempts. Try again later.',
-    ENROLLMENT_CLOSED: 'School enrollment is temporarily closed.',
-    ORIGIN_NOT_ALLOWED: 'Registration requests from this origin are not allowed.',
-    SERVICE_UNAVAILABLE: 'Registration server is temporarily unavailable. Please try again later.',
-  };
-  return result?.message || messages[result?.code] || 'Registration is temporarily unavailable. Please try again later.';
-}
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -35,8 +17,6 @@ const LoginPage = () => {
   const [authStatus, setAuthStatus] = useState(0);
   const [schoolCode, setSchoolCode] = useState('');
   const [password, setPassword] = useState('');
-  const [schoolName, setSchoolName] = useState('');
-  const [teacherWhatsapp, setTeacherWhatsapp] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formResult, setFormResult] = useState(null);
   const wrapperRef = useRef(null);
@@ -80,30 +60,11 @@ const LoginPage = () => {
     event.preventDefault();
     setFormResult(null);
 
-    setSubmitting(true);
     if (mode === 'register') {
-      const result = await submitRegistration({
-        schoolName,
-        teacherWhatsapp,
-      });
-      setSubmitting(false);
-
-      if (!result.ok) {
-        const errorMsg = registrationMessage(result);
-        console.error('[Registration Submission Failed]', { code: result.code, message: errorMsg, raw: result });
-        setFormResult({ ok: false, message: errorMsg });
-        return;
-      }
-
-      setSchoolName('');
-      setTeacherWhatsapp('');
-      setFormResult({
-        ok: true,
-        message: 'Application received. The Genesis Council will contact approved schools on WhatsApp.',
-      });
       return;
     }
 
+    setSubmitting(true);
     const result = await signInSchool(schoolCode, password);
     setSubmitting(false);
     setPassword('');
@@ -279,13 +240,13 @@ const LoginPage = () => {
                 <div className="auth-notice">
                   <span className="notice-icon">⊠</span>
                   <span>
-                    No school credentials yet?{' '}
+                    School registration is closed.{' '}
                     <button
                       type="button"
                       className="notice-link"
                       onClick={toggleMode}
                     >
-                      Register your school first.
+                      View notice.
                     </button>
                   </span>
                 </div>
@@ -332,53 +293,36 @@ const LoginPage = () => {
                 </button>
               </div>
             ) : (
-              /* ── REGISTER FIELDS ── */
+              /* ── REGISTRATION CLOSED NOTICE ── */
               <div className="fields-group" key="register">
-                <div className="field-row">
-                  <label className="field-label label-caps" htmlFor="school-name">
-                    School Name
-                  </label>
-                  <input
-                    id="school-name"
-                    className="field-input"
-                    type="text"
-                    placeholder="Full name of your institution"
-                    value={schoolName}
-                    onChange={(event) => setSchoolName(event.target.value)}
-                    autoComplete="organization"
-                    minLength={2}
-                    maxLength={120}
-                    required
-                  />
-                </div>
-
-                <div className="field-row">
-                  <label className="field-label label-caps" htmlFor="teacher-whatsapp">
-                    WhatsApp No. — Teacher-in-Charge
-                  </label>
-                  <input
-                    id="teacher-whatsapp"
-                    className="field-input"
-                    type="tel"
-                    placeholder="+919876543210"
-                    value={teacherWhatsapp}
-                    onChange={(event) => setTeacherWhatsapp(event.target.value)}
-                    autoComplete="tel"
-                    maxLength={64}
-                    required
-                  />
-                </div>
-
-                <button type="submit" className="submit-btn" id="register-submit" disabled={submitting || !enrollmentEnabled}>
-                  <span>{submitting ? 'SUBMITTING...' : enrollmentEnabled ? 'REGISTER' : 'ENROLLMENT CLOSED'}</span>
-                  <span className="submit-arrow">→</span>
-                </button>
-
-                <div className="register-warning">
-                  <span className="register-warning-icon">⊠</span>
-                  <span>
-                    Registration is for schools as a whole and is to be done by Teacher-in-Charge ONLY. Students are NOT supposed to register here.
-                  </span>
+                <div className="registration-closed-card">
+                  <div className="registration-closed-eyebrow label-caps">
+                    // NOTICE: ACCESS RESTRICTED
+                  </div>
+                  <h2 className="registration-closed-title">REGISTRATION CLOSED</h2>
+                  <p className="registration-closed-text">
+                    Registration for Genesis &apos;26 has closed, see you in &apos;27!
+                  </p>
+                  <p className="registration-closed-contact">
+                    Contact{' '}
+                    <a
+                      href="mailto:thegenesiscouncil@ivws.org"
+                      className="registration-contact-email"
+                    >
+                      thegenesiscouncil@ivws.org
+                    </a>{' '}
+                    for any discrepancies.
+                  </p>
+                  <div className="registration-closed-action">
+                    <button
+                      type="button"
+                      className="registration-return-btn"
+                      onClick={toggleMode}
+                    >
+                      <span>Already registered? Return to Login</span>
+                      <span className="return-arrow">→</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             )}

@@ -247,6 +247,87 @@
   flex-shrink: 0;
 }
 
+/* ── Registration Closed Card (Mobile) ────────────────────── */
+.ml-closed-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 16px;
+  background: rgba(18, 12, 12, 0.7);
+  border: 1px solid var(--border-accent);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.ml-closed-eyebrow {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--accent-mid);
+}
+
+.ml-closed-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.ml-closed-text {
+  font-family: var(--font-label);
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.ml-closed-contact {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.ml-contact-email {
+  color: var(--accent-pale);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+}
+
+.ml-closed-action {
+  margin-top: 6px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-strong);
+}
+
+.ml-return-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(172, 50, 46, 0.15);
+  border: 1px solid var(--border-accent);
+  color: var(--text);
+  font-family: var(--font-label);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ml-return-btn:active {
+  background: rgba(172, 50, 46, 0.3);
+}
+
+.ml-return-arrow {
+  font-size: 15px;
+  color: var(--accent-mid);
+}
+
 /* Submit */
 .ml-submit {
   display: flex;

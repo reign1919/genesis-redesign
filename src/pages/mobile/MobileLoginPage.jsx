@@ -4,28 +4,10 @@ import MobileBackground from '../../components/mobile/MobileBackground';
 import MobileHamburger from '../../components/mobile/MobileHamburger';
 import SEO from '../../components/SEO';
 import { signInSchool } from '../../lib/auth';
-import { loadSchoolCredentials, submitRegistration } from '../../lib/edgeFunctions';
+import { loadSchoolCredentials } from '../../lib/edgeFunctions';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../lib/authContext';
 import './MobileLoginPage.css';
-
-const enrollmentEnabled = import.meta.env.VITE_ENROLLMENT_ENABLED !== 'false';
-
-function registrationMessage(result) {
-  const messages = {
-    INVALID_SCHOOL_NAME: 'Enter a school name between 2 and 120 characters.',
-    INVALID_PHONE: 'Use international phone format, such as +919876543210.',
-    ALREADY_PENDING: 'Your school registration is already awaiting review.',
-    ALREADY_APPROVED: 'Your school is already approved.',
-    REGISTRATION_REJECTED: 'Your school registration was not approved.',
-    NOT_A_SCHOOL_NAME: 'A school name must contain one of: School, Academy, Vidya Mandir, Institute, International',
-    RATE_LIMITED: 'Too many attempts. Try again later.',
-    ENROLLMENT_CLOSED: 'School enrollment is temporarily closed.',
-    ORIGIN_NOT_ALLOWED: 'Registration requests from this origin are not allowed.',
-    SERVICE_UNAVAILABLE: 'Registration server is temporarily unavailable.',
-  };
-  return result?.message || messages[result?.code] || 'Registration is temporarily unavailable.';
-}
 
 const MobileLoginPage = () => {
   const navigate = useNavigate();
@@ -33,8 +15,6 @@ const MobileLoginPage = () => {
   const [mode, setMode] = useState('login');
   const [schoolCode, setSchoolCode] = useState('');
   const [password, setPassword] = useState('');
-  const [schoolName, setSchoolName] = useState('');
-  const [teacherWhatsapp, setTeacherWhatsapp] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formResult, setFormResult] = useState(null);
 
@@ -57,23 +37,12 @@ const MobileLoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setFormResult(null);
-    setSubmitting(true);
 
     if (mode === 'register') {
-      const result = await submitRegistration({ schoolName, teacherWhatsapp });
-      setSubmitting(false);
-      if (!result.ok) {
-        const errorMsg = registrationMessage(result);
-        console.error('[Mobile Registration Failed]', { code: result.code, message: errorMsg, raw: result });
-        setFormResult({ ok: false, message: errorMsg });
-        return;
-      }
-      setSchoolName('');
-      setTeacherWhatsapp('');
-      setFormResult({ ok: true, message: 'Application received. The Genesis Council will contact approved schools on WhatsApp.' });
       return;
     }
 
+    setSubmitting(true);
     const result = await signInSchool(schoolCode, password);
     setSubmitting(false);
     setPassword('');
@@ -139,9 +108,9 @@ const MobileLoginPage = () => {
               <div className="ml-notice">
                 <span className="ml-notice-icon">⊠</span>
                 <span>
-                  No credentials yet?{' '}
+                  School registration is closed.{' '}
                   <button type="button" className="ml-notice-link" onClick={toggleMode}>
-                    Register first.
+                    View notice.
                   </button>
                 </span>
               </div>
@@ -185,47 +154,25 @@ const MobileLoginPage = () => {
             </div>
           ) : (
             <div className="ml-fields" key="register">
-              <div className="ml-field">
-                <label className="ml-label label-caps" htmlFor="ml-sname">School Name</label>
-                <input
-                  id="ml-sname"
-                  className="ml-input"
-                  type="text"
-                  placeholder="Full name of your institution"
-                  value={schoolName}
-                  onChange={(e) => setSchoolName(e.target.value)}
-                  autoComplete="organization"
-                  minLength={2}
-                  maxLength={120}
-                  required
-                />
-              </div>
-
-              <div className="ml-field">
-                <label className="ml-label label-caps" htmlFor="ml-wa">WhatsApp — Teacher-in-Charge</label>
-                <input
-                  id="ml-wa"
-                  className="ml-input"
-                  type="tel"
-                  placeholder="+919876543210"
-                  value={teacherWhatsapp}
-                  onChange={(e) => setTeacherWhatsapp(e.target.value)}
-                  autoComplete="tel"
-                  maxLength={64}
-                  required
-                />
-              </div>
-
-              <button type="submit" className="ml-submit" disabled={submitting || !enrollmentEnabled}>
-                <span>{submitting ? 'SUBMITTING...' : enrollmentEnabled ? 'REGISTER' : 'ENROLLMENT CLOSED'}</span>
-                <span className="ml-submit-arrow">→</span>
-              </button>
-
-              <div className="register-warning">
-                <span className="register-warning-icon">⊠</span>
-                <span>
-                  Registration is for schools as a whole and is to be done by Teacher-in-Charge ONLY. Students are NOT supposed to register here.
-                </span>
+              <div className="ml-closed-card">
+                <div className="ml-closed-eyebrow label-caps">// NOTICE: ACCESS RESTRICTED</div>
+                <h2 className="ml-closed-title">REGISTRATION CLOSED</h2>
+                <p className="ml-closed-text">
+                  Registration for Genesis &apos;26 has closed, see you in &apos;27!
+                </p>
+                <p className="ml-closed-contact">
+                  Contact{' '}
+                  <a href="mailto:thegenesiscouncil@ivws.org" className="ml-contact-email">
+                    thegenesiscouncil@ivws.org
+                  </a>{' '}
+                  for any discrepancies.
+                </p>
+                <div className="ml-closed-action">
+                  <button type="button" className="ml-return-btn" onClick={toggleMode}>
+                    <span>Already registered? Return to Login</span>
+                    <span className="ml-return-arrow">→</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}
