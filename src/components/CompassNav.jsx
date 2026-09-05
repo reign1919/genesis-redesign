@@ -24,8 +24,8 @@ const CompassNav = () => {
           <span className="nav-text">EVENTS</span>
         </Link>
         
-        <a href="/#about" className="nav-label label-bottom" onMouseEnter={() => setHoveredNav('bottom')} onMouseLeave={() => setHoveredNav(null)}>
-          <span className="nav-text">ABOUT</span>
+        <a href="/#faq" className="nav-label label-bottom" onMouseEnter={() => setHoveredNav('bottom')} onMouseLeave={() => setHoveredNav(null)}>
+          <span className="nav-text">FAQ</span>
         </a>
       </div>
     </div>

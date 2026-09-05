@@ -22,9 +22,16 @@ const row2Sponsors = [
   { id: 'youngmetro', name: 'The Telegraph: Young Metro', logo: youngmetroLogo, alt: 'The Telegraph: Young Metro', website: 'https://www.telegraphindia.com/topic/the-telegraph-young-metro' },
 ];
 
-// Duplicate items for continuous, uninterrupted marquee looping
-const track1Items = [...row1Sponsors, ...row1Sponsors, ...row1Sponsors, ...row1Sponsors];
-const track2Items = [...row2Sponsors, ...row2Sponsors, ...row2Sponsors, ...row2Sponsors];
+// Duplicate items for continuous, uninterrupted marquee looping.
+// Each half contains enough repetitions (8 copies = 24 items, ~5,000px width) so that
+// the content spans far beyond even 4K ultrawide viewports (3840px), guaranteeing
+// zero blank spaces/pauses during transform and a 100% seamless, continuous loop.
+const REPEAT_COUNT_PER_HALF = 8;
+const row1Half = Array.from({ length: REPEAT_COUNT_PER_HALF }, () => row1Sponsors).flat();
+const row2Half = Array.from({ length: REPEAT_COUNT_PER_HALF }, () => row2Sponsors).flat();
+
+const track1Items = [...row1Half, ...row1Half];
+const track2Items = [...row2Half, ...row2Half];
 
 const SponsorsSection = () => {
   return (
@@ -43,8 +50,8 @@ const SponsorsSection = () => {
         <div className="sponsors-row-banner" aria-label="Sponsors Row 1">
           <div className="sponsors-track sponsors-track-left">
             {track1Items.map((sponsor, index) => (
-              <a 
-                key={`row1-${sponsor.id}-${index}`} 
+              <a
+                key={`row1-${sponsor.id}-${index}`}
                 href={sponsor.website}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -52,11 +59,13 @@ const SponsorsSection = () => {
                 aria-label={`Visit ${sponsor.name} website (opens in new tab)`}
                 onClick={(e) => e.currentTarget.blur()}
               >
-                <img 
-                  src={sponsor.logo} 
-                  alt={sponsor.alt} 
-                  className={`sponsor-logo-img sponsor-${sponsor.id}`} 
-                  loading="lazy" 
+                <img
+                  src={sponsor.logo}
+                  alt={sponsor.alt}
+                  className={`sponsor-logo-img sponsor-${sponsor.id}`}
+                  loading="eager"
+                  decoding="async"
+                  draggable="false"
                 />
               </a>
             ))}
@@ -67,8 +76,8 @@ const SponsorsSection = () => {
         <div className="sponsors-row-banner" aria-label="Sponsors Row 2">
           <div className="sponsors-track sponsors-track-right">
             {track2Items.map((sponsor, index) => (
-              <a 
-                key={`row2-${sponsor.id}-${index}`} 
+              <a
+                key={`row2-${sponsor.id}-${index}`}
                 href={sponsor.website}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -76,11 +85,13 @@ const SponsorsSection = () => {
                 aria-label={`Visit ${sponsor.name} website (opens in new tab)`}
                 onClick={(e) => e.currentTarget.blur()}
               >
-                <img 
-                  src={sponsor.logo} 
-                  alt={sponsor.alt} 
-                  className={`sponsor-logo-img sponsor-${sponsor.id}`} 
-                  loading="lazy" 
+                <img
+                  src={sponsor.logo}
+                  alt={sponsor.alt}
+                  className={`sponsor-logo-img sponsor-${sponsor.id}`}
+                  loading="eager"
+                  decoding="async"
+                  draggable="false"
                 />
               </a>
             ))}

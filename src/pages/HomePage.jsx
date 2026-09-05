@@ -99,14 +99,15 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* SECTION 2: FAQ */}
-        <section id="about" className="faq-section" aria-label="About and FAQ">
-          <FAQCompass />
-        </section>
-
-        {/* SECTION 3: SPONSORS */}
+        {/* SECTION 2: SPONSORS (Moved above FAQ compass) */}
         <section className="home-sponsors-section" aria-label="Meet Our Sponsors">
           <SponsorsSection />
+        </section>
+
+        {/* SECTION 3: FAQ COMPASS */}
+        <section id="faq" className="faq-section" aria-label="Frequently Asked Questions &amp; About">
+          <span id="about" className="sr-only" tabIndex={-1} />
+          <FAQCompass />
         </section>
 
         {/* SECTION 4: CORE COMMITTEE */}
