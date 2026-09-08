@@ -4,7 +4,6 @@ import './SponsorsSection.css';
 
 // Direct imports from sponsor-logos with updated transparent assets
 import n8nLogo from '../../sponsor-logos/n8n_pink+white_logo.png';
-import studyinLogo from '../../sponsor-logos/study-in-removebg-preview.png';
 import friendsfmLogo from '../../sponsor-logos/91-9-fm-removebg-preview.png';
 import xyzLogo from '../../sponsor-logos/xyz-logo-color.png';
 import reactkolkataLogo from '../../sponsor-logos/raact-kolkata-logo-full-light.png';
@@ -12,23 +11,22 @@ import youngmetroLogo from '../../sponsor-logos/young-metro-removebg-preview.png
 
 const row1Sponsors = [
   { id: 'n8n', name: 'n8n', logo: n8nLogo, alt: 'n8n', website: 'https://n8n.io/' },
-  { id: 'studyin', name: 'StudyIn', logo: studyinLogo, alt: 'StudyIn', website: 'https://gostudyin.com/' },
+  { id: 'xyz', name: '.xyz', logo: xyzLogo, alt: '.xyz', website: 'https://gen.xyz/' },
   { id: 'friendsfm', name: '91.9 Friends FM', logo: friendsfmLogo, alt: '91.9 Friends FM', website: 'https://www.youtube.com/919friendsfm' },
 ];
 
 const row2Sponsors = [
-  { id: 'xyz', name: '.xyz', logo: xyzLogo, alt: '.xyz', website: 'https://gen.xyz/' },
-  { id: 'reactkolkata', name: 'React Kolkata', logo: reactkolkataLogo, alt: 'React Kolkata', website: 'https://reactkolkata.com/en' },
   { id: 'youngmetro', name: 'The Telegraph: Young Metro', logo: youngmetroLogo, alt: 'The Telegraph: Young Metro', website: 'https://www.telegraphindia.com/topic/the-telegraph-young-metro' },
+  { id: 'reactkolkata', name: 'React Kolkata', logo: reactkolkataLogo, alt: 'React Kolkata', website: 'https://reactkolkata.com/en' },
 ];
 
 // Duplicate items for continuous, uninterrupted marquee looping.
-// Each half contains enough repetitions (8 copies = 24 items, ~5,000px width) so that
-// the content spans far beyond even 4K ultrawide viewports (3840px), guaranteeing
-// zero blank spaces/pauses during transform and a 100% seamless, continuous loop.
-const REPEAT_COUNT_PER_HALF = 8;
-const row1Half = Array.from({ length: REPEAT_COUNT_PER_HALF }, () => row1Sponsors).flat();
-const row2Half = Array.from({ length: REPEAT_COUNT_PER_HALF }, () => row2Sponsors).flat();
+// Both halves contain 24 items (~5,000px width) so that the content spans far
+// beyond even 4K ultrawide viewports (3840px), guaranteeing zero blank spaces/pauses.
+const REPEAT_COUNT_ROW1 = 8;
+const REPEAT_COUNT_ROW2 = 12;
+const row1Half = Array.from({ length: REPEAT_COUNT_ROW1 }, () => row1Sponsors).flat();
+const row2Half = Array.from({ length: REPEAT_COUNT_ROW2 }, () => row2Sponsors).flat();
 
 const track1Items = [...row1Half, ...row1Half];
 const track2Items = [...row2Half, ...row2Half];

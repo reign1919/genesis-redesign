@@ -11,7 +11,7 @@ const MobileSponsorsPage = () => {
     <div className="m-sponsors-wrapper">
       <SEO
         title="Official Sponsors & Partners — Genesis 2026 | IVWS Tech Fest"
-        description="Meet the official sponsors and partners supporting Genesis 2026 Tech Fest: StudyIn, n8n, .xyz, 91.9 Friends FM, The Telegraph: Young Metro, and React Kolkata."
+        description="Meet the official sponsors and partners supporting Genesis 2026 Tech Fest: n8n, .xyz, 91.9 Friends FM, The Telegraph: Young Metro, and React Kolkata."
         canonical="/sponsors"
       />
 

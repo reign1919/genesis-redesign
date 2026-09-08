@@ -42,9 +42,9 @@ describe('MobileSponsorsPage', () => {
     expect(screen.getByText(/partners & sponsors/i)).toBeInTheDocument();
   });
 
-  it('renders all 6 sponsor cards with visit buttons and correct URLs', () => {
+  it('renders all 5 sponsor cards with visit buttons and correct URLs', () => {
     renderComponent();
-    expect(screen.getByText('StudyIn')).toBeInTheDocument();
+    expect(screen.queryByText('StudyIn')).not.toBeInTheDocument();
     expect(screen.getByText('n8n')).toBeInTheDocument();
     expect(screen.getByText('.xyz')).toBeInTheDocument();
     expect(screen.getByText('91.9 Friends FM')).toBeInTheDocument();
@@ -52,11 +52,11 @@ describe('MobileSponsorsPage', () => {
     expect(screen.getByText('React Kolkata')).toBeInTheDocument();
 
     const links = screen.getAllByRole('link', { name: /visit.*website/i });
-    expect(links).toHaveLength(6);
+    expect(links).toHaveLength(5);
 
-    const studyinLink = screen.getByRole('link', { name: /visit studyin official website/i });
-    expect(studyinLink).toHaveAttribute('href', 'https://gostudyin.com/');
-    expect(studyinLink).toHaveAttribute('target', '_blank');
+    const n8nLink = screen.getByRole('link', { name: /visit n8n official website/i });
+    expect(n8nLink).toHaveAttribute('href', 'https://n8n.io/');
+    expect(n8nLink).toHaveAttribute('target', '_blank');
   });
 
   it('does not render become a partner callout on mobile sponsors page', () => {

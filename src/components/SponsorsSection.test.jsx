@@ -21,7 +21,7 @@ describe('SponsorsSection', () => {
     expect(dirLink).toHaveAttribute('href', '/sponsors');
   });
 
-  it('renders all 6 unique sponsors in the marquee tracks', () => {
+  it('renders all 5 unique sponsors in the marquee tracks', () => {
     render(
       <MemoryRouter>
         <SponsorsSection />
@@ -30,7 +30,6 @@ describe('SponsorsSection', () => {
 
     // Check alt texts
     const n8nLogos = screen.getAllByAltText(/n8n/i);
-    const studyinLogos = screen.getAllByAltText(/studyin/i);
     const friendsfmLogos = screen.getAllByAltText(/friends\s*fm/i);
     const xyzLogos = screen.getAllByAltText(/\.xyz|xyz/i);
     const reactkolkataLogos = screen.getAllByAltText(/react\s*kolkata/i);
@@ -38,11 +37,12 @@ describe('SponsorsSection', () => {
 
     // Each should be duplicated for the seamless loop
     expect(n8nLogos.length).toBeGreaterThanOrEqual(2);
-    expect(studyinLogos.length).toBeGreaterThanOrEqual(2);
     expect(friendsfmLogos.length).toBeGreaterThanOrEqual(2);
     expect(xyzLogos.length).toBeGreaterThanOrEqual(2);
     expect(reactkolkataLogos.length).toBeGreaterThanOrEqual(2);
     expect(youngmetroLogos.length).toBeGreaterThanOrEqual(2);
+
+    expect(screen.queryByAltText(/studyin/i)).not.toBeInTheDocument();
   });
 
   it('renders sponsor logos as external links to their official websites', () => {
@@ -57,10 +57,9 @@ describe('SponsorsSection', () => {
     expect(n8nLinks[0]).toHaveAttribute('target', '_blank');
     expect(n8nLinks[0]).toHaveAttribute('rel', expect.stringContaining('noopener'));
 
-    const studyinLinks = screen.getAllByRole('link', { name: /visit studyin website/i });
-    expect(studyinLinks[0]).toHaveAttribute('href', 'https://gostudyin.com/');
-
     const xyzLinks = screen.getAllByRole('link', { name: /visit \.xyz website/i });
     expect(xyzLinks[0]).toHaveAttribute('href', 'https://gen.xyz/');
+
+    expect(screen.queryByRole('link', { name: /visit studyin website/i })).not.toBeInTheDocument();
   });
 });

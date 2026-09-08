@@ -38,24 +38,23 @@ describe('SponsorsPage (Desktop)', () => {
     expect(screen.getByText(/official partners & sponsors/i)).toBeInTheDocument();
   });
 
-  it('renders all 6 sponsor names and briefs', () => {
+  it('renders all 5 sponsor names and briefs', () => {
     renderComponent();
-    expect(screen.getByText('StudyIn')).toBeInTheDocument();
+    expect(screen.queryByText('StudyIn')).not.toBeInTheDocument();
     expect(screen.getByText('n8n')).toBeInTheDocument();
     expect(screen.getByText('.xyz')).toBeInTheDocument();
     expect(screen.getByText('91.9 Friends FM')).toBeInTheDocument();
     expect(screen.getByText('The Telegraph: Young Metro')).toBeInTheDocument();
     expect(screen.getByText('React Kolkata')).toBeInTheDocument();
 
-    expect(screen.getByText(/Premier global education and overseas admissions consultancy/i)).toBeInTheDocument();
     expect(screen.getByText(/Fair-code workflow automation platform/i)).toBeInTheDocument();
     expect(screen.getByText(/boundary-pushing domain registry/i)).toBeInTheDocument();
   });
 
   it('renders external links with target="_blank" and rel="noopener noreferrer"', () => {
     renderComponent();
-    const link = screen.getByRole('link', { name: /visit studyin official website/i });
-    expect(link).toHaveAttribute('href', 'https://gostudyin.com/');
+    const link = screen.getByRole('link', { name: /visit n8n official website/i });
+    expect(link).toHaveAttribute('href', 'https://n8n.io/');
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
   });
@@ -65,9 +64,9 @@ describe('SponsorsPage (Desktop)', () => {
     expect(screen.queryByRole('link', { name: /become a partner/i })).not.toBeInTheDocument();
   });
 
-  it('renders all 6 sponsor logos with alt text', () => {
+  it('renders all 5 sponsor logos with alt text', () => {
     renderComponent();
-    expect(screen.getByAltText('StudyIn logo')).toBeInTheDocument();
+    expect(screen.queryByAltText('StudyIn logo')).not.toBeInTheDocument();
     expect(screen.getByAltText('n8n logo')).toBeInTheDocument();
     expect(screen.getByAltText('.xyz logo')).toBeInTheDocument();
     expect(screen.getByAltText('91.9 Friends FM logo')).toBeInTheDocument();

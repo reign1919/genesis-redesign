@@ -67,34 +67,13 @@ describe('LoginPage (Desktop)', () => {
     expect(screen.getByRole('button', { name: /ENTER/i })).toBeInTheDocument();
   });
 
-  it('displays closure notice in the login helper text', () => {
-    renderComponent();
-    expect(screen.getByText(/School registration is closed/i)).toBeInTheDocument();
-  });
-
-  it('switches to register mode and displays closure message instead of registration form', () => {
+  it('switches to register mode and displays registration form', () => {
     renderComponent();
     const registerToggle = screen.getByRole('button', { name: /^REGISTER$/i });
     fireEvent.click(registerToggle);
 
-    expect(screen.getByRole('heading', { name: /REGISTRATION CLOSED/i })).toBeInTheDocument();
-    expect(
-      screen.getByText(/Registration for Genesis '26 has closed, see you in '27!/i)
-    ).toBeInTheDocument();
-
-    const contactLink = screen.getByRole('link', { name: /thegenesiscouncil@ivws\.org/i });
-    expect(contactLink).toBeInTheDocument();
-    expect(contactLink).toHaveAttribute('href', 'mailto:thegenesiscouncil@ivws.org');
-
-    // Registration inputs and buttons must not be present
-    expect(screen.queryByLabelText(/School Name/i)).not.toBeInTheDocument();
-    expect(screen.queryByLabelText(/WhatsApp/i)).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /^SUBMITTING...$/i })).not.toBeInTheDocument();
-
-    // Clicking return button brings user back to login
-    const returnBtn = screen.getByRole('button', { name: /Already registered\? Return to Login/i });
-    fireEvent.click(returnBtn);
-    expect(screen.getByLabelText(/School Code/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/School Name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/WhatsApp/i)).toBeInTheDocument();
   });
 });
 
@@ -118,25 +97,12 @@ describe('MobileLoginPage', () => {
     expect(screen.getByRole('button', { name: /ENTER/i })).toBeInTheDocument();
   });
 
-  it('switches to register tab and shows closed notice on mobile', () => {
+  it('switches to register tab and shows registration inputs on mobile', () => {
     renderComponent();
     const registerTab = screen.getByRole('button', { name: /^REGISTER$/i });
     fireEvent.click(registerTab);
 
-    expect(screen.getByRole('heading', { name: /REGISTRATION CLOSED/i })).toBeInTheDocument();
-    expect(
-      screen.getByText(/Registration for Genesis '26 has closed, see you in '27!/i)
-    ).toBeInTheDocument();
-
-    const contactLink = screen.getByRole('link', { name: /thegenesiscouncil@ivws\.org/i });
-    expect(contactLink).toBeInTheDocument();
-    expect(contactLink).toHaveAttribute('href', 'mailto:thegenesiscouncil@ivws.org');
-
-    expect(screen.queryByLabelText(/School Name/i)).not.toBeInTheDocument();
-    expect(screen.queryByLabelText(/WhatsApp/i)).not.toBeInTheDocument();
-
-    const returnBtn = screen.getByRole('button', { name: /Already registered\? Return to Login/i });
-    fireEvent.click(returnBtn);
-    expect(screen.getByLabelText(/School Code/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/School Name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/WhatsApp/i)).toBeInTheDocument();
   });
 });

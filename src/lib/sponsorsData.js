@@ -1,19 +1,10 @@
 import n8nLogo from '../../sponsor-logos/n8n_pink+white_logo.png';
-import studyinLogo from '../../sponsor-logos/study-in-removebg-preview.png';
 import friendsfmLogo from '../../sponsor-logos/91-9-fm-removebg-preview.png';
 import xyzLogo from '../../sponsor-logos/xyz-logo-color.png';
 import reactkolkataLogo from '../../sponsor-logos/raact-kolkata-logo-full-light.png';
 import youngmetroLogo from '../../sponsor-logos/young-metro-removebg-preview.png';
 
 export const SPONSORS = [
-  {
-    id: 'studyin',
-    name: 'StudyIn',
-    role: 'GLOBAL EDUCATION PARTNER',
-    logo: studyinLogo,
-    website: 'https://gostudyin.com/',
-    description: 'Premier global education and overseas admissions consultancy, guiding ambitious students through end-to-end university applications and career pathways worldwide.',
-  },
   {
     id: 'n8n',
     name: 'n8n',
