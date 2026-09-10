@@ -10,9 +10,9 @@ values
   ('code-clash', 'CODE CLASH', 'Senior-level competitive coding contest on HackerRank testing algorithmic efficiency.', 2, true, '120-Minute HackerRank'),
   ('merge-conflict', 'MERGE CONFLICT', 'Oxford-style technical debate on AI ethics, digital rights, and tech governance.', 2, true, 'Oxford-Style Debate'),
   ('cine-tank', 'CINE TANK', 'Two-part event introducing a tech product through a short cinematic film followed by a live pitch.', 3, true, '2m Film + 3m Pitch'),
-  ('pixel-prix', 'PIXEL PRIX', 'Rapid-fire digital art challenge to conceptualize and sketch a one-page comic based on a surprise prompt.', 1, true, 'Solo A4 Digital Art'),
-  ('reel-deal', 'REEL DEAL', 'Create a vertical video (60s minimum to 120s maximum) capturing the excitement and preparation for Genesis Fest.', 3, true, '60s–120s Vertical 9:16 Reel'),
-  ('focal-point', 'FOCAL POINT', 'On-spot photography competition capturing raw moments and atmosphere across the fest campus.', 2, true, 'On-Spot Campus Shooting')
+  ('pixel-prix', 'PIXEL PRIX', 'Live digital art competition where participants create original artwork based on a surprise prompt.', 1, true, 'Solo Digital Art (BYOD)'),
+  ('reel-deal', 'REEL DEAL', 'Create a vertical video (60s minimum to 120s maximum) capturing the excitement and preparation for Genesis Fest.', 3, true, 'Public Instagram Reel Link'),
+  ('focal-point', 'FOCAL POINT', 'On-spot photography competition capturing raw moments and atmosphere across the fest campus.', 2, true, '2–4 Photos (Venue Only)')
 on conflict (slug) do update set
   name = excluded.name,
   description = excluded.description,
