@@ -264,7 +264,7 @@ export const eventsData = [
       'Timeline: Shooting starts directly after the opening ceremony; participants have until 1.5 hours before the closing ceremony.',
       'Location: All photos must be taken exclusively at the fest venue itself during the designated window.',
       'Submission: A fixed number of entries must be submitted, with a minimum of 2 and a maximum of 4 entries.',
-      'Allowed: Participant\'s own camera (DSLR/Mirrorless/Phone); all types of editing are allowed (looking for creativity).',
+      'Allowed: Participant\'s own camera (DSLR/Mirrorless); all types of editing are allowed (looking for creativity).',
       'Prohibited: STRICTLY NO AI ALLOWED (generative AI tools for creating, expanding, or altering images banned), no pre-shot material or off-site photography.'
     ]
   }
