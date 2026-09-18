@@ -163,80 +163,112 @@ function AdminDashboard({ admin, onLogout }) {
       : date.toLocaleString('en-IN', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
 
-  const buildExportText = (allRegistrations) => {
-    const lines = [];
-    const divider = '='.repeat(64);
-    lines.push(divider);
-    lines.push('GENESIS TECH FEST — ADMIN EXPORT');
-    lines.push('Indus Valley World School');
-    lines.push(`Exported: ${new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}`);
-    lines.push(`Total registrations: ${allRegistrations.length}`);
-    lines.push(divider);
+  // Render a jsPDF A4 document: page header, then each school's details
+  // immediately followed by that school's full roster summary.
+  const buildExportPdf = async (allRegistrations) => {
+    const { jsPDF } = await import('jspdf');
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 48;
+    let y = margin;
 
-    allRegistrations.forEach((registration, index) => {
-      lines.push('');
-      lines.push('-'.repeat(64));
-      lines.push(`SCHOOL ${index + 1}: ${registration.school_name || 'N/A'}`);
-      lines.push('-'.repeat(64));
-      lines.push(`  Status           : ${registration.status || '—'}`);
-      lines.push(`  School Code      : ${registration.school_code || '—'}`);
-      lines.push(`  Teacher WhatsApp : ${registration.teacher_whatsapp || '—'}`);
-      lines.push(`  Submitted        : ${formatExportDate(registration.created_at)}`);
-    });
+    const ensureSpace = (needed) => {
+      if (y + needed > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+    };
 
-    return lines.join('\n');
-  };
+    const writeLine = ({ text, size = 10, bold = false, indent = 0, color = [40, 40, 40], spacing = 14 }) => {
+      doc.setFont('helvetica', bold ? 'bold' : 'normal');
+      doc.setFontSize(size);
+      doc.setTextColor(...color);
+      const wrapped = doc.splitTextToSize(text, pageWidth - margin * 2 - indent);
+      ensureSpace(wrapped.length * spacing);
+      doc.text(wrapped, margin + indent, y);
+      y += wrapped.length * spacing + 4;
+    };
 
-  // For each school, fetch its full roster and append event + participant details.
-  const buildFullExportText = async (allRegistrations) => {
-    const header = buildExportText(allRegistrations);
-    const lines = [header];
+    const writeDivider = () => {
+      ensureSpace(24);
+      doc.setDrawColor(160, 40, 45);
+      doc.setLineWidth(1.2);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 18;
+    };
+
+    // ── Document header ──
+    writeLine({ text: 'GENESIS TECH FEST — ADMIN EXPORT', size: 16, bold: true, color: [160, 40, 45] });
+    writeLine({ text: 'Indus Valley World School', size: 11, color: [120, 120, 120] });
+    writeLine({ text: `Exported: ${new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}`, size: 11, color: [120, 120, 120] });
+    writeLine({ text: `Total registrations: ${allRegistrations.length}`, size: 11, color: [120, 120, 120], spacing: 18 });
+    writeDivider();
 
     for (let index = 0; index < allRegistrations.length; index += 1) {
       const registration = allRegistrations[index];
       const rosterResult = await fetchSchoolRoster(registration.id);
-      lines.push('');
-      lines.push('#'.repeat(64));
-      lines.push(`ROSTER DETAILS — ${registration.school_name || `SCHOOL ${index + 1}`}`);
-      lines.push(`Event selections: ${rosterResult.totalSelectedCount} | Complete rosters: ${rosterResult.completeCount}`);
-      lines.push('#'.repeat(64));
+
+      // ── School details block ──
+      ensureSpace(110);
+      writeLine({ text: `SCHOOL ${index + 1}: ${registration.school_name || 'N/A'}`, size: 14, bold: true, color: [30, 30, 30], spacing: 18 });
+      writeLine({ text: `  Status           : ${registration.status || '—'}`, indent: 12 });
+      writeLine({ text: `  School Code      : ${registration.school_code || '—'}`, indent: 12 });
+      writeLine({ text: `  Teacher WhatsApp : ${registration.teacher_whatsapp || '—'}`, indent: 12 });
+      writeLine({ text: `  Submitted        : ${formatExportDate(registration.created_at)}`, indent: 12, spacing: 18 });
+
+      // ── Roster summary block, right below the school details ──
+      writeDivider();
+      writeLine({ text: 'ROSTER SUMMARY', size: 11, bold: true, color: [160, 40, 45], spacing: 16 });
+      writeLine({
+        text: `Event selections: ${rosterResult.totalSelectedCount} | Complete rosters: ${rosterResult.completeCount}`,
+        size: 10,
+        color: [90, 90, 90],
+        spacing: 14,
+      });
 
       const rosters = rosterResult.rosters || [];
       if (rosters.length === 0) {
-        lines.push('  No event rosters registered yet for this institution.');
+        writeLine({ text: 'No event rosters registered yet for this institution.', size: 10, color: [120, 120, 120] });
       } else {
         rosters.forEach((event, eventIdx) => {
-          lines.push('');
-          lines.push(`  EVENT ${eventIdx + 1}: ${event.event_name}`);
-          lines.push(`  Category          : ${event.category || '—'}`);
-          lines.push(`  Team Limit        : ${event.teamLimit || '—'} Members`);
-          lines.push(`  Selection Status  : ${event.status || '—'}`);
-          lines.push('  Participants:');
+          ensureSpace(30);
+          writeLine({ text: `EVENT ${eventIdx + 1}: ${event.event_name}`, size: 11, bold: true, indent: 6, spacing: 16 });
+          writeLine({ text: `  Category          : ${event.category || '—'}`, indent: 12 });
+          writeLine({ text: `  Team Limit        : ${event.teamLimit || '—'} Members`, indent: 12 });
+          writeLine({ text: `  Selection Status  : ${event.status || '—'}`, indent: 12, spacing: 12 });
+          writeLine({ text: 'Participants:', size: 10, bold: true, indent: 6, spacing: 14 });
+
           (event.participants || []).forEach((p) => {
-            lines.push(`    ${p.row_index}. ${p.name && p.name !== '—' ? p.name : 'Not provided'} | Class: ${p.class || '—'} | Phone: ${p.phone || '—'}`);
+            const name = p.name && p.name !== '—' ? p.name : 'Not provided';
+            writeLine({
+              text: `${p.row_index}. ${name} | Class: ${p.class || '—'} | Phone: ${p.phone || '—'}`,
+              size: 10,
+              indent: 12,
+              color: [60, 60, 60],
+            });
           });
+          y += 8;
         });
       }
-      lines.push('');
+
+      y += 10;
+      writeDivider();
+      if (index < allRegistrations.length - 1) {
+        ensureSpace(40);
+        y += 14;
+      }
     }
 
-    return lines.join('\n');
+    return doc;
   };
 
   const handleExport = async () => {
     setExporting(true);
     setExportError('');
     try {
-      const text = await buildFullExportText(registrations);
-      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.download = `genesis-school-export-${new Date().toISOString().slice(0, 10)}.txt`;
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
-      URL.revokeObjectURL(url);
+      const doc = await buildExportPdf(registrations);
+      doc.save(`genesis-school-export-${new Date().toISOString().slice(0, 10)}.pdf`);
     } catch (err) {
       console.error('[Admin Export Failed]', err);
       setExportError('The export could not be generated. Try again later.');
