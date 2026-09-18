@@ -143,11 +143,13 @@ export default function RosterSummaryView({
                     )}
                   </p>
                 </div>
-                <div className="no-print">
-                  <button type="button" className="review-print-btn" onClick={handlePrint}>
-                    <Printer size={15} /> Export PDF / Print
-                  </button>
-                </div>
+                {!isAdminView && (
+                  <div className="no-print">
+                    <button type="button" className="review-print-btn" onClick={handlePrint}>
+                      <Printer size={15} /> Export PDF / Print
+                    </button>
+                  </div>
+                )}
               </div>
 
               {!isAdminView && (
