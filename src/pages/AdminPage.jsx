@@ -151,6 +151,100 @@ function AdminDashboard({ admin, onLogout }) {
     }
   };
 
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState('');
+
+  // Build the date line like "Wed, 14 Aug 2026"
+  const formatExportDate = (value) => {
+    if (!value) return '—';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime())
+      ? '—'
+      : date.toLocaleString('en-IN', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  };
+
+  const buildExportText = (allRegistrations) => {
+    const lines = [];
+    const divider = '='.repeat(64);
+    lines.push(divider);
+    lines.push('GENESIS TECH FEST — ADMIN EXPORT');
+    lines.push('Indus Valley World School');
+    lines.push(`Exported: ${new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}`);
+    lines.push(`Total registrations: ${allRegistrations.length}`);
+    lines.push(divider);
+
+    allRegistrations.forEach((registration, index) => {
+      lines.push('');
+      lines.push('-'.repeat(64));
+      lines.push(`SCHOOL ${index + 1}: ${registration.school_name || 'N/A'}`);
+      lines.push('-'.repeat(64));
+      lines.push(`  Status           : ${registration.status || '—'}`);
+      lines.push(`  School Code      : ${registration.school_code || '—'}`);
+      lines.push(`  Teacher WhatsApp : ${registration.teacher_whatsapp || '—'}`);
+      lines.push(`  Submitted        : ${formatExportDate(registration.created_at)}`);
+    });
+
+    return lines.join('\n');
+  };
+
+  // For each school, fetch its full roster and append event + participant details.
+  const buildFullExportText = async (allRegistrations) => {
+    const header = buildExportText(allRegistrations);
+    const lines = [header];
+
+    for (let index = 0; index < allRegistrations.length; index += 1) {
+      const registration = allRegistrations[index];
+      const rosterResult = await fetchSchoolRoster(registration.id);
+      lines.push('');
+      lines.push('#'.repeat(64));
+      lines.push(`ROSTER DETAILS — ${registration.school_name || `SCHOOL ${index + 1}`}`);
+      lines.push(`Event selections: ${rosterResult.totalSelectedCount} | Complete rosters: ${rosterResult.completeCount}`);
+      lines.push('#'.repeat(64));
+
+      const rosters = rosterResult.rosters || [];
+      if (rosters.length === 0) {
+        lines.push('  No event rosters registered yet for this institution.');
+      } else {
+        rosters.forEach((event, eventIdx) => {
+          lines.push('');
+          lines.push(`  EVENT ${eventIdx + 1}: ${event.event_name}`);
+          lines.push(`  Category          : ${event.category || '—'}`);
+          lines.push(`  Team Limit        : ${event.teamLimit || '—'} Members`);
+          lines.push(`  Selection Status  : ${event.status || '—'}`);
+          lines.push('  Participants:');
+          (event.participants || []).forEach((p) => {
+            lines.push(`    ${p.row_index}. ${p.name && p.name !== '—' ? p.name : 'Not provided'} | Class: ${p.class || '—'} | Phone: ${p.phone || '—'}`);
+          });
+        });
+      }
+      lines.push('');
+    }
+
+    return lines.join('\n');
+  };
+
+  const handleExport = async () => {
+    setExporting(true);
+    setExportError('');
+    try {
+      const text = await buildFullExportText(registrations);
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `genesis-school-export-${new Date().toISOString().slice(0, 10)}.txt`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('[Admin Export Failed]', err);
+      setExportError('The export could not be generated. Try again later.');
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const filtered = useMemo(() => filter === 'all'
     ? registrations
     : registrations.filter(registration => registration.status === filter), [filter, registrations]);
@@ -167,7 +261,19 @@ function AdminDashboard({ admin, onLogout }) {
       eyebrow="Restricted Genesis Council Access"
       title="Admin Portal"
       subtitle={`Signed in as ${admin.email}`}
-      action={<button type="button" className="secure-action" onClick={() => onLogout('logout')}>Log out</button>}
+      action={(
+        <div className="admin-header-actions">
+          <button
+            type="button"
+            className="secure-action"
+            onClick={handleExport}
+            disabled={exporting || registrations.length === 0}
+          >
+            {exporting ? 'Exporting…' : 'Export'}
+          </button>
+          <button type="button" className="secure-action" onClick={() => onLogout('logout')}>Log out</button>
+        </div>
+      )}
     >
       <SEO
         title="Admin Portal — Genesis 2026"
@@ -175,6 +281,7 @@ function AdminDashboard({ admin, onLogout }) {
         noindex={true}
       />
       {error && <div className="secure-card secure-status secure-status--error" role="alert">{error}</div>}
+      {exportError && <div className="secure-card secure-status secure-status--error" role="alert">{exportError}</div>}
 
       {approvalNotice && (
         <section className="admin-notice secure-card" role="status">

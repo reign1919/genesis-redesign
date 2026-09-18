@@ -33,6 +33,13 @@
   align-self: flex-start;
 }
 
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .admin-filters {
   display: flex;
   margin: 0 0 20px;
