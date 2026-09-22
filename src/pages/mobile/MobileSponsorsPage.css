@@ -190,6 +190,7 @@
   object-fit: contain;
 }
 
+.m-logo-img.m-logo-yesbank { max-height: 58%; }
 .m-logo-img.m-logo-n8n { max-height: 60%; }
 .m-logo-img.m-logo-xyz { max-height: 55%; }
 .m-logo-img.m-logo-friendsfm { max-height: 78%; }

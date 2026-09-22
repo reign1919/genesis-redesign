@@ -8,6 +8,7 @@ import friendsfmLogo from '../../sponsor-logos/91-9-fm-removebg-preview.png';
 import xyzLogo from '../../sponsor-logos/xyz-logo-color.png';
 import reactkolkataLogo from '../../sponsor-logos/raact-kolkata-logo-full-light.png';
 import youngmetroLogo from '../../sponsor-logos/young-metro-removebg-preview.png';
+import yesBankLogo from '../../sponsor-logos/Yes_Bank_Logo_in_2024.png';
 
 const row1Sponsors = [
   { id: 'n8n', name: 'n8n', logo: n8nLogo, alt: 'n8n', website: 'https://n8n.io/' },
@@ -18,13 +19,14 @@ const row1Sponsors = [
 const row2Sponsors = [
   { id: 'youngmetro', name: 'The Telegraph: Young Metro', logo: youngmetroLogo, alt: 'The Telegraph: Young Metro', website: 'https://www.telegraphindia.com/topic/the-telegraph-young-metro' },
   { id: 'reactkolkata', name: 'React Kolkata', logo: reactkolkataLogo, alt: 'React Kolkata', website: 'https://reactkolkata.com/en' },
+  { id: 'yesbank', name: 'Yes Bank', logo: yesBankLogo, alt: 'Yes Bank', website: 'https://www.yesbank.in/' },
 ];
 
 // Duplicate items for continuous, uninterrupted marquee looping.
 // Both halves contain 24 items (~5,000px width) so that the content spans far
 // beyond even 4K ultrawide viewports (3840px), guaranteeing zero blank spaces/pauses.
 const REPEAT_COUNT_ROW1 = 8;
-const REPEAT_COUNT_ROW2 = 12;
+const REPEAT_COUNT_ROW2 = 8;
 const row1Half = Array.from({ length: REPEAT_COUNT_ROW1 }, () => row1Sponsors).flat();
 const row2Half = Array.from({ length: REPEAT_COUNT_ROW2 }, () => row2Sponsors).flat();
 

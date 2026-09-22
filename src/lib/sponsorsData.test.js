@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { SPONSORS } from './sponsorsData';
 
 describe('sponsorsData', () => {
-  it('contains exactly 5 official sponsors', () => {
-    expect(SPONSORS).toHaveLength(5);
+  it('contains exactly 6 official sponsors', () => {
+    expect(SPONSORS).toHaveLength(6);
   });
 
   it('has all required fields for each sponsor', () => {
@@ -20,6 +20,7 @@ describe('sponsorsData', () => {
   it('includes exact official names and does not include StudyIn', () => {
     const names = SPONSORS.map((s) => s.name);
     expect(names).not.toContain('StudyIn');
+    expect(names).toContain('Yes Bank');
     expect(names).toContain('n8n');
     expect(names).toContain('.xyz');
     expect(names).toContain('91.9 Friends FM');

@@ -317,6 +317,10 @@
 }
 
 /* Individual Logo Sizing Tuning */
+.sponsor-chamber-img.sponsor-yesbank {
+  max-height: 60%;
+}
+
 .sponsor-chamber-img.sponsor-n8n {
   max-height: 65%;
 }

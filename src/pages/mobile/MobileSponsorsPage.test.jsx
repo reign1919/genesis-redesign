@@ -42,9 +42,10 @@ describe('MobileSponsorsPage', () => {
     expect(screen.getByText(/partners & sponsors/i)).toBeInTheDocument();
   });
 
-  it('renders all 5 sponsor cards with visit buttons and correct URLs', () => {
+  it('renders all 6 sponsor cards with visit buttons and correct URLs', () => {
     renderComponent();
     expect(screen.queryByText('StudyIn')).not.toBeInTheDocument();
+    expect(screen.getByText('Yes Bank')).toBeInTheDocument();
     expect(screen.getByText('n8n')).toBeInTheDocument();
     expect(screen.getByText('.xyz')).toBeInTheDocument();
     expect(screen.getByText('91.9 Friends FM')).toBeInTheDocument();
@@ -52,7 +53,11 @@ describe('MobileSponsorsPage', () => {
     expect(screen.getByText('React Kolkata')).toBeInTheDocument();
 
     const links = screen.getAllByRole('link', { name: /visit.*website/i });
-    expect(links).toHaveLength(5);
+    expect(links).toHaveLength(6);
+
+    const yesBankLink = screen.getByRole('link', { name: /visit yes bank official website/i });
+    expect(yesBankLink).toHaveAttribute('href', 'https://www.yesbank.in/');
+    expect(yesBankLink).toHaveAttribute('target', '_blank');
 
     const n8nLink = screen.getByRole('link', { name: /visit n8n official website/i });
     expect(n8nLink).toHaveAttribute('href', 'https://n8n.io/');

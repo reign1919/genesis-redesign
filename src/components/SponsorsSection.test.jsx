@@ -21,7 +21,7 @@ describe('SponsorsSection', () => {
     expect(dirLink).toHaveAttribute('href', '/sponsors');
   });
 
-  it('renders all 5 unique sponsors in the marquee tracks', () => {
+  it('renders all 6 unique sponsors in the marquee tracks', () => {
     render(
       <MemoryRouter>
         <SponsorsSection />
@@ -29,6 +29,7 @@ describe('SponsorsSection', () => {
     );
 
     // Check alt texts
+    const yesBankLogos = screen.getAllByAltText(/yes\s*bank/i);
     const n8nLogos = screen.getAllByAltText(/n8n/i);
     const friendsfmLogos = screen.getAllByAltText(/friends\s*fm/i);
     const xyzLogos = screen.getAllByAltText(/\.xyz|xyz/i);
@@ -36,6 +37,7 @@ describe('SponsorsSection', () => {
     const youngmetroLogos = screen.getAllByAltText(/young\s*metro/i);
 
     // Each should be duplicated for the seamless loop
+    expect(yesBankLogos.length).toBeGreaterThanOrEqual(2);
     expect(n8nLogos.length).toBeGreaterThanOrEqual(2);
     expect(friendsfmLogos.length).toBeGreaterThanOrEqual(2);
     expect(xyzLogos.length).toBeGreaterThanOrEqual(2);
@@ -51,6 +53,11 @@ describe('SponsorsSection', () => {
         <SponsorsSection />
       </MemoryRouter>
     );
+
+    const yesBankLinks = screen.getAllByRole('link', { name: /visit yes bank website/i });
+    expect(yesBankLinks[0]).toHaveAttribute('href', 'https://www.yesbank.in/');
+    expect(yesBankLinks[0]).toHaveAttribute('target', '_blank');
+    expect(yesBankLinks[0]).toHaveAttribute('rel', expect.stringContaining('noopener'));
 
     const n8nLinks = screen.getAllByRole('link', { name: /visit n8n website/i });
     expect(n8nLinks[0]).toHaveAttribute('href', 'https://n8n.io/');

@@ -3,8 +3,17 @@ import friendsfmLogo from '../../sponsor-logos/91-9-fm-removebg-preview.png';
 import xyzLogo from '../../sponsor-logos/xyz-logo-color.png';
 import reactkolkataLogo from '../../sponsor-logos/raact-kolkata-logo-full-light.png';
 import youngmetroLogo from '../../sponsor-logos/young-metro-removebg-preview.png';
+import yesBankLogo from '../../sponsor-logos/Yes_Bank_Logo_in_2024.png';
 
 export const SPONSORS = [
+  {
+    id: 'yesbank',
+    name: 'Yes Bank',
+    role: 'OFFICIAL BANKING PARTNER',
+    logo: yesBankLogo,
+    website: 'https://www.yesbank.in/',
+    description: 'One of India’s premier full-service commercial banks, delivering customer-centric digital banking solutions, financial innovation, and empowering next-generation leaders and entrepreneurs across the nation.',
+  },
   {
     id: 'n8n',
     name: 'n8n',

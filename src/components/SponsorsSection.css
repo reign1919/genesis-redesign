@@ -205,6 +205,10 @@
   max-height: 56px;
 }
 
+.sponsor-yesbank {
+  max-height: 46px;
+}
+
 /* ACCESSIBILITY: REDUCED MOTION */
 @media (prefers-reduced-motion: reduce) {
 
@@ -245,6 +249,10 @@
 
   .sponsor-xyz {
     max-height: 44px;
+  }
+
+  .sponsor-yesbank {
+    max-height: 36px;
   }
 
   .sponsors-track-left {
