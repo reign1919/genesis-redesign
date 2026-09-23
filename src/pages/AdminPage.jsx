@@ -163,15 +163,67 @@ function AdminDashboard({ admin, onLogout }) {
       : date.toLocaleString('en-IN', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
 
-  // Render a jsPDF A4 document: page header, then each school's details
-  // immediately followed by that school's full roster summary.
+  // Render a jsPDF A4 document: page 1 has two summary tables (school-wise
+  // and event-wise), then each school's details immediately followed by that
+  // school's full roster summary.
   const buildExportPdf = async (allRegistrations) => {
-    const { jsPDF } = await import('jspdf');
+    const [{ jsPDF }, { default: autoTable }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
     const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const margin = 48;
     let y = margin;
+
+    const isCompleteRoster = (event) =>
+      ['selected_complete', 'locked', 'submitted'].includes(event.status);
+
+    // Pre-fetch all rosters so we can compute the summary tables up front.
+    const rosterResults = [];
+    for (let index = 0; index < allRegistrations.length; index += 1) {
+      rosterResults.push(await fetchSchoolRoster(allRegistrations[index].id));
+    }
+
+    // ── School-wise summary rows ──
+    const schoolWiseRows = allRegistrations.map((registration, index) => {
+      const rosters = rosterResults[index]?.rosters || [];
+      const completeRosters = rosters.filter(isCompleteRoster);
+      const totalParticipants = completeRosters.reduce(
+        (sum, event) => sum + event.participants.filter((p) => p.name && p.name !== '—').length,
+        0,
+      );
+      const eventNames = completeRosters.map((event) => event.event_name).join(', ');
+      return [
+        registration.school_name || 'N/A',
+        registration.school_code || '—',
+        String(totalParticipants),
+        String(completeRosters.length),
+        registration.teacher_whatsapp || '—',
+        eventNames || '—',
+      ];
+    });
+
+    // ── Event-wise summary rows ──
+    const eventMap = new Map();
+    allRegistrations.forEach((registration, index) => {
+      const rosters = rosterResults[index]?.rosters || [];
+      rosters.filter(isCompleteRoster).forEach((event) => {
+        const key = event.event_name;
+        if (!eventMap.has(key)) {
+          eventMap.set(key, { schools: new Set(), participants: 0 });
+        }
+        const entry = eventMap.get(key);
+        entry.schools.add(registration.school_name || 'N/A');
+        entry.participants += event.participants.filter((p) => p.name && p.name !== '—').length;
+      });
+    });
+    const eventWiseRows = [...eventMap.entries()].map(([name, entry]) => [
+      name,
+      String(entry.schools.size),
+      String(entry.participants),
+    ]);
 
     const ensureSpace = (needed) => {
       if (y + needed > pageHeight - margin) {
@@ -198,6 +250,11 @@ function AdminDashboard({ admin, onLogout }) {
       y += 18;
     };
 
+    const writeSectionHeading = (text) => {
+      ensureSpace(30);
+      writeLine({ text, size: 12, bold: true, color: [160, 40, 45], spacing: 18 });
+    };
+
     // ── Document header ──
     writeLine({ text: 'GENESIS TECH FEST — ADMIN EXPORT', size: 16, bold: true, color: [160, 40, 45] });
     writeLine({ text: 'Indus Valley World School', size: 11, color: [120, 120, 120] });
@@ -205,9 +262,61 @@ function AdminDashboard({ admin, onLogout }) {
     writeLine({ text: `Total registrations: ${allRegistrations.length}`, size: 11, color: [120, 120, 120], spacing: 18 });
     writeDivider();
 
+    // ── Page 1: School-wise summary table ──
+    writeSectionHeading('SCHOOL-WISE SUMMARY');
+    autoTable(doc, {
+      startY: y,
+      head: [[
+        'School Name',
+        'Code',
+        'Total Participants',
+        'No. of Events',
+        'Teacher In-charge No.',
+        'Events Participating In',
+      ]],
+      body: schoolWiseRows,
+      theme: 'grid',
+      margin: { left: margin, right: margin },
+      styles: { fontSize: 8, cellPadding: 4, textColor: [40, 40, 40], lineColor: [200, 200, 200], lineWidth: 0.4 },
+      headStyles: { fillColor: [160, 40, 45], textColor: [255, 255, 255], fontStyle: 'bold' },
+      columnStyles: {
+        0: { cellWidth: 110 },
+        1: { cellWidth: 55 },
+        2: { cellWidth: 55 },
+        3: { cellWidth: 45 },
+        4: { cellWidth: 70 },
+        5: { cellWidth: 'auto' },
+      },
+    });
+    y = doc.lastAutoTable.finalY + 24;
+
+    // ── Page 1: Event-wise summary table ──
+    writeSectionHeading('EVENT-WISE SUMMARY');
+    autoTable(doc, {
+      startY: y,
+      head: [['Event Name', 'Schools Participating', 'Participants per Event']],
+      body: eventWiseRows.length > 0
+        ? eventWiseRows
+        : [['No complete event rosters yet.', '—', '—']],
+      theme: 'grid',
+      margin: { left: margin, right: margin },
+      styles: { fontSize: 9, cellPadding: 4, textColor: [40, 40, 40], lineColor: [200, 200, 200], lineWidth: 0.4 },
+      headStyles: { fillColor: [160, 40, 45], textColor: [255, 255, 255], fontStyle: 'bold' },
+      columnStyles: {
+        0: { cellWidth: 'auto' },
+        1: { cellWidth: 110 },
+        2: { cellWidth: 110 },
+      },
+    });
+    y = doc.lastAutoTable.finalY + 30;
+
+    // Start the per-school detail sections on a fresh page.
+    doc.addPage();
+    y = margin;
+
     for (let index = 0; index < allRegistrations.length; index += 1) {
       const registration = allRegistrations[index];
-      const rosterResult = await fetchSchoolRoster(registration.id);
+      const rosterResult = rosterResults[index];
 
       // ── School details block ──
       ensureSpace(110);
