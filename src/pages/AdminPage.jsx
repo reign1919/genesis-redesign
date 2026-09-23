@@ -222,8 +222,12 @@ function AdminDashboard({ admin, onLogout }) {
     const eventWiseRows = [...eventMap.entries()].map(([name, entry]) => [
       name,
       String(entry.schools.size),
+      [...entry.schools].join(', '),
       String(entry.participants),
     ]);
+    const grandTotalParticipants = eventMap.size === 0
+      ? 0
+      : [...eventMap.values()].reduce((sum, entry) => sum + entry.participants, 0);
 
     const ensureSpace = (needed) => {
       if (y + needed > pageHeight - margin) {
@@ -294,21 +298,31 @@ function AdminDashboard({ admin, onLogout }) {
     writeSectionHeading('EVENT-WISE SUMMARY');
     autoTable(doc, {
       startY: y,
-      head: [['Event Name', 'Schools Participating', 'Participants per Event']],
+      head: [['Event Name', 'No. of Schools Participating', 'Schools Participating', 'Participants per Event']],
       body: eventWiseRows.length > 0
         ? eventWiseRows
-        : [['No complete event rosters yet.', '—', '—']],
+        : [['No complete event rosters yet.', '—', '—', '—']],
       theme: 'grid',
       margin: { left: margin, right: margin },
-      styles: { fontSize: 9, cellPadding: 4, textColor: [40, 40, 40], lineColor: [200, 200, 200], lineWidth: 0.4 },
+      styles: { fontSize: 8, cellPadding: 4, textColor: [40, 40, 40], lineColor: [200, 200, 200], lineWidth: 0.4 },
       headStyles: { fillColor: [160, 40, 45], textColor: [255, 255, 255], fontStyle: 'bold' },
       columnStyles: {
-        0: { cellWidth: 'auto' },
-        1: { cellWidth: 110 },
-        2: { cellWidth: 110 },
+        0: { cellWidth: 110 },
+        1: { cellWidth: 55 },
+        2: { cellWidth: 'auto' },
+        3: { cellWidth: 70 },
       },
     });
-    y = doc.lastAutoTable.finalY + 30;
+    y = doc.lastAutoTable.finalY + 18;
+
+    writeLine({
+      text: `GRAND TOTAL PARTICIPANTS: ${grandTotalParticipants}`,
+      size: 12,
+      bold: true,
+      color: [160, 40, 45],
+      spacing: 18,
+    });
+    y += 12;
 
     // Start the per-school detail sections on a fresh page.
     doc.addPage();
