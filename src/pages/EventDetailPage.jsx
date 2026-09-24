@@ -236,8 +236,10 @@ export default function EventDetailPage() {
     loadData();
   }, [loadData]);
 
-  // Derived read-only state
+  // Derived read-only state - participant registration is closed for all schools
+  const REGISTRATION_CLOSED = true;
   const isReadOnly =
+    REGISTRATION_CLOSED ||
     registrationStatus === 'submitted' ||
     ['locked', 'submitted'].includes(selectionStatus);
 
@@ -443,7 +445,7 @@ export default function EventDetailPage() {
 
   const handleNavigateBack = async (e) => {
     if (e) e.preventDefault();
-    if (isDirtyRef.current) {
+    if (isDirtyRef.current && !isReadOnly) {
       const saved = await saveRoster('Saved participant details before returning to checklist.');
       if (!saved) return;
     }
@@ -540,9 +542,15 @@ export default function EventDetailPage() {
     <SecurePage
       eyebrow="GENESIS FEST REGISTRATION"
       title={dbEvent.name}
-      subtitle={`Participant Entry Form (${participantLimit} ${
-        participantLimit === 1 ? 'Participant Table' : 'Separate Participant Tables'
-      })`}
+      subtitle={
+        isReadOnly
+          ? `Participant Entry Form — Closed (${participantLimit} ${
+              participantLimit === 1 ? 'Participant Table' : 'Separate Participant Tables'
+            })`
+          : `Participant Entry Form (${participantLimit} ${
+              participantLimit === 1 ? 'Participant Table' : 'Separate Participant Tables'
+            })`
+      }
       action={
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <button type="button" onClick={handleNavigateBack} className="secure-action">
@@ -606,14 +614,14 @@ export default function EventDetailPage() {
           </div>
         </div>
 
-        {/* Read-Only Lock Banner if Submitted */}
+        {/* Read-Only Lock Banner */}
         {isReadOnly && (
           <div className="lock-banner secure-card">
             <Lock className="lock-banner__icon" size={20} />
             <div>
-              <h4>Registration Locked (Read-Only)</h4>
+              <h4>Registration Closed (Read-Only)</h4>
               <p>
-                This event registration is locked because your school registration has been submitted.
+                Participant registration is officially closed for all schools. Rosters are locked and can no longer be edited or changed.
               </p>
             </div>
           </div>
@@ -639,7 +647,11 @@ export default function EventDetailPage() {
           <div className="actions-bar-info">
             <Info size={15} />
             <span>
-              Fill in student details for all {participantLimit} participant slots below. Click "Save Details" to persist your changes.
+              {isReadOnly
+                ? `Participant registration is closed. Viewing confirmed roster slots (${participantLimit} ${
+                    participantLimit === 1 ? 'participant' : 'participants'
+                  } required).`
+                : `Fill in student details for all ${participantLimit} participant slots below. Click "Save Details" to persist your changes.`}
             </span>
           </div>
 

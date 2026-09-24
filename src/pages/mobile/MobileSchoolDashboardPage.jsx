@@ -23,37 +23,12 @@ import {
 } from 'lucide-react';
 import './MobileSchoolDashboardPage.css';
 
+// Participant registration status - officially closed for all schools
 function getDeadlineDetails() {
-  const currentYear = new Date().getFullYear();
-  const deadline = new Date(`${currentYear}-09-14T23:59:59Z`);
-  const now = new Date();
-  const diffMs = deadline.getTime() - now.getTime();
-
-  if (diffMs <= 0) {
-    return {
-      formattedText: 'Deadline Passed',
-      badgeClass: 'dash-deadline--red',
-    };
-  }
-
-  const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const days = Math.floor(totalHours / 24);
-  const remainingHours = totalHours % 24;
-
-  let formattedText = `${days}d ${remainingHours}h left`;
-  if (days === 0) {
-    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    formattedText = `${remainingHours}h ${minutes}m left`;
-  }
-
-  let badgeClass = 'dash-deadline--neutral';
-  if (totalHours <= 48) {
-    badgeClass = 'dash-deadline--red';
-  } else if (totalHours <= 168) {
-    badgeClass = 'dash-deadline--amber';
-  }
-
-  return { formattedText, badgeClass };
+  return {
+    formattedText: 'Registration Closed',
+    badgeClass: 'dash-deadline--red',
+  };
 }
 
 const STATUS_CONFIG = {
@@ -297,7 +272,7 @@ export default function MobileSchoolDashboardPage() {
 
           <div className={`mdash-metric-box mdash-deadline-box ${deadline.badgeClass}`}>
             <div className="flex items-center gap-1" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span className="mdash-metric-label" style={{ color: 'inherit' }}>Deadline</span>
+              <span className="mdash-metric-label" style={{ color: 'inherit' }}>Registration Status</span>
               <button
                 type="button"
                 onClick={(e) => {
@@ -305,7 +280,7 @@ export default function MobileSchoolDashboardPage() {
                   setShowDeadlineTooltip((prev) => !prev);
                 }}
                 style={{ background: 'none', border: 'none', padding: 0, color: 'inherit', cursor: 'pointer', display: 'flex' }}
-                aria-label="Deadline info"
+                aria-label="Registration status info"
               >
                 <HelpCircle size={11} />
               </button>
@@ -320,7 +295,7 @@ export default function MobileSchoolDashboardPage() {
                     }}
                   />
                   <div className="mdash-tooltip-box">
-                    Schools with at least 3 completed event rosters by September 14th will be automatically approved.
+                    Participant registration is closed for all schools. Rosters are locked and can no longer be edited or changed.
                     <div className="mdash-tooltip-arrow" />
                   </div>
                 </>
@@ -346,7 +321,7 @@ export default function MobileSchoolDashboardPage() {
         <div className="mdash-events-card">
           <div className="mdash-events-header">
             <h2>Events Checklist ({eventsList.length})</h2>
-            <span className="mdash-events-sub">Select 3–10 events</span>
+            <span className="mdash-events-sub">Registration Closed (Rosters Locked)</span>
           </div>
 
           <div className="mdash-events-timeline">

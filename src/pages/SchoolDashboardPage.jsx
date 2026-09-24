@@ -21,38 +21,12 @@ import {
 } from 'lucide-react';
 import './SchoolDashboardPage.css';
 
-// September 14th deadline countdown calculation & color shifts
+// Participant registration status - officially closed for all schools
 function getDeadlineDetails() {
-  const currentYear = new Date().getFullYear();
-  const deadline = new Date(`${currentYear}-09-14T23:59:59Z`);
-  const now = new Date();
-  const diffMs = deadline.getTime() - now.getTime();
-
-  if (diffMs <= 0) {
-    return {
-      formattedText: 'Deadline Passed',
-      badgeClass: 'dash-deadline--red',
-    };
-  }
-
-  const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const days = Math.floor(totalHours / 24);
-  const remainingHours = totalHours % 24;
-
-  let formattedText = `${days}d ${remainingHours}h left`;
-  if (days === 0) {
-    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    formattedText = `${remainingHours}h ${minutes}m left`;
-  }
-
-  let badgeClass = 'dash-deadline--neutral';
-  if (totalHours <= 48) {
-    badgeClass = 'dash-deadline--red';
-  } else if (totalHours <= 168) {
-    badgeClass = 'dash-deadline--amber';
-  }
-
-  return { formattedText, badgeClass };
+  return {
+    formattedText: 'Registration Closed',
+    badgeClass: 'dash-deadline--red',
+  };
 }
 
 const STATUS_CONFIG = {
@@ -312,7 +286,7 @@ export default function SchoolDashboardPage() {
               <Calendar size={15} />
               <div>
                 <div className="flex items-center gap-1.5 relative">
-                  <span className="label-caps block text-[10px]">Deadline (Sep 14)</span>
+                  <span className="label-caps block text-[10px]">Registration Status</span>
                   <div className="relative inline-flex items-center">
                     <button
                       type="button"
@@ -321,7 +295,7 @@ export default function SchoolDashboardPage() {
                         setShowDeadlineTooltip((prev) => !prev);
                       }}
                       className="text-zinc-400 hover:text-white transition-colors cursor-pointer p-0.5 rounded-full hover:bg-white/10 focus:outline-none flex items-center justify-center"
-                      aria-label="Deadline info"
+                      aria-label="Registration status info"
                     >
                       <HelpCircle size={13} />
                     </button>
@@ -336,7 +310,7 @@ export default function SchoolDashboardPage() {
                           }}
                         />
                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 bg-zinc-950 text-zinc-100 text-xs rounded-lg border border-zinc-700/80 shadow-2xl backdrop-blur-md z-50 font-sans font-normal normal-case leading-snug text-left">
-                          Schools with at least 3 completed event rosters by September 14th will be automatically approved.
+                          Participant registration is closed for all schools. Rosters are locked and can no longer be edited or changed.
                           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-950 border-r border-b border-zinc-700/80 rotate-45" />
                         </div>
                       </>
@@ -355,7 +329,7 @@ export default function SchoolDashboardPage() {
               <p className="label-caps text-accent">Genesis Fest Events Checklist</p>
               <h3>Event Registration Rack ({eventsList.length} Events)</h3>
             </div>
-            <span className="label-caps text-muted">Select 3–10 Events (Min 3 Complete)</span>
+            <span className="label-caps text-muted">Registration Closed (Rosters Locked)</span>
           </div>
 
           <div className="dash-events-timeline-container">
