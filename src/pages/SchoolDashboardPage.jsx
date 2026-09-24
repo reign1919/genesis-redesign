@@ -21,14 +21,8 @@ import {
 } from 'lucide-react';
 import './SchoolDashboardPage.css';
 
-// Participant registration status - closed for all schools unless the school's override flag is set
-function getDeadlineDetails(editingOpen) {
-  if (editingOpen) {
-    return {
-      formattedText: 'Registration Editing Open',
-      badgeClass: 'dash-deadline--neutral',
-    };
-  }
+// Participant registration status - officially closed for all schools
+function getDeadlineDetails() {
   return {
     formattedText: 'Registration Closed',
     badgeClass: 'dash-deadline--red',
@@ -77,7 +71,6 @@ export default function SchoolDashboardPage() {
   const [copied, setCopied] = useState('');
   const [eventsList, setEventsList] = useState([]);
   const [showDeadlineTooltip, setShowDeadlineTooltip] = useState(false);
-  const [participantEditingOpen, setParticipantEditingOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -143,16 +136,6 @@ export default function SchoolDashboardPage() {
         }
       }
 
-      // Fetch per-school editing override flag
-      if (activeSchoolId) {
-        const { data: schoolRow } = await supabase
-          .from('schools')
-          .select('participant_editing_open')
-          .eq('id', activeSchoolId)
-          .maybeSingle();
-        if (active) setParticipantEditingOpen(Boolean(schoolRow?.participant_editing_open));
-      }
-
       if (!active) return;
 
       const statusMap = new Map();
@@ -209,7 +192,7 @@ export default function SchoolDashboardPage() {
     ['selected_complete', 'locked', 'submitted'].includes(e.status)
   ).length;
 
-  const deadline = getDeadlineDetails(participantEditingOpen);
+  const deadline = getDeadlineDetails();
 
   return (
     <SecurePage
@@ -327,9 +310,7 @@ export default function SchoolDashboardPage() {
                           }}
                         />
                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 bg-zinc-950 text-zinc-100 text-xs rounded-lg border border-zinc-700/80 shadow-2xl backdrop-blur-md z-50 font-sans font-normal normal-case leading-snug text-left">
-                          {participantEditingOpen
-                            ? 'Participant registration is open for this school. Rosters can be edited until the event locks them.'
-                            : 'Participant registration is closed for all schools. Rosters are locked and can no longer be edited or changed.'}
+                          Participant registration is closed for all schools. Rosters are locked and can no longer be edited or changed.
                           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-zinc-950 border-r border-b border-zinc-700/80 rotate-45" />
                         </div>
                       </>
@@ -348,11 +329,7 @@ export default function SchoolDashboardPage() {
               <p className="label-caps text-accent">Genesis Fest Events Checklist</p>
               <h3>Event Registration Rack ({eventsList.length} Events)</h3>
             </div>
-            <span className="label-caps text-muted">
-              {participantEditingOpen
-                ? 'Select 3–10 Events (Min 3 Complete)'
-                : 'Registration Closed (Rosters Locked)'}
-            </span>
+            <span className="label-caps text-muted">Registration Closed (Rosters Locked)</span>
           </div>
 
           <div className="dash-events-timeline-container">

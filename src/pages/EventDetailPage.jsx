@@ -84,9 +84,6 @@ export default function EventDetailPage() {
   const [rows, setRows] = useState([]);
   const [initialLoaded, setInitialLoaded] = useState(false);
 
-  // Participant registration editing override (per-school): false => closed
-  const [participantEditingOpen, setParticipantEditingOpen] = useState(false);
-
   // Save UX State
   const [saving, setSaving] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState(null);
@@ -148,14 +145,6 @@ export default function EventDetailPage() {
     setSchoolId(currentSchoolId);
 
     if (currentSchoolId) {
-      // Fetch per-school editing override flag
-      const { data: schoolRow } = await supabase
-        .from('schools')
-        .select('participant_editing_open')
-        .eq('id', currentSchoolId)
-        .maybeSingle();
-      setParticipantEditingOpen(Boolean(schoolRow?.participant_editing_open));
-
       // Fetch school registration status
       const { data: regData } = await supabase
         .from('registrations')
@@ -247,8 +236,8 @@ export default function EventDetailPage() {
     loadData();
   }, [loadData]);
 
-  // Derived read-only state - participant registration closed unless the school's override flag is set
-  const REGISTRATION_CLOSED = !participantEditingOpen;
+  // Derived read-only state - participant registration is closed for all schools
+  const REGISTRATION_CLOSED = true;
   const isReadOnly =
     REGISTRATION_CLOSED ||
     registrationStatus === 'submitted' ||
