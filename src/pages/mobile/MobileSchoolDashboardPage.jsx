@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import './MobileSchoolDashboardPage.css';
 
-const ALLOWED_OVERRIDE_CODES = ['GEN-0039', 'GEN-0023'];
+const ALLOWED_OVERRIDE_CODES = ['GEN-0023', 'GEN-0036'];
 
 // Participant registration status - closed for all schools unless the school's override flag is set
 function getDeadlineDetails(editingOpen) {
