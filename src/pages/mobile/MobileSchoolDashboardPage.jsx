@@ -23,16 +23,8 @@ import {
 } from 'lucide-react';
 import './MobileSchoolDashboardPage.css';
 
-const ALLOWED_OVERRIDE_CODES = ['GEN-0023'];
-
-// Participant registration status - closed for all schools unless the school's override flag is set
-function getDeadlineDetails(editingOpen) {
-  if (editingOpen) {
-    return {
-      formattedText: 'Registration Editing Open',
-      badgeClass: 'dash-deadline--neutral',
-    };
-  }
+// Participant registration status - officially closed for all schools
+function getDeadlineDetails() {
   return {
     formattedText: 'Registration Closed',
     badgeClass: 'dash-deadline--red',
@@ -81,7 +73,6 @@ export default function MobileSchoolDashboardPage() {
   const [copied, setCopied] = useState('');
   const [eventsList, setEventsList] = useState([]);
   const [showDeadlineTooltip, setShowDeadlineTooltip] = useState(false);
-  const [participantEditingOpen, setParticipantEditingOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -145,19 +136,6 @@ export default function MobileSchoolDashboardPage() {
         }
       }
 
-      // Fetch per-school editing override flag
-      let isOpen = ALLOWED_OVERRIDE_CODES.includes(derivedCode);
-      if (activeSchoolId) {
-        const { data: schoolRow } = await supabase
-          .from('schools')
-          .select('participant_editing_open, school_code')
-          .eq('id', activeSchoolId)
-          .maybeSingle();
-        const code = schoolRow?.school_code || derivedCode;
-        isOpen = isOpen || Boolean(schoolRow?.participant_editing_open) || ALLOWED_OVERRIDE_CODES.includes(code);
-      }
-      if (active) setParticipantEditingOpen(isOpen);
-
       if (!active) return;
 
       const statusMap = new Map();
@@ -213,7 +191,7 @@ export default function MobileSchoolDashboardPage() {
     ['selected_complete', 'locked', 'submitted'].includes(e.status)
   ).length;
 
-  const deadline = getDeadlineDetails(participantEditingOpen);
+  const deadline = getDeadlineDetails();
 
   return (
     <div className="mdash-wrapper">
@@ -317,9 +295,7 @@ export default function MobileSchoolDashboardPage() {
                     }}
                   />
                   <div className="mdash-tooltip-box">
-                    {participantEditingOpen
-                      ? 'Participant registration is open for this school. Rosters can be edited until the event locks them.'
-                      : 'Participant registration is closed for all schools. Rosters are locked and can no longer be edited or changed.'}
+                    Participant registration is closed for all schools. Rosters are locked and can no longer be edited or changed.
                     <div className="mdash-tooltip-arrow" />
                   </div>
                 </>
@@ -345,11 +321,7 @@ export default function MobileSchoolDashboardPage() {
         <div className="mdash-events-card">
           <div className="mdash-events-header">
             <h2>Events Checklist ({eventsList.length})</h2>
-            <span className="mdash-events-sub">
-              {participantEditingOpen
-                ? 'Select 3–10 Events (Min 3 Complete)'
-                : 'Registration Closed (Rosters Locked)'}
-            </span>
+            <span className="mdash-events-sub">Registration Closed (Rosters Locked)</span>
           </div>
 
           <div className="mdash-events-timeline">
