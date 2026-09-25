@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import './EventDetailPage.css';
 
-const ALLOWED_OVERRIDE_CODES = ['GEN-0023', 'GEN-0036'];
+const ALLOWED_OVERRIDE_CODES = ['GEN-0023'];
 
 const STATUS_CONFIG = {
   not_selected: {
