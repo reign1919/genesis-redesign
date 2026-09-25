@@ -9,6 +9,7 @@ const mocks = vi.hoisted(() => ({
   from: vi.fn(),
   rpc: vi.fn(),
   loadSchoolCredentials: vi.fn(),
+  schoolsEditingOpen: false,
 }));
 
 vi.mock('../components/NeuralBackground', () => ({
@@ -37,6 +38,8 @@ vi.mock('../lib/authContext', () => ({
 describe('EventDetailPage Component Lockdown', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    mocks.schoolsEditingOpen = false;
 
     mocks.getSession.mockResolvedValue({
       data: { session: { user: { id: 'user-uuid-1', email: 'gen-0015@schools.genesis.invalid' } } },
@@ -121,6 +124,19 @@ describe('EventDetailPage Component Lockdown', () => {
         };
       }
 
+      if (tableName === 'schools') {
+        return {
+          select: () => ({
+            eq: () => ({
+              maybeSingle: () =>
+                Promise.resolve({
+                  data: { participant_editing_open: mocks.schoolsEditingOpen },
+                }),
+            }),
+          }),
+        };
+      }
+
       if (tableName === 'registration_participants') {
         return {
           select: () => ({
@@ -187,5 +203,39 @@ describe('EventDetailPage Component Lockdown', () => {
     expect(screen.queryByText(/Save Details/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Clear Participant/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Select Event/i)).not.toBeInTheDocument();
+  });
+
+  it('enables participant editing when the school override flag is set', async () => {
+    mocks.schoolsEditingOpen = true;
+
+    render(
+      <MemoryRouter initialEntries={['/dashboard/code-relay']}>
+        <Routes>
+          <Route path="/dashboard/:eventSlug" element={<EventDetailPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Closed banner must NOT appear when editing is open
+    await waitFor(() => {
+      expect(screen.queryByText('Registration Closed (Read-Only)')).not.toBeInTheDocument();
+    });
+
+    // Input fields should be enabled
+    const nameInputs = screen.getAllByPlaceholderText('Enter Student Full Name');
+    expect(nameInputs.length).toBeGreaterThan(0);
+    nameInputs.forEach((input) => {
+      expect(input).not.toBeDisabled();
+    });
+
+    const phoneInputs = screen.getAllByPlaceholderText('10-digit Phone');
+    expect(phoneInputs.length).toBeGreaterThan(0);
+    phoneInputs.forEach((input) => {
+      expect(input).not.toBeDisabled();
+    });
+
+    // Save action should be available
+    const saveButtons = screen.getAllByText(/Save Details/i);
+    expect(saveButtons.length).toBeGreaterThanOrEqual(1);
   });
 });
