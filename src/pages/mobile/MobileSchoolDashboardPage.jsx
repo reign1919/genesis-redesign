@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 import './MobileSchoolDashboardPage.css';
 
+const ALLOWED_OVERRIDE_CODES = ['GEN-0039', 'GEN-0023'];
+
 // Participant registration status - closed for all schools unless the school's override flag is set
 function getDeadlineDetails(editingOpen) {
   if (editingOpen) {
@@ -144,14 +146,17 @@ export default function MobileSchoolDashboardPage() {
       }
 
       // Fetch per-school editing override flag
+      let isOpen = ALLOWED_OVERRIDE_CODES.includes(derivedCode);
       if (activeSchoolId) {
         const { data: schoolRow } = await supabase
           .from('schools')
-          .select('participant_editing_open')
+          .select('participant_editing_open, school_code')
           .eq('id', activeSchoolId)
           .maybeSingle();
-        if (active) setParticipantEditingOpen(Boolean(schoolRow?.participant_editing_open));
+        const code = schoolRow?.school_code || derivedCode;
+        isOpen = isOpen || Boolean(schoolRow?.participant_editing_open) || ALLOWED_OVERRIDE_CODES.includes(code);
       }
+      if (active) setParticipantEditingOpen(isOpen);
 
       if (!active) return;
 

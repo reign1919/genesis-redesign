@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 import './EventDetailPage.css';
 
+const ALLOWED_OVERRIDE_CODES = ['GEN-0039', 'GEN-0023'];
+
 const STATUS_CONFIG = {
   not_selected: {
     label: 'Not Selected',
@@ -147,14 +149,21 @@ export default function EventDetailPage() {
 
     setSchoolId(currentSchoolId);
 
+    const userCode = sessionData.session?.user?.email
+      ? sessionData.session.user.email.split('@')[0].toUpperCase()
+      : '';
+    let isOverride = ALLOWED_OVERRIDE_CODES.includes(userCode);
+
     if (currentSchoolId) {
       // Fetch per-school editing override flag
       const { data: schoolRow } = await supabase
         .from('schools')
-        .select('participant_editing_open')
+        .select('participant_editing_open, school_code')
         .eq('id', currentSchoolId)
         .maybeSingle();
-      setParticipantEditingOpen(Boolean(schoolRow?.participant_editing_open));
+      const schoolCode = schoolRow?.school_code || userCode;
+      isOverride = isOverride || Boolean(schoolRow?.participant_editing_open) || ALLOWED_OVERRIDE_CODES.includes(schoolCode);
+      setParticipantEditingOpen(isOverride);
 
       // Fetch school registration status
       const { data: regData } = await supabase
@@ -249,10 +258,11 @@ export default function EventDetailPage() {
 
   // Derived read-only state - participant registration closed unless the school's override flag is set
   const REGISTRATION_CLOSED = !participantEditingOpen;
-  const isReadOnly =
-    REGISTRATION_CLOSED ||
-    registrationStatus === 'submitted' ||
-    ['locked', 'submitted'].includes(selectionStatus);
+  const isReadOnly = !participantEditingOpen
+    ? (REGISTRATION_CLOSED ||
+       registrationStatus === 'submitted' ||
+       ['locked', 'submitted'].includes(selectionStatus))
+    : selectionStatus === 'locked';
 
   // Duplicate detection within this event
   const getDuplicateRowIndices = useCallback(() => {

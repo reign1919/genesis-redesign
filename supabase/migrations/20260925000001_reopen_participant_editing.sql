@@ -15,7 +15,27 @@ where school_code in ('GEN-0039', 'GEN-0023')
    or name ilike 'APEEJAY SCHOOL PARK STREET%'
    or name ilike 'Indus Valley World School%';
 
--- 3. Registration state check helper now means "editing allowed":
+-- 3. Reset registration status and selections back to editable draft for target schools
+update public.registrations
+set status = 'draft'
+where school_id in (
+  select id from public.schools
+  where school_code in ('GEN-0039', 'GEN-0023')
+     or name ilike 'APEEJAY SCHOOL PARK STREET%'
+     or name ilike 'Indus Valley World School%'
+);
+
+update public.school_event_selections
+set status = 'selected_complete'
+where school_id in (
+  select id from public.schools
+  where school_code in ('GEN-0039', 'GEN-0023')
+     or name ilike 'APEEJAY SCHOOL PARK STREET%'
+     or name ilike 'Indus Valley World School%'
+)
+and status = 'submitted';
+
+-- 4. Registration state check helper now means "editing allowed":
 --    admins always allowed; a school is allowed only while its override flag is set.
 create or replace function public.is_school_draft(p_school_id uuid)
 returns boolean
@@ -32,7 +52,7 @@ as $$
      );
 $$;
 
--- 4. RPC: toggle_school_event_selection (restores original body using is_school_draft)
+-- 5. RPC: toggle_school_event_selection (restores original body using is_school_draft)
 create or replace function public.toggle_school_event_selection(
   p_school_id uuid,
   p_event_id uuid,
@@ -80,7 +100,7 @@ begin
   from public.school_event_selections
   where school_id = p_school_id and event_id = p_event_id and deselected_at is null;
 
-  if v_curr_status in ('locked', 'submitted') then
+  if v_curr_status = 'locked' or (v_curr_status = 'submitted' and not public.is_school_draft(p_school_id)) then
     raise exception 'Validation failed: Selection for event % is % and cannot be toggled.', v_event_name, v_curr_status
       using errcode = '22000';
   end if;
@@ -136,7 +156,7 @@ $$;
 
 grant execute on function public.toggle_school_event_selection(uuid, uuid, boolean) to authenticated;
 
--- 5. RPC: save_event_participants (restores original body using is_school_draft)
+-- 6. RPC: save_event_participants (restores original body using is_school_draft)
 create or replace function public.save_event_participants(
   p_school_id uuid,
   p_event_id uuid,
@@ -198,7 +218,7 @@ begin
       using errcode = '22000';
   end if;
 
-  if v_curr_status in ('locked', 'submitted') then
+  if v_curr_status = 'locked' or (v_curr_status = 'submitted' and not public.is_school_draft(p_school_id)) then
     raise exception 'Validation failed: Event selection status is % and cannot be modified.', v_curr_status
       using errcode = '22000';
   end if;
